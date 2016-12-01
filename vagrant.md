@@ -8,10 +8,10 @@
 
 #### Vagrant 及相關軟體安裝
 
-1. Vagrant: https://www.vagrantup.com/downloads.html
-2. [Optional] Vagrant Manager for macOS: https://github.com/lanayotech/vagrant-manager/releases
-3. [Optional] Vagrant Manager for Windows: https://github.com/lanayotech/vagrant-manager-windows/releases
-4. [Optional] VirtualBox: https://www.virtualbox.org/wiki/Downloads
+1. [Vagrant](https://www.vagrantup.com/downloads.html)
+2. [[Optional] Vagrant Manager for macOS](https://github.com/lanayotech/vagrant-manager/releases)
+3. [[Optional] Vagrant Manager for Windows](https://github.com/lanayotech/vagrant-manager-windows/releases)
+4. [[Optional] VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 
 以上除了 [Vagrant](https://www.vagrantup.com/downloads.html) 本身必須要安裝外，其他軟體讀者可以根據情況自行斟酌是否要安裝。另外，在未來的章節內，我將主要以 macOS 作為我們的主要作業系統。
 
