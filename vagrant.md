@@ -17,13 +17,13 @@
 
 在 Vagrant 安裝完成後，在終端機 (terminal) 內輸入以下指令：
 
-```
+```shell
 $ vagrant version
 ```
 
 若出現類似以下結果，表示 Vagrant 已經安裝成功囉！
 
-```
+```shell
 Installed Version: 1.9.0
 Latest Version: 1.9.0
 
@@ -38,13 +38,13 @@ You're running an up-to-date version of Vagrant!
 
 首先，我們先在桌面上建立一個 workspace 給這次的專案使用。
 
-```
+```shell
 $ mkdir ~/Desktop/workspace
 ```
 
 接下來，將資料夾目錄切換至 workspace 中並初始化我們的 Vagrant box
 
-```
+```shell
 $ cd ~/Desktop/workspace
 $ vagrant init hashicorp/precise64
 
@@ -56,7 +56,7 @@ the comments in the Vagrantfile as well as documentation on
 
 你可能已經注意到 Vagrant 在 workspace 中初始化了一個 `Vagrantfile`，不過我們暫時先不用管它。接著執行指令來啟動我們的第一台虛擬機：
 
-```
+```shell
 $ vagrant up
 
 Bringing machine 'default' up with 'virtualbox' provider...
@@ -99,7 +99,7 @@ Bringing machine 'default' up with 'virtualbox' provider...
 
 最後，透過 [SSH](https://zh.wikipedia.org/wiki/Secure_Shell) 登入虛擬機：
 
-```
+```shell
 $ vagrant ssh
 
 Welcome to Ubuntu 12.04 LTS (GNU/Linux 3.2.0-23-generic x86_64)
