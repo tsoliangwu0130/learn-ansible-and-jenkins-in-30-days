@@ -160,7 +160,7 @@ config.vm.define "ironman_ansible_jenkins"
 
 重新啟動 (up) 一個新的主機：
 
-```
+```shell
 $ vagrant up
 
 Bringing machine 'ironman_ansible_jenkins' up with 'virtualbox' provider...
@@ -202,7 +202,7 @@ Bringing machine 'ironman_ansible_jenkins' up with 'virtualbox' provider...
 
 再檢查一次虛擬機運行狀況：
 
-```
+```shell
 $ vagrant status
 
 Current machine states:
