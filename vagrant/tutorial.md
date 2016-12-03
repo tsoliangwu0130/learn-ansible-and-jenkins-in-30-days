@@ -1,4 +1,4 @@
-# Vagrant 介紹
+# Vagrant 基本設定
 
 #### 如何管理 Vagrant boxes？
  

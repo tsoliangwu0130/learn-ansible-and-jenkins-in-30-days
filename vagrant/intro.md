@@ -1,4 +1,4 @@
-# Vagrant 基本設定
+# Vagrant 介紹
 
 #### Vagrant 是什麼？
 
