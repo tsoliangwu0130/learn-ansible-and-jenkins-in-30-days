@@ -155,7 +155,7 @@ simply run `vagrant up`.
 我們可以清楚發現雖然虛擬機已經成功運行，但主機名稱顯示為 `default`。這種模糊的名稱在管理主機數量多起來後常常會造成開發者的困擾。為了避免混淆，我們可以先用 `vagrant halt` 將目前的虛擬機暫停或是使用 `vagrant destroy` 直接摧毀 (destroy)。接下來，在 `Vagrantfile` 中加入下列設置來替我們的虛擬機命名：
 
 ```ruby
-config.vm.define "ironman_ansible_jenkins"
+config.vm.define "ironman"
 ```
 
 重新啟動 (up) 一個新的主機：
@@ -163,41 +163,41 @@ config.vm.define "ironman_ansible_jenkins"
 ```shell
 $ vagrant up
 
-Bringing machine 'ironman_ansible_jenkins' up with 'virtualbox' provider...
-==> ironman_ansible_jenkins: Importing base box 'hashicorp/precise64'...
-==> ironman_ansible_jenkins: Matching MAC address for NAT networking...
-==> ironman_ansible_jenkins: Checking if box 'hashicorp/precise64' is up to date...
-==> ironman_ansible_jenkins: Setting the name of the VM: workspace_ironman_ansible_jenkins_1480738218546_20931
-==> ironman_ansible_jenkins: Clearing any previously set network interfaces...
-==> ironman_ansible_jenkins: Preparing network interfaces based on configuration...
-    ironman_ansible_jenkins: Adapter 1: nat
-==> ironman_ansible_jenkins: Forwarding ports...
-    ironman_ansible_jenkins: 22 (guest) => 2222 (host) (adapter 1)
-==> ironman_ansible_jenkins: Booting VM...
-==> ironman_ansible_jenkins: Waiting for machine to boot. This may take a few minutes...
-    ironman_ansible_jenkins: SSH address: 127.0.0.1:2222
-    ironman_ansible_jenkins: SSH username: vagrant
-    ironman_ansible_jenkins: SSH auth method: private key
-    ironman_ansible_jenkins:
-    ironman_ansible_jenkins: Vagrant insecure key detected. Vagrant will automatically replace
-    ironman_ansible_jenkins: this with a newly generated keypair for better security.
-    ironman_ansible_jenkins:
-    ironman_ansible_jenkins: Inserting generated public key within guest...
-    ironman_ansible_jenkins: Removing insecure key from the guest if it's present...
-    ironman_ansible_jenkins: Key inserted! Disconnecting and reconnecting using new SSH key...
-==> ironman_ansible_jenkins: Machine booted and ready!
-==> ironman_ansible_jenkins: Checking for guest additions in VM...
-    ironman_ansible_jenkins: The guest additions on this VM do not match the installed version of
-    ironman_ansible_jenkins: VirtualBox! In most cases this is fine, but in rare cases it can
-    ironman_ansible_jenkins: prevent things such as shared folders from working properly. If you see
-    ironman_ansible_jenkins: shared folder errors, please make sure the guest additions within the
-    ironman_ansible_jenkins: virtual machine match the version of VirtualBox you have installed on
-    ironman_ansible_jenkins: your host and reload your VM.
-    ironman_ansible_jenkins:
-    ironman_ansible_jenkins: Guest Additions Version: 4.2.0
-    ironman_ansible_jenkins: VirtualBox Version: 5.0
-==> ironman_ansible_jenkins: Mounting shared folders...
-    ironman_ansible_jenkins: /vagrant => /Users/tsoliang/Desktop/workspace
+Bringing machine 'ironman' up with 'virtualbox' provider...
+==> ironman: Importing base box 'hashicorp/precise64'...
+==> ironman: Matching MAC address for NAT networking...
+==> ironman: Checking if box 'hashicorp/precise64' is up to date...
+==> ironman: Setting the name of the VM: workspace_ironman_1480738218546_20931
+==> ironman: Clearing any previously set network interfaces...
+==> ironman: Preparing network interfaces based on configuration...
+    ironman: Adapter 1: nat
+==> ironman: Forwarding ports...
+    ironman: 22 (guest) => 2222 (host) (adapter 1)
+==> ironman: Booting VM...
+==> ironman: Waiting for machine to boot. This may take a few minutes...
+    ironman: SSH address: 127.0.0.1:2222
+    ironman: SSH username: vagrant
+    ironman: SSH auth method: private key
+    ironman:
+    ironman: Vagrant insecure key detected. Vagrant will automatically replace
+    ironman: this with a newly generated keypair for better security.
+    ironman:
+    ironman: Inserting generated public key within guest...
+    ironman: Removing insecure key from the guest if it's present...
+    ironman: Key inserted! Disconnecting and reconnecting using new SSH key...
+==> ironman: Machine booted and ready!
+==> ironman: Checking for guest additions in VM...
+    ironman: The guest additions on this VM do not match the installed version of
+    ironman: VirtualBox! In most cases this is fine, but in rare cases it can
+    ironman: prevent things such as shared folders from working properly. If you see
+    ironman: shared folder errors, please make sure the guest additions within the
+    ironman: virtual machine match the version of VirtualBox you have installed on
+    ironman: your host and reload your VM.
+    ironman:
+    ironman: Guest Additions Version: 4.2.0
+    ironman: VirtualBox Version: 5.0
+==> ironman: Mounting shared folders...
+    ironman: /vagrant => /Users/tsoliang/Desktop/workspace
 ```
 
 再檢查一次虛擬機運行狀況：
@@ -207,7 +207,7 @@ $ vagrant status
 
 Current machine states:
 
-ironman_ansible_jenkins   running (virtualbox)
+ironman   running (virtualbox)
 
 The VM is running. To stop this VM, you can run `vagrant halt` to
 shut it down forcefully, or you can run `vagrant suspend` to simply
