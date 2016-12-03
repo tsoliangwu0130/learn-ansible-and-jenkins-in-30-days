@@ -30,7 +30,7 @@ You're running an up-to-date version of Vagrant!
 
 使用 Vagrant 的另一大優點就是大家都可以把自己習慣的開發環境打包給其他人使用。而這些打包後的作業系統在 Vagrant 的世界內就稱為 [Vagrant boxes](https://www.vagrantup.com/docs/boxes.html)。讀者可以依據自己的需求在 [public Vagrant box catalog](https://atlas.hashicorp.com/boxes/search) 上搜尋適合的 box 來使用。值得一提的是官方特別推薦使用 [Bento boxes](https://atlas.hashicorp.com/bento) 這個列表內中的 boxes，除了因為開發者大多皆為知名軟體工作者，其品質相對穩定外，各專案也都已於 GitHub 上開源。
 
-作為示範，我將使用官方釋出的輕量級 box -- hashicorp/precise64 (Ubuntu 12.04 (32 and 64-bit))來作為接下來的標準 box。
+作為示範，我將使用官方釋出的輕量級 box -- `hashicorp/precise64` (Ubuntu 12.04 (32 and 64-bit))來作為接下來的標準 box。
 
 首先，我們先在桌面上建立一個 workspace 給這次的專案使用。
 
