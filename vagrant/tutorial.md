@@ -127,7 +127,7 @@ end
 
 簡單來說，`Vagrantfile` 就是每一台的虛擬機的規格表。每次我們啟動或部署 Vagrant 虛擬機時就是依據這一份設置文件 (configuration file) 來進行定義的。雖然乍看之下這個檔案長得有些驚悚，但仔細研究後會發現目前真正有用到的配置其實只有短短幾行而已：
 
-```shell
+```ruby
 Vagrant.configure("2") do |config|
   config.vm.box = "hashicorp/precise64"
 end
