@@ -6,3 +6,4 @@
 	* [2-2. Vagrant 基本設定](vagrant/tutorial.md)
 * [3. 使用 Ansible 部署環境](ansible/README.md)
 	* [3-1. Ansible 介紹](ansible/intro.md)
+	* [3-2. Ansible 安裝](ansible/installation.md)
