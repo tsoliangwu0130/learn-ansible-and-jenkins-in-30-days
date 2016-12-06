@@ -7,3 +7,4 @@
 * [3. 使用 Ansible 部署環境](ansible/README.md)
 	* [3-1. Ansible 介紹](ansible/intro.md)
 	* [3-2. Ansible 安裝](ansible/installation.md)
+	* [3-3. 撰寫第一個 Playbook](ansible/playbook.md)
