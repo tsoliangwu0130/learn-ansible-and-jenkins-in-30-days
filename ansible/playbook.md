@@ -4,11 +4,11 @@
 
 當確認 Ansible 已經正確地安裝在控制主機上之後，我們現在就可以準備透過 Ansible 對遙控節點進行部署了。然而，我們要如何告訴 Ansible 我們想要對遙控節點做些什麼呢？在 Ansible 的世界裡，我們是透過編寫劇本 (playbook) 來告訴 Ansible 接下來需要做的事項。由於 Ansible 的劇本是用 [YAML (YAML Ain't Markup Language)](http://yaml.org/) 這種語言來撰寫，而這個語言最大的特色就是具有高度可讀性，因此無論有沒有程式語言的基礎，理論上任何人在看到一份好的 Ansible playbook 的時候應該都是非常容易理解及著手修改維護的。
 
-#### 我的第一個 Playbook
+#### 我的第一個 playbook
 
 以下先用一個非常簡單的範例來介紹 playbook 的運作方式。我們先創建一個 playbook 檔案，將其命名為 `playbook.yml` 並置於工作目錄下 (e.g. `workspace/playbook.yml`)。接著，開啟檔案並輸入以下內容：
 
-```yaml
+```yml
 ---
 - hosts: ironman
   tasks:
@@ -37,4 +37,37 @@
 
 	在上一個 task 中，我們已經把 ping 後的結果存在 `message` 這個變數中了。我們可以利用 [debug](http://docs.ansible.com/ansible/debug_module.html) 這個模組把儲存的訊息輸出到我們的終端機上。在 Ansible 中，若要調用儲存變數，我們必須在變數名稱外加上兩個大括弧 - {{ }} 來告訴 Ansible 大括弧內的是一個變數 （[如果變數在描述句 (statement) 的開頭，還必須要額外加上一個雙引號 - ""](http://docs.ansible.com/ansible/playbooks_variables.html#hey-wait-a-yaml-gotcha)）。
 
-定義好了我們的第一個 playbook 後，接下來就是如何運行我們寫好的 playbook 啦！
+#### 利用 Ansible-lint 來檢查 playbook
+
+上一個章節中，我有提到 [Ansible-lint](https://github.com/willthames/ansible-lint) 這個語法提示工具，如果沒有安裝的讀者可以自行跳過這個部分。使用 Ansible-lint 的方法相當簡單，只要在終端機中利用 `ansible-lint` 輸入需要檢查的檔案 (e.g. `playbook.yml`) 即可：
+
+```shell
+$ ansible-lint playbook.yml
+```
+
+如果沒有看到任何輸出就表示你的 playbook 完全沒有問題！不過為了展示 Ansible-lint 的提示效果，我在 playbook 的第五行句尾加上一個空白：
+
+```yml
+    - name: test connection 
+                           ~
+```
+
+接著，重新輸入剛剛的指令：
+```
+$ ansible-lint playbook.yml
+
+[ANSIBLE0002] Trailing whitespace
+playbook.yml:5
+    - name: test connection
+```
+
+我們可以清楚地看到 Ansible-lint 告訴我們在 `playbook.yml:5` 第五行的地方有個後綴空白 (trailing whitespace)，為了保持程式碼的簡潔，我們可以將其刪除。
+
+
+#### [Optional] Sublime 插件 - Syntax highlighting for Ansible files
+
+如果讀者使用的編輯器是 [Sublime Text](https://www.sublimetext.com/)，在這裡推薦一個不錯的語法高亮器 (Syntax Highlighting) 給大家。因為在 Sublime 中，語法高亮並沒有原生支援 Ansible 的語法，所以我們只能預設使用 YAML 來加亮語法。[Syntax highlighting for Ansible files](https://github.com/clifford-github/sublime-ansible) 這套插件補強了 Ansible 在 Sublime 上的顯示效果，非常推薦使用 Sublime 的讀者安裝這套插件。
+
+![sublime_ansible](images/sublime_ansible.png "Sublime Plugin for Ansible")
+
+在定義好了我們的第一個 playbook 後，接下來就是如何運行我們寫好的 playbook 啦！
