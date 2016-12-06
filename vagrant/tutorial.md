@@ -215,4 +215,4 @@ suspend the virtual machine. In either case, to restart it again,
 simply run `vagrant up`.
 ```
 
-正如我們預期的，虛擬機有自己的名字拉！
+正如我們預期的，虛擬機有自己的名字啦！
