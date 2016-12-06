@@ -31,7 +31,7 @@
 
 	我們在這個 task 中，呼叫了 Ansible 的內建測試模組 (module) - [ping](http://docs.ansible.com/ansible/ping_module.html)。這個模組的目的非常類似在學習每個語言一開始練習的 ["Hello World"](https://zh.wikipedia.org/wiki/Hello_World) 程式。其主要是用來測試操控主機是否可以正確地與遙控節點進行溝通，如果連線正常，遙控節點就會回傳一個 "pong" 的訊息給控制主機。接著，我們透過另一個 Ansible 內建模組 - [register](http://docs.ansible.com/ansible/playbooks_variables.html#registered-variables) 把遙控節點回傳的訊息存成變數 (variable) 的形式。
 
-	_注意：此處的 "ping" 並非建立在 [ICMP 協定](https://zh.wikipedia.org/wiki/%E4%BA%92%E8%81%94%E7%BD%91%E6%8E%A7%E5%88%B6%E6%B6%88%E6%81%AF%E5%8D%8F%E8%AE%AE)下的 "[ping](https://zh.wikipedia.org/wiki/Ping)" 指令，只是純 Ansible 開發的一個簡單測試模組。_
+	_注意：此處的 ping 並非建立在 [ICMP 協定](https://zh.wikipedia.org/wiki/%E4%BA%92%E8%81%94%E7%BD%91%E6%8E%A7%E5%88%B6%E6%B6%88%E6%81%AF%E5%8D%8F%E8%AE%AE)下的 [ping](https://zh.wikipedia.org/wiki/Ping) 指令，只是純 Ansible 開發的一個簡單測試模組。_
 
 2. print debug message
 
