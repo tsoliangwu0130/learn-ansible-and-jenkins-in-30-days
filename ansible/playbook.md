@@ -68,6 +68,6 @@ playbook.yml:5
 
 如果讀者使用的編輯器是 [Sublime Text](https://www.sublimetext.com/)，在這裡推薦一個不錯的語法高亮器 (Syntax Highlighting) 給大家。因為在 Sublime 中，語法高亮並沒有原生支援 Ansible 的語法，所以我們只能預設使用 YAML 來加亮語法。[Syntax highlighting for Ansible files](https://github.com/clifford-github/sublime-ansible) 這套插件補強了 Ansible 在 Sublime 上的顯示效果，非常推薦使用 Sublime 的讀者安裝這套插件。
 
-![sublime_ansible](images/sublime_ansible.png "Sublime Plugin for Ansible")
+![sublime_ansible](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/raw/master/images/sublime_ansible.png "Sublime Plugin for Ansible")
 
 在定義好了我們的第一個 playbook 後，接下來就是如何運行我們寫好的 playbook 啦！
