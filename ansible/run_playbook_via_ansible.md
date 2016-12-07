@@ -97,7 +97,7 @@ IdentityFile /Users/tsoliang/Desktop/workspace/.vagrant/machines/ironman/virtual
 這個參數告訴了我們這台虛擬主機 private key 的存放位置，我們只需要透過以下指令，將這個檔案的路徑指定給 Ansible，我們就可以成功運行我們的 playbook 囉！
 
 ```shell
-ansible-playbook \
+$ ansible-playbook \
   --private-key /Users/tsoliang/Desktop/workspace/.vagrant/machines/ironman/virtualbox/private_key \
   -i inventory playbook.yml
 ```
