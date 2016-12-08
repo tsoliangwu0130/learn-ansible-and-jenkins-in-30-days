@@ -8,4 +8,5 @@
 	* [3-1. Ansible 介紹](ansible/intro.md)
 	* [3-2. Ansible 安裝](ansible/installation.md)
 	* [3-3. 撰寫第一個 Playbook](ansible/playbook_intro.md)
-	* [3-4. 透過 Ansible 運行 playbook](ansible/run_playbook_via_ansible.md)
+	* [3-4. 透過 Ansible 運行 playbook](ansible/run_playbook_with_ansible.md)
+	* [3-5. 透過 Vagrant 運行 playbook](ansible/run_playbook_with_vagrant.md)
