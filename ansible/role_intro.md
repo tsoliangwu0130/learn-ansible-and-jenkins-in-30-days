@@ -58,3 +58,60 @@ The program 'curl' is currently not installed.  You can install it by typing:
 sudo apt-get install curl
 ```
 
+雖然 cURL 這個指令在 Unix / Linux 系統的主機上常常被開發人員大量使用，可是很不幸地，並不是所有的 box 或作業系統都有預先安裝好這個工具。為了能夠順利將 cURL 安裝在遙控節點上並將所有安裝的過程自動化，我們可以試著利用 Ansible 完成所有安裝程序。
+
+
+#### 我的第一個 role
+
+考量到由於安裝 cURL 這個工作很可能在未來進行 Ansible 開發的過程中被不同的 playbook 重複使用，因此，我會選擇把安裝 cURL 的方法寫成一個可以重複被利用的 role ，而非 playbook 中的一個 task。
+
+讓我們在工作資料夾下依照以下結構新增檔案 (新增 `roles/curl/main.yml`)：
+
+```shell
+workspace
+├── Vagrantfile
+├── inventory
+├── playbook.yml
+└── roles
+    └── curl
+        └── tasks
+            └── main.yml
+```
+
+在這個結構下， `curl` 就是我們的第一個 role 的名稱，而這個 role 的工作流程就會被我們定義在下面的 `tasks/main.yml` 之中。接著打開 `curl/tasks//main.yml` 並在其中寫入以下內容：
+
+```yml
+---
+  - name: install curl
+    apt:
+      name: curl
+    when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian' 
+```
+
+我們在這個 role 的內容中呼叫了 Ansible 內建模組 [apt](http://docs.ansible.com/ansible/apt_module.html)，並加上了一個系統[判斷條件](http://docs.ansible.com/ansible/playbooks_conditionals.html)。由於 Ubuntu 跟 Debian 這兩種主要的 Linux 作業系統預設都是搭載 apt 做為套件管理，所以當我們今天只要運行這個 role，並判斷遙控節點是這兩個作業系統的時候我們就會運行上面的任務。
+
+接著，打開我們的 `playbook.yml`，並修改為以下內容：
+
+```shell
+---
+- hosts: ironman
+  roles:
+    - { role: curl, become: true }
+```
+
+我們刪掉了之前用來測試的 ping 劇本，並在這個 playbook 中告訴 Ansible 我們想要執行 `curl` 這個我們剛定義好的 role。其中要特別注意的是，[become](http://docs.ansible.com/ansible/become.html) 代表我們要升高當前使用者權限 （等效於 Unix / Linux 中的 `sudo` 指令）來運行當前工作。
+
+
+最後，重新運行我們的 playbook，應該會得到以下結果：
+
+```shell
+PLAY [ironman] *****************************************************************
+
+TASK [setup] *******************************************************************
+ok: [ironman]
+
+PLAY RECAP *********************************************************************
+ironman                    : ok=1    changed=0    unreachable=0    failed=0
+```
+
+雖然 playbook 被正確運行了，可是很顯然地，我們用來安裝 cURL 的 role 並沒有被其呼叫成功。
