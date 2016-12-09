@@ -10,3 +10,4 @@
 	* [3-3. 撰寫第一個 Playbook](ansible/playbook_intro.md)
 	* [3-4. 透過 Ansible 運行 playbook](ansible/run_playbook_with_ansible.md)
 	* [3-5. 透過 Vagrant 運行 playbook](ansible/run_playbook_with_vagrant.md)
+	* [3-6. 撰寫第一個 Role](ansible/role_intro.md)
