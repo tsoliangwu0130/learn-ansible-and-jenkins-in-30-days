@@ -32,7 +32,7 @@ $ sudo apt-get install jenkins
 
 當在終端機輸出內容的最後看到以下訊息，就代表現在 Jenkins 已經成功安裝在我們的遙控節點上了：
 
-```
+```shell
 Setting up jenkins (2.19.4) ...
  * Starting Jenkins Continuous Integration Server jenkins                                                                                                                  [ OK ]
 Processing triggers for libc-bin ...
