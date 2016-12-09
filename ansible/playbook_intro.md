@@ -1,4 +1,4 @@
-# 撰寫第一個 Playbook
+# 撰寫第一個 playbook
 
 #### 什麼是 Ansible Playbook？
 
