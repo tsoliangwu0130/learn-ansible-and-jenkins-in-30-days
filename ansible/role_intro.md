@@ -2,10 +2,6 @@
 
 在了解 playbook 的基本架構與運行方式後，我會在接下來的章節內介紹如何使用 Ansible 搭建起 [Jenkins](https://jenkins.io/) 的運行環境。透過實際的例子，相信讀者會對操作 Ansible 將會更加熟練與靈活。然而，我並不會在這個章節內過度著墨 Jenkins 的部分。關於 Jenkins 持續整合的使用，會在未來的章節內做更詳細的介紹。
 
-#### 什麼是 Ansible Role？
-
-我們在前面的章節內學習了如何撰寫 Ansible playbook，我們可以將我們希望 Ansible 做的事項以 task 的方式在 playbook 中表列下來。然而，如果 Ansible 只能做到這樣的程度，充其量我們只能說這是一個比較方便閱讀的 Shell script 罷了。若是今天我們清單中的任務有上百個，這樣我們的 playbook 也可能會變得非常冗長，就算語法再如何易讀，整體而言 playbook 還是會變得十分難以理解。另外，很多時候其實我們會希望有部分的部署內容是可以被其他不同的 playbook 重新使用。舉例來說，很多服務都可以直接使用 pip 這個套件管理來進行安裝，我們並不會希望在每一個不同的 playbook 中都要重新定義一次 pip 的安裝方法。因此，為了解決上述的問題，Ansible 提供了我們在撰寫自動化腳本時一個[角色 (role)](http://docs.ansible.com/ansible/playbooks_roles.html) 的概念。我們可以透過撰寫屬於自己的 role 來讓所有 playbook 重複使用，藉此提升透過 Ansible 自動化的靈活度。
-
 #### 嘗試手動安裝 Jenkins
 
 首先，讓我們先試著不要透過 Ansible，手動安裝 Jenkins 在我們的主機上。因為在這系列文章中，我們用的是 Ubuntu 的 box 來運行虛擬機，因此根據 Jenkins [官方的 Ubuntu 安裝教學](https://wiki.jenkins-ci.org/display/JENKINS/Installing+Jenkins+on+Ubuntu)，我們可以直接透過系統內建的 apt 套件管理進行 Jenkins 安裝：
@@ -60,6 +56,9 @@ sudo apt-get install curl
 
 雖然 cURL 這個指令在 Unix / Linux 系統的主機上常常被開發人員大量使用，可是很不幸地，並不是所有的 box 或作業系統都有預先安裝好這個工具。為了能夠順利將 cURL 安裝在遙控節點上並將所有安裝的過程自動化，我們可以試著利用 Ansible 完成所有安裝程序。
 
+#### 什麼是 Ansible Role？
+
+我們在前面的章節內學習了如何撰寫 Ansible playbook，我們可以將我們希望 Ansible 做的事項以 task 的方式在 playbook 中表列下來。然而，如果 Ansible 只能做到這樣的程度，充其量我們只能說這是一個比較方便閱讀的 Shell script 罷了。若是今天我們清單中的任務有上百個，這樣我們的 playbook 也可能會變得非常冗長，就算語法再如何易讀，整體而言 playbook 還是會變得十分難以理解。另外，很多時候其實我們會希望有部分的部署內容是可以被其他不同的 playbook 重新使用。舉例來說，很多服務都可以直接使用 pip 這個套件管理來進行安裝，我們並不會希望在每一個不同的 playbook 中都要重新定義一次 pip 的安裝方法。因此，為了解決上述的問題，Ansible 提供了我們在撰寫自動化腳本時一個[角色 (role)](http://docs.ansible.com/ansible/playbooks_roles.html) 的概念。我們可以透過撰寫屬於自己的 role 來讓所有 playbook 重複使用，藉此提升透過 Ansible 自動化的靈活度。
 
 #### 我的第一個 role
 
