@@ -7,10 +7,11 @@
 新增一個檔案 `ansible.cfg` 並加入以下內容：
 
 ```
+[ironman]
 roles_path = ./roles
 ```
 
-雖然只有短短一行，但 Ansible 就會依此路徑去找到我們 role 的存放位置。接著重新執行我們的 playbook：
+雖然只有短短兩行，但 Ansible 就會依此路徑去找到我們 role 的存放位置。接著重新執行我們的 playbook：
 
 ```shell
 PLAY [ironman] *****************************************************************
