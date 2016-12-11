@@ -12,3 +12,4 @@
 	* [3-5. 透過 Vagrant 運行 playbook](ansible/run_playbook_with_vagrant.md)
 	* [3-6. 撰寫第一個 Ansible Role](ansible/role_intro.md)
 	* [3-7. 配置 ansible.cfg](ansible/ansible_cfg_intro.md)
+	* [3-8. 建立 Ansible Role 的依賴關係](ansible/role_meta.md)
