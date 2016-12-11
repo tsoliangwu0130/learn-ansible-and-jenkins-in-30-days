@@ -95,7 +95,7 @@ workspace
 ---
 - hosts: ironman
   roles:
-    - { role: curl, become: true }
+    - { role: curl, become: yes }
 ```
 
 我們刪除了之前用來測試的 ping 劇碼 (play)，並在這個 playbook 中告訴 Ansible 我們想要執行 `curl` 這個我們剛定義好的 role。其中要特別注意的是，[become](http://docs.ansible.com/ansible/become.html) 代表我們要升高當前使用者權限 （等效於 Unix / Linux 中的 `sudo` 指令）來運行當前工作。

@@ -132,7 +132,7 @@ workspace
 ---
 - hosts: ironman
   roles:
-    - { role: jenkins, become: true }
+    - { role: jenkins, become: yes }
 ```
 
 重新運行 playbook.yml，結果如下：
