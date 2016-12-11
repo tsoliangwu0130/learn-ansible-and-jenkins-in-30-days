@@ -58,8 +58,8 @@ workspace
 ---
 - hosts: ironman
   roles:
-    - { role: curl, become: true }
-    - { role: jenkins, become: true }
+    - { role: curl, become: yes }
+    - { role: jenkins, become: yes }
 ```
 
 結果如下：
