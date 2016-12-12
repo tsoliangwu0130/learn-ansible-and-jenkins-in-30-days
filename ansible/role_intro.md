@@ -77,19 +77,16 @@ workspace
             └── main.yml
 ```
 
-在這個結構下， `curl` 就是我們的第一個 role 的名稱，而這個 role 的工作流程就會被我們定義在下面的 `tasks/main.yml` 之中。接著打開 `curl/tasks/main.yml` 並在其中寫入以下內容：
+在這個結構下， `curl` 就是我們的第一個 role 的名稱，而這個 role 的工作流程就會被我們定義在下面的 `tasks/main.yml` 之中。現在打開 `curl/tasks/main.yml` 並在其中寫入以下內容：
 
 ```yml
 ---
   - name: install curl
     apt:
       name: curl
-    when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian' 
 ```
 
-我們在這個 role 的內容中呼叫了 Ansible 內建模組 [apt](http://docs.ansible.com/ansible/apt_module.html)，並加上了一個系統[判斷條件](http://docs.ansible.com/ansible/playbooks_conditionals.html)。由於 Ubuntu 跟 Debian 這兩種主要的 Linux 作業系統預設都是搭載 apt 做為套件管理，所以當我們今天只要運行這個 role，並判斷遙控主機是這兩個作業系統之一的時候我們就會運行上面的任務。
-
-接著，打開我們的 `playbook.yml`，並修改為以下內容：
+我們在這個 role 的內容中呼叫了 Ansible 內建模組 [apt](http://docs.ansible.com/ansible/apt_module.html)，並利用它直接進行 cURL 的安裝。接著，打開我們的 `playbook.yml`，並修改為以下內容：
 
 ```shell
 ---
