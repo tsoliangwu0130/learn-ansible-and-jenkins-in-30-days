@@ -4,7 +4,7 @@
 
 #### 安裝 Git
 
-在本系列文章一開始的簡介中，我們有提到 Jenkins 是一個可以幫我們從原始碼託管服務（在這次的教學系列文中將以 [GitHub](https://github.com/) 作為範例）上產品狀況的一個持續整合服務。因此為了讓 Jenkins 運行的主機可以使用對應的版本控制系統 - [Git](https://git-scm.com/)，我們接下來會寫另一個獨立的 role 來安裝 Git。
+在本系列文章一開始的簡介中，我們有提到 Jenkins 是一個可以幫我們從原始碼託管服務（在這次的教學系列文中將以 [GitHub](https://github.com/) 作為範例）上維護產品的一個持續整合服務。因此為了讓 Jenkins 運行的主機可以使用對應的版本控制系統 - [Git](https://git-scm.com/)，我們接下來會寫另一個獨立的 role 來安裝 Git。
 
 依照以下結構新增 `git` 這個 role：
 
