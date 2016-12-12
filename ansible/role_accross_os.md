@@ -2,14 +2,14 @@
 
 目前為止，我們在安裝 Jenkins 的遙控主機上只有額外安裝 `curl` 這項工具。不過在未來的章節中，我們還會需要一些其他工具的幫忙。因此，我將在這個章節內新增幾個額外的 role，並介紹如何使用單一個 role 同時支援不同作業系統的主機。
 
-#### 安裝 Git 及 pip
+#### 安裝 Git
 
 在本系列文章一開始的簡介中，我們有提到 Jenkins 是一個可以幫我們從原始碼託管服務（在這次的教學系列文中將以 [GitHub](https://github.com/) 作為範例）上產品狀況的一個持續整合服務。因此為了讓 Jenkins 運行的主機可以使用對應的版本控制系統 - [Git](https://git-scm.com/)，我們接下來會寫另一個獨立的 role 來安裝 Git。
 
 依照以下結構新增 `git` 這個 role：
 
 ```shell
-workspace/
+workspace
 ├── Vagrantfile
 ├── ansible.cfg
 ├── inventory
@@ -60,10 +60,12 @@ workspace/
     when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
 ```
 
-除此之外，由於在未來的章節中，我會讓 Jenkins 使用 [Ansible-lint](https://github.com/willthames/ansible-lint) 這個語法檢查器來反向檢查我們所有的 Ansible playbook 及 roles，以確保我們每次放在 GitHub 上的程式碼都是最佳狀態。為了安裝 Ansible-lint，我們還需要安裝 pip 這個 Python 套件管理工具在主機上：
+#### 安裝 pip 以及 Ansible-lint
+
+除此之外，由於在未來的章節中，我會讓 Jenkins 使用 [Ansible-lint](https://github.com/willthames/ansible-lint) 這個語法檢查器來反向檢查我們所有的 Ansible playbook 及 roles，以確保我們每次放在 GitHub 上的程式碼都是最佳狀態。為了安裝 Ansible-lint，我們需要先安裝 pip 這個 Python 套件管理工具在主機上：
 
 ```shell
-workspace/
+workspace
 ├── Vagrantfile
 ├── ansible.cfg
 ├── inventory
@@ -118,6 +120,76 @@ workspace/
 
 雖然 pip 也是在一般操作系統中非常常用的套件管理工具，但在 CentOS 作業系統中安裝 pip 會稍微比其他 Linux / Unix 的安裝步驟更加麻煩一點，我們會需要先安裝 [EPEL (Extra Packages for Enterprise Linux)](https://fedoraproject.org/wiki/EPEL) 才可以進行 pip 的安裝，而其中又以 CentOS 6.x 版本的安裝更加繁瑣。由於我們這次的重點並非討論其中的差異，因此我只將我個人的 role 在這裡分享給大家，若有興趣了解的讀者可以在網路上自行研究其差異 (e.g. [CentOS 6.x](http://sharadchhetri.com/2014/05/30/install-pip-centos-rhel-ubuntu-debian/), [CentOS 7.x](http://sharadchhetri.com/2014/09/07/install-epel-repo-centos-7-rhel-7/))。
 
+接著，使用剛安裝好的 `pip` 來安裝 Ansible-lint：
+
+```shell
+workspace
+├── Vagrantfile
+├── ansible.cfg
+├── inventory
+├── playbook.yml
+└── roles
+    ├── ansible-lint
+    │   ├── meta
+    │   │   └── main.yml
+    │   └── tasks
+    │       └── main.yml
+    ├── curl
+    │   └── tasks
+    │       └── main.yml
+    ├── git
+    │   └── tasks
+    │       └── main.yml
+    ├── jenkins
+    │   ├── meta
+    │   │   └── main.yml
+    │   └── tasks
+    │       └── main.yml
+    └── pip
+        └── tasks
+            └── main.yml
+```
+
+在 `roles/ansible-lint/meta/main.yml` 中添加 `pip` 為其角色依賴：
+
+```yml
+---
+  dependencies:
+    - { role: pip, become: yes }
+```
+
+接著在 `roles/ansible-lint/meta/main.yml` 新增內容：
+
+```yml
+---
+  - name: install ansible-lint dependencies (via pip)
+    pip:
+      name: "{{ item }}"
+    with_items:
+      - markupsafe
+      - PyYAML
+
+  - name: install ansible-lint dependencies (via apt-get)
+    apt:
+      name: "{{ item }}"
+      update_cache: yes
+    with_items:
+      - python-keyczar
+      - python-httplib2
+      - python-jinja2
+      - python-paramiko
+      - python-setuptools
+      - python-six
+      - python-dev
+    when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+
+  - name: install ansible-lint
+    pip:
+      name: ansible-lint
+```
+
+由於我們使用的是相當乾淨的環境，在安裝 Ansible-lint 之前，我們還必須要分別使用 apt 及 pip 來安裝一些 Ansible-lint 需要的 Python 依賴。在這裡順便介紹一下 Ansible 基本[迴圈](http://docs.ansible.com/ansible/playbooks_loops.html)的寫法。我們可以使用 `{{ item }}` 跟 `with_items` 的組合來實現類似於一般程式語言中的 [For 迴圈](https://zh.wikipedia.org/zh-hant/For%E8%BF%B4%E5%9C%88)概念。Ansible 在進入帶有 `with_items` 迴圈的 task 後，會依序將 `with_items` 下的清單代入 `{{ item }}` 的位置。
+
 最後，更新 `jenkins` 的 `meta` 依賴：
 
 ```yml
@@ -125,10 +197,10 @@ workspace/
   dependencies:
     - { role: curl, become: yes }
     - { role: git, become: yes }
-    - { role: pip, become: yes }
+    - { role: ansible-lint, become: yes }
 ```
 
-結果如下：
+運行 playbook 後結果如下：
 
 ```
 PLAY [ironman] *****************************************************************
@@ -160,8 +232,15 @@ skipping: [ironman]
 TASK [pip : install pip] *******************************************************
 changed: [ironman]
 
-TASK [pip : install curl] ******************************************************
-ok: [ironman]
+TASK [ansible-lint : install ansible-lint dependencies (via pip)] **************
+changed: [ironman] => (item=markupsafe)
+changed: [ironman] => (item=PyYAML)
+
+TASK [ansible-lint : install ansible-lint dependencies (via apt-get)] **********
+changed: [ironman] => (item=[u'python-keyczar', u'python-httplib2', u'python-jinja2', u'python-paramiko', u'python-setuptools', u'python-six', u'python-dev'])
+
+TASK [ansible-lint : install ansible-lint] *************************************
+changed: [ironman]
 
 TASK [jenkins : add jenkins key] ***********************************************
 ok: [ironman]
