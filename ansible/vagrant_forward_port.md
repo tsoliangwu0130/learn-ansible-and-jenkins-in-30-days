@@ -4,7 +4,7 @@
 
 #### Vagrant port forward
 
-由於 Jenkins 預設是運行在主機的 `port 8080`，因此我們必須試著把遙控節點的 `port 8080` 廣播到控制主機上。不過，由於 `port 8080` 是一個非常容易被其他服務使用的 port，因此為了避免衝突，我們將利用 `forwarded_port` 這個參數來將遙控節點上的 `port 8080` 映射到控制主機上的 `port 9080`。
+由於 Jenkins 預設是運行在主機的 `port 8080`，因此我們必須試著把遙控節點的 `port 8080` 廣播到控制主機上。不過，由於 `port 8080` 是一個非常容易被其他服務使用的 port，為了避免衝突，我們將利用 `forwarded_port` 這個參數來將遙控節點上的 `port 8080` 映射到控制主機上的 `port 9080`。
 
 在 `Vagrantfile` 中，直接在 `config.vm.define "ironman"` 該行下面新增以下設定：
 
@@ -12,7 +12,7 @@
 config.vm.network "forwarded_port", guest: 8080, host: 9080
 ```
 
-這樣表示我們可以直接在控制主機上使用 `port 9080` 來訪問遙控節點上 `port 8080` 的服務。現在重新啟動 Vagrant 來讓新設定生效：
+這樣表示我們可以直接在控制主機上使用 `port 9080` 來訪問遙控節點上 `port 8080` 的服務。現在重新啟動 Vagrant 主機來讓新設定生效：
 
 ```shell
 $ vagrant reload
