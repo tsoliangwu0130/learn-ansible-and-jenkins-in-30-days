@@ -180,4 +180,4 @@ ironman                    : ok=7    changed=3    unreachable=0    failed=0
 
 #### [Optional] Ansible Galaxy
 
-[Ansible Galaxy](https://galaxy.ansible.com/) 是一個 Ansible 官方提供的 Ansible Role 共享平台。所有 Ansible 的使用者都可以自由上傳自己的 role 與全世界的開發人員分享。在接到任務需求前，建議讀者可以花個幾分鐘在上面稍微瀏覽一下，看看是否有適合自己使用的現成 role 的可以立刻拿來使用。不過，為避免讀者混淆，這次就不特別介紹如何使用 `ansible-galaxy` 來調用其他開發者的 role，有興趣的讀者可以自行參閱[官方使用教學](http://docs.ansible.com/ansible/galaxy.html)。
+[Ansible Galaxy](https://galaxy.ansible.com/) 是一個 Ansible 官方提供的 Ansible Role 共享平台。所有 Ansible 的使用者都可以自由上傳自己的 role 與全世界的開發人員分享。在接到任務需求前，建議讀者可以花個幾分鐘在上面稍微[瀏覽](https://galaxy.ansible.com/list#/roles?page=1&page_size=10)一下，看看是否有適合自己使用的現成 role 的可以立刻拿來使用。不過，為避免讀者混淆，這次就不特別介紹如何使用 `ansible-galaxy` 來調用其他開發者的 role，有興趣的讀者可以自行參閱[官方使用教學](http://docs.ansible.com/ansible/galaxy.html)。
