@@ -158,7 +158,7 @@ workspace
     - { role: pip, become: yes }
 ```
 
-接著在 `roles/ansible-lint/meta/main.yml` 新增內容：
+接著在 `roles/ansible-lint/tasks/main.yml` 新增內容：
 
 ```yml
 ---
