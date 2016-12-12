@@ -97,12 +97,12 @@ workspace
       description: EPEL yum repo
       baseurl: http://download.fedoraproject.org/pub/epel/$releasever/$basearch/
       gpgkey: /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-6
-    when: ansible_distribution == "CentOS" and ansible_distribution_major_version == "6"
+    when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '6'
 
   - name: install EPEL
     yum:
       name: epel-release
-    when: ansible_distribution == "CentOS" and ansible_distribution_major_version == "7"
+    when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'
 
   - name: install pip
     yum:
@@ -115,7 +115,7 @@ workspace
     apt:
       name: python-pip
       update_cache: yes
-    when: ansible_distribution == 'Debian'
+    when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
 ```
 
 雖然 pip 也是在一般操作系統中非常常用的套件管理工具，但在 CentOS 作業系統中安裝 pip 會稍微比其他 Linux / Unix 的安裝步驟更加麻煩一點，我們會需要先安裝 [EPEL (Extra Packages for Enterprise Linux)](https://fedoraproject.org/wiki/EPEL) 才可以進行 pip 的安裝，而其中又以 CentOS 6.x 版本的安裝更加繁瑣。由於我們這次的重點並非討論其中的差異，因此我只將我個人的 role 在這裡分享給大家，若有興趣了解的讀者可以在網路上自行研究其差異 (e.g. [CentOS 6.x](http://sharadchhetri.com/2014/05/30/install-pip-centos-rhel-ubuntu-debian/), [CentOS 7.x](http://sharadchhetri.com/2014/09/07/install-epel-repo-centos-7-rhel-7/))。
