@@ -177,3 +177,7 @@ ironman                    : ok=7    changed=3    unreachable=0    failed=0
 ```
 
 我們可以看到 Ansible 會根據對應的作業系統判斷哪些 tasks 可以被略過 (`skipping`)，這也是為什麼我們不需要特別為不同作業系統保存多份版本的 role，只要專注在同一個 role 中開發當前任務即可。另外，若仔細閱讀在終端機上顯示的 Ansible 安裝流程，應該會發現已經被安裝過的服務並不會一直重複被安裝。顯示為 `changed` 表示遙控主機在這次運行 playbook 的過程裡，Ansible 在該項 task 中對系統做了改變；`ok` 則表示該 task 的完成條件已滿足，所以 Ansible 並不會額外對主機做其他變動。特別需要解釋的是，若我們使用了 `update_cache: yes` 這項屬性來透過套件管理工具安裝服務。我們每次安裝服務前都會試圖將套件管理工具的版本都更新到當前最新版本，然後才進行安裝步驟，因此每次 task 的狀態都將會顯示為 `changed`。
+
+#### [Optional] Ansible Galaxy
+
+[Ansible Galaxy](https://galaxy.ansible.com/) 是一個 Ansible 官方提供的 Ansible Role 共享平台。所有 Ansible 的使用者都可以自由上傳自己的 role 與全世界的開發人員分享。在接到任務需求前，建議讀者可以花個幾分鐘在上面稍微瀏覽一下，看看是否有適合自己使用的現成 role 的可以立刻拿來使用。不過，為避免讀者混淆，這次就不特別介紹如何使用 `ansible-galaxy` 來調用其他開發者的 role，有興趣的讀者可以自行參閱[官方使用教學](http://docs.ansible.com/ansible/galaxy.html)。
