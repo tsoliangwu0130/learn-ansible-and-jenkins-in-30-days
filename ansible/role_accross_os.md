@@ -43,7 +43,7 @@ workspace
     when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
 ```
 
-除了非常類似於之前 `curl` 這個 role 的安裝流程，這次我們在 role 裡面加上了系統[判斷條件](http://docs.ansible.com/ansible/playbooks_conditionals.html)。由於 Ubuntu 跟 Debian 這兩種主要的 Linux 作業系統預設都是搭載 apt 做為套件管理，所以當我們今天只要運行這個 role，並判斷遙控主機是這兩個作業系統之一的時候，我們就會運行上面定義的任務。另外，由於 `git` 這個 role 理論上在未來被重複利用到的頻率會非常高，因此我在這裡同時也新增了在 CentOS 這套作業系統上使用 yum 安裝 git 的方法（在 yum 套件管理系統中，Git 套件的名稱與 apt 系統並不相同），以增加這個 role 的使用靈活性。
+除了非常類似於之前 `curl` 這個 role 的安裝流程，這次我們在 role 裡面加上了系統[判斷條件](http://docs.ansible.com/ansible/playbooks_conditionals.html)。由於 Ubuntu 跟 Debian 這兩種主要的 Linux 作業系統預設都是搭載 apt 做為套件管理，所以當我們今天只要運行這個 role，並判斷遙控主機是這兩個作業系統之一的時候，我們就會運行上面定義的任務。另外，由於 `git` 這個 role 理論上在未來被重複利用到的頻率會非常高，因此我在這裡同時也新增了在 CentOS 這套作業系統上使用 yum 安裝 Git 的方法（在 yum 套件管理系統中，Git 套件的名稱與 apt 系統並不相同），以增加這個 role 的使用靈活性。
 
 同理，我們也可以將之前寫的 `curl` 略作更改：
 
