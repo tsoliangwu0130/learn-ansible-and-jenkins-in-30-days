@@ -1,6 +1,6 @@
-# 擴充 jenkins role 及設定 Vagrant port forward
+# 強化 Ansible Role 跨系統的靈活性
 
-在前面的幾個章節內，我們只有簡單的利用 cURL 測試 Jenkins 是否已經正確安裝。現在我們要透過更新 `Vagrantfile` 來讓主機端的瀏覽器可以訪問 Jenkins 位於 `localhost` 的服務，並新增幾個我們在未來章節會用到 roles dependencies。
+目前為止，我們在安裝 Jenkins 的遙控主機上只有額外安裝 `curl` 這項工具。不過在未來的章節中，我們還會需要一些其他工具的幫忙。因此，我將在這個章節內新增幾個額外的 role，並介紹如何使用單一個 role 同時支援不同作業系統的主機。
 
 #### 安裝 Git 及 pip
 
@@ -175,55 +175,3 @@ ironman                    : ok=7    changed=3    unreachable=0    failed=0
 ```
 
 我們可以看到 Ansible 會根據對應的作業系統判斷哪些 tasks 可以被略過 (`skipping`)，這也是為什麼我們不需要特別為不同作業系統保存多份版本的 role，只要專注在同一個 role 中開發當前任務即可。另外，若仔細閱讀在終端機上顯示的 Ansible 安裝流程，應該會發現已經被安裝過的服務並不會一直重複被安裝。顯示為 `changed` 表示遙控主機在這次運行 playbook 的過程裡，Ansible 在該項 task 中對系統做了改變；`ok` 則表示該 task 的完成條件已滿足，所以 Ansible 並不會額外對主機做其他變動。特別需要解釋的是，若我們使用了 `update_cache: yes` 這項屬性來透過套件管理工具安裝服務。我們每次安裝服務前都會試圖將套件管理工具的版本都更新到當前最新版本，然後才進行安裝步驟，因此每次 task 的狀態都將會顯示為 `changed`。
-
-#### Vagrant port forward
-
-由於 Jenkins 預設是運行在主機的 `port 8080`，因此我們必須試著把遙控節點的 `port 8080` 廣播到控制主機上。不過，由於 `port 8080` 是一個非常容易被其他服務使用的 port，因此為了避免衝突，我們將利用 `forwarded_port` 這個參數來將遙控節點上的 `port 8080` 映射到控制主機上的 `port 9080`。
-
-在 `Vagrantfile` 中，直接在 `config.vm.define "ironman"` 該行下面新增以下設定：
-
-```ruby
-config.vm.network "forwarded_port", guest: 8080, host: 9080
-```
-
-這樣表示我們可以直接在控制主機上使用 `port 9080` 來訪問遙控節點上 `port 8080` 的服務。現在重新啟動 Vagrant 來讓新設定生效：
-
-```shell
-$ vagrant reload
-
-==> ironman: Attempting graceful shutdown of VM...
-==> ironman: Checking if box 'hashicorp/precise64' is up to date...
-==> ironman: Clearing any previously set forwarded ports...
-==> ironman: Clearing any previously set network interfaces...
-==> ironman: Preparing network interfaces based on configuration...
-    ironman: Adapter 1: nat
-==> ironman: Forwarding ports...
-    ironman: 8080 (guest) => 9080 (host) (adapter 1)
-    ironman: 22 (guest) => 2222 (host) (adapter 1)
-==> ironman: Booting VM...
-==> ironman: Waiting for machine to boot. This may take a few minutes...
-    ironman: SSH address: 127.0.0.1:2222
-    ironman: SSH username: vagrant
-    ironman: SSH auth method: private key
-    ironman: Warning: Remote connection disconnect. Retrying...
-==> ironman: Machine booted and ready!
-==> ironman: Checking for guest additions in VM...
-    ironman: The guest additions on this VM do not match the installed version of
-    ironman: VirtualBox! In most cases this is fine, but in rare cases it can
-    ironman: prevent things such as shared folders from working properly. If you see
-    ironman: shared folder errors, please make sure the guest additions within the
-    ironman: virtual machine match the version of VirtualBox you have installed on
-    ironman: your host and reload your VM.
-    ironman:
-    ironman: Guest Additions Version: 4.2.0
-    ironman: VirtualBox Version: 5.0
-==> ironman: Mounting shared folders...
-    ironman: /vagrant => /Users/tsoliang/Desktop/workspace
-==> ironman: Machine already provisioned. Run `vagrant provision` or use the `--provision`
-==> ironman: flag to force provisioning. Provisioners marked to run always will still run.
-```
-
-我們可以從上面資訊中看到 Vagrant 已經幫我們把遙控節點上的 `port 8080` 廣播到控制主機的 `port 9080` 了。現在嘗試透過瀏覽器訪問 `http://localhost:9080` 就應該可以順利進入 Jenkins 的初始化頁面了：
-
-![jenkins_index_9080](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins_index_9080.png?raw=true)
-
