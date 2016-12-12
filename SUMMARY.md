@@ -13,6 +13,6 @@
 	* [3-06. 撰寫第一個 Ansible Role](ansible/role_intro.md)
 	* [3-07. 配置 ansible.cfg](ansible/ansible_cfg_intro.md)
 	* [3-08. 建立 Ansible Role 的依賴關係](ansible/role_meta.md)
-	* [3-09. 強化 Ansible Role 跨系統的靈活性](ansible/role_accross_os.md)
+	* [3-09. 強化 Ansible Role 跨系統的靈活度](ansible/role_accross_os.md)
 	* [3-10. 設定 Vagrant forward port](ansible/vagrant_forward_port.md)
 	<!-- * [3-11. 使用 template 建立 Jenkins 使用者](ansible/create_jenkins_users_with_template.md) -->
