@@ -18,3 +18,5 @@ $ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 
 在一開始，我們可以先選取 **Install suggested plugins** 就好。未來若有需要，還是可以隨時新增其他的插件。
 
+![jenkins_02](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins_02.png?raw=true)
+
