@@ -71,7 +71,6 @@ roles/jenkins
 
   - name: install plugins
     include: install_plugins.yml
-    become_user: jenkins
 ```
 
 接著，在 `roles/jenkins/tasks/plugins_install.yml` 中加入以下內容：
