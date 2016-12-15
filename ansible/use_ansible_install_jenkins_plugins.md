@@ -88,6 +88,8 @@ roles/jenkins
     get_url:
       url: http://updates.jenkins-ci.org/latest/{{ item }}.hpi
       dest: /var/lib/jenkins/plugins/{{ item }}.hpi
+      owner: jenkins
+      group: jenkins
     with_items:
       - ace-editor
       - antisamy-markup-formatter
@@ -274,6 +276,8 @@ jenkins_plugins_path: "{{ jenkins_home }}/plugins"
     get_url:
       url: http://updates.jenkins-ci.org/latest/{{ item }}.hpi
       dest: "{{ jenkins_plugins_path }}/{{ item }}.hpi"
+      owner: jenkins
+      group: jenkins
     with_items:
       - ace-editor
       ... 下略
