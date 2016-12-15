@@ -98,6 +98,7 @@ roles/jenkins
       - branch-api
       - build-timeout
       - cloudbees-folder
+      - credentials
       - credentials-binding
       - display-url-api
       - durable-task
