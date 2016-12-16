@@ -17,3 +17,5 @@
 	* [3-10. 設定 Vagrant forward port](ansible/vagrant_forward_port.md)
 	* [3-11. 使用 Ansible 安裝 Jenkins 插件](ansible/use_ansible_install_jenkins_plugins.md)
 	* [3-12. 安全性與便利性的平衡](ansible/automation_vs_security.md)
+* [4. 使用 Jenkins 實現持續整合](jenkins/README.md)
+	* [4-01. Jenkins 介紹](jenkins/intro.md)
