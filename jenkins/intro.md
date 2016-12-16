@@ -8,6 +8,6 @@
 
 #### 如何安裝 Jenkins？
 
-[Jenkins](https://jenkins.io/)其實已經在官網釋出大部分作業系統的安裝檔，甚至還提供了 [Docker](https://www.docker.com/) 容器 (container) 的映像檔 (image)，因此在手動安裝上可以說是沒有任何難度可言。正如同前面章節提到的，身為開源軟體，Jenkins 的改版速度幾乎每個禮拜就會有一到二個新版本釋出 (weekly release)。除了每週的新版本外，Jenkins 也提供了穩定版本 (Long-Term Support, LTS) 的下載。穩定版本是每十二個月中最穩定的版本，因此，在選擇安裝的版本上可以根據開發團隊的需求挑選適合的版本來進行安裝。
+[Jenkins](https://jenkins.io/)其實已經在官網釋出大部分作業系統的安裝檔，甚至還提供了 [Docker](https://www.docker.com/) 容器 (container) 的映像檔 (image)，因此在手動安裝上可以說是幾乎沒有任何難度。正如同前面章節提到的，身為開源軟體，Jenkins 的改版速度幾乎每個禮拜就會有一到二個新版本釋出 (weekly release)。除了每週的新版本外，Jenkins 也提供了穩定版本 (Long-Term Support, LTS) 的下載。穩定版本是每十二個月中最穩定的版本，因此，在選擇安裝的版本上可以根據開發團隊的需求挑選適合的版本來進行安裝。
 
 我在之前的章節中已經簡單地介紹了如何使用 Ansible 來安裝 Jenkins 至我們的遙控主機上，接下來，我會繼續沿用這套 playbook / role 來進行 Jenkins 的教學，並繼續強化我們的 `jenkins` role。
