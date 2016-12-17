@@ -1,6 +1,6 @@
 # 初覽 Jenkins 介面
 
-在以 admin 的身份透過 `http://localhost:9080` 登入後，我們可以進入 Jenkins 的主要操作介面。一般來說，我們都是透過網路介面進行 Jenkins 的操作。在未來的章節內，若我們有進行 Jenkins 設定，我還是會篇幅介紹如何利用 Ansible 來將相關設定自動配置好。
+在以 admin 的身份透過 `http://localhost:9080` 登入後，我們可以進入 Jenkins 的主要操作介面。一般來說，我們都是透過網路介面進行 Jenkins 的操作。在未來的章節內，若我們有進行 Jenkins 設定，我還是會用一些篇幅來介紹如何利用 Ansible 將相關設定自動配置好。
 
 #### Jenkins 介面基本介紹
 
