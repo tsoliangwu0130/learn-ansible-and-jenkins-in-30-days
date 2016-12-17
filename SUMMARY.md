@@ -19,3 +19,4 @@
 	* [3-12. 安全性與便利性的平衡](ansible/automation_vs_security.md)
 * [4. 使用 Jenkins 實現持續整合](jenkins/README.md)
 	* [4-01. Jenkins 介紹](jenkins/intro.md)
+	* [4-02. 初覽 Jenkins 介面](jenkins/web_ui.md)
