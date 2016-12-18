@@ -20,3 +20,4 @@
 * [4. 使用 Jenkins 實現持續整合](jenkins/README.md)
 	* [4-01. Jenkins 介紹](jenkins/intro.md)
 	* [4-02. 初覽 Jenkins 介面](jenkins/web_ui.md)
+	* [4-03. 建置第一個工作專案](jenkins/job_intro.md)
