@@ -68,11 +68,11 @@
 
 ![my_first_jenkins_job_05](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/my_first_jenkins_job_05.png?raw=true)
 
-我們可以在這個頁面下瀏覽該次建置的紀錄。其中，建置的詳細流程及終端機輸出即時地記錄在 `Console Output` 的子頁面下。點擊 `Console Output`：
+我們可以在這個頁面下瀏覽該次建置的紀錄。其中，建置的詳細流程及終端機輸出即時地記錄在 `Console Output` 的子頁面下：
 
 ![my_first_jenkins_job_06](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/my_first_jenkins_job_06.png?raw=true)
 
-我們可以從 `Console Output` 中看到這次建置是以 `admin` 的身份進行操作。這次建置過程中運行了 `pwd` 這個指令，並成功回傳專案所在位置：`/var/lib/jenkins/workspace/my_first_jenkins_job`。
+我們可以從 `Console Output` 中看到這次建置是以 admin 管理員的身份進行操作。這次建置過程中運行了 `pwd` 這個指令，並成功回傳專案所在位置：`/var/lib/jenkins/workspace/my_first_jenkins_job`。
 
 最後，回到 Jenkins 控制主頁面，我們可以看到以下畫面：
 
