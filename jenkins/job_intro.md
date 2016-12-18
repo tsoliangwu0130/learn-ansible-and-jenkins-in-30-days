@@ -2,7 +2,7 @@
 
 在對 Jenkins 的介面有初步認識後，我們可以開始試著建置我們的第一個工作專案。
 
-#### 如何建置工作專案
+#### 建置專案介紹
 
 在 Jenkins 首頁下，點擊 `New item` 的標籤頁來建立新的專案。任意命名專案名稱，並選取 `Freestyle project` 如下圖所示：
 
@@ -50,3 +50,32 @@
 
 	在建置完成後，我們可以在 `Post-build Actions` 的區塊中定義建置後動作。我們可以在這裡進行 E-mail 通知的發送，或是透過安裝通訊軟體的插件 (e.g. [HipChat](https://www.hipchat.com/)) 來發送通知到開發者頻道內。除此之外，若專案建置完成後有產生建置產物，我們也可以在這裡使用 SSH 傳送到指定伺服器上。
 
+#### 我的第一個建置工作
+
+我們會用一個非常簡單的例子來作為我們的專案建置介紹。在剛剛建置專案的頁面裡，在 `Build` 的標籤下新增建置步驟，並選擇 `Execute shell`：
+
+![my_first_jenkins_job_pwd](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/my_first_jenkins_job_pwd.png?raw=true)
+
+在 `Execute shell` 下輸入 [pwd](https://zh.wikipedia.org/wiki/Pwd) 做為我們的建置指令。在 Linux / Unix 系統的電腦中，執行 `pwd` 會回傳當前工作目錄並輸出至終端機上，因此，透過這個建置範例工作，理論上我們應該要可以得到當前專案在虛擬主機上的專案目錄。設置好後儲存專案，進入當前專案建置頁面：
+
+![my_first_jenkins_job_03](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/my_first_jenkins_job_03.png?raw=true)
+
+點擊左邊 `Build Now` 來立即建置這個專案後，我們可以在左下角 `Build History` 看到此專案的第一次建置已經完成：
+
+![my_first_jenkins_job_04](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/my_first_jenkins_job_04.png?raw=true)
+
+接著點擊 `Build History` 下 `#1` 的建置紀錄，並進入以下介面：
+
+![my_first_jenkins_job_05](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/my_first_jenkins_job_05.png?raw=true)
+
+我們可以在這個頁面下瀏覽該次建置的紀錄。其中，建置的詳細流程及終端機輸出即時地記錄在 `Console Output` 的子頁面下。點擊 `Console Output`：
+
+![my_first_jenkins_job_06](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/my_first_jenkins_job_06.png?raw=true)
+
+我們可以從 `Console Output` 中看到這次建置是以 `admin` 的身份進行操作。這次建置過程中運行了 `pwd` 這個指令，並成功回傳專案所在位置：`/var/lib/jenkins/workspace/my_first_jenkins_job`。
+
+最後，回到 Jenkins 控制主頁面，我們可以看到以下畫面：
+
+![jenkins_07](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins_07.png?raw=true)
+
+在主控頁面下，可以看到現在我們已經有了第一個專案工作，並紀錄了最近一次的成功或失敗的建置，以及建置所花費的時間。
