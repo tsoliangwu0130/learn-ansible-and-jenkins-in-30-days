@@ -54,9 +54,16 @@
 
 我們會用一個非常簡單的例子來作為我們的專案建置介紹。在剛剛建置專案的頁面裡，在 `Build` 的標籤下新增建置步驟，並選擇 `Execute shell`：
 
-![my_first_jenkins_job_pwd](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/my_first_jenkins_job_pwd.png?raw=true)
+![my_first_jenkins_job_pwd_touch](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/my_first_jenkins_job_pwd_touch.png?raw=true)
 
-在 `Execute shell` 下輸入 [pwd](https://zh.wikipedia.org/wiki/Pwd) 做為我們的建置指令。在 Linux / Unix 系統的電腦中，執行 `pwd` 會回傳當前工作目錄並輸出至終端機上，因此，透過這個建置範例工作，理論上我們應該要可以得到當前專案在虛擬主機上的專案目錄。設置好後儲存專案，進入當前專案建置頁面：
+在 `Execute shell` 下試著輸入以下命令作為建置指令：
+
+```shell
+$ pwd
+$ touch helloworld.out
+```
+
+我們在建置步驟內，先呼叫 `pwd` 指令來回傳當前工作目錄並輸出至終端機上，接著在工作目錄下新增一個 `helloworld.out` 的空白檔案作為測試。設置好後儲存專案，進入當前專案建置頁面：
 
 ![my_first_jenkins_job_03](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/my_first_jenkins_job_03.png?raw=true)
 
