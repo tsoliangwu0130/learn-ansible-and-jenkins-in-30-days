@@ -63,7 +63,7 @@ $ pwd
 $ touch helloworld.out
 ```
 
-我們在建置步驟內，先呼叫 `pwd` 指令來回傳當前工作目錄並輸出至終端機上，接著在工作目錄下新增一個 `helloworld.out` 的空白檔案作為測試。設置好後儲存專案，進入當前專案建置頁面：
+我們在建置步驟內，先呼叫 `pwd` 指令來回傳當前工作環境目錄 (workspace) 並輸出至終端機上，接著目錄下新增一個 `helloworld.out` 的空白檔案作為測試。設置好後儲存專案，進入當前專案建置頁面：
 
 ![my_first_jenkins_job_03](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/my_first_jenkins_job_03.png?raw=true)
 
@@ -79,7 +79,7 @@ $ touch helloworld.out
 
 ![my_first_jenkins_job_06](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/my_first_jenkins_job_06.png?raw=true)
 
-我們可以從 `Console Output` 中看到這次建置是以 admin 管理員的身份進行操作。這次建置過程中運行了 `pwd` 這個指令，並成功回傳專案所在位置：`/var/lib/jenkins/workspace/my_first_jenkins_job`。
+我們可以從 `Console Output` 中看到這次建置是以 admin 管理員的身份進行操作。這次建置過程中運行了 `pwd` 及 `touch` 這兩個指令，並成功回傳專案所在位置：`/var/lib/jenkins/workspace/my_first_jenkins_job`。
 
 最後，回到 Jenkins 控制主頁面，我們可以看到以下畫面：
 
