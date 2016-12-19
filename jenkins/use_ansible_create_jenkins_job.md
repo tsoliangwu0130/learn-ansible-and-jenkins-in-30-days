@@ -40,29 +40,27 @@ lrwxrwxrwx 1 jenkins jenkins   26 Dec 19 01:52 lastSuccessful -> builds/lastSucc
 $ cat /var/lib/jenkins/jobs/my_first_jenkins_job/config.xml
 ```
 
-注意到以下 `config.xml` 中的 `builders` 標籤，這次範例專案的執行指令就被存放在這個區塊中。
+我們也可以直接透過瀏覽器訪問 `http://localhost:9080/job/my_first_jenkins_job/config.xml` 得到同樣的配置檔內容。注意到以下 `config.xml` 中的 `builders` 標籤，這次範例專案的執行指令就被存放在這個區塊中。
 
 ```xml
-<?xml version='1.0' encoding='UTF-8'?>
 <project>
-  <description></description>
-  <keepDependencies>false</keepDependencies>
-  <properties/>
-  <scm class="hudson.scm.NullSCM"/>
-  <canRoam>true</canRoam>
-  <disabled>false</disabled>
-  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
-  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers/>
-  <concurrentBuild>false</concurrentBuild>
-  <builders>
-    <hudson.tasks.Shell>
-      <command>pwd
-touch helloworld.out</command>
-    </hudson.tasks.Shell>
-  </builders>
-  <publishers/>
-  <buildWrappers/>
+	<description/>
+	<keepDependencies>false</keepDependencies>
+	<properties/>
+	<scm class="hudson.scm.NullSCM"/>
+	<canRoam>true</canRoam>
+	<disabled>false</disabled>
+	<blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+	<blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+	<triggers/>
+	<concurrentBuild>false</concurrentBuild>
+	<builders>
+		<hudson.tasks.Shell>
+			<command>pwd touch helloworld.out</command>
+		</hudson.tasks.Shell>
+	</builders>
+	<publishers/>
+	<buildWrappers/>
 </project>
 ```
 
