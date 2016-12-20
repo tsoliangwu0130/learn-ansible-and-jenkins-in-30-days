@@ -181,8 +181,7 @@ fatal: [ironman]: FAILED! => {"changed": false, "failed": true, "msg": "Unable t
 在使用 Ansible 部署各類服務時，**重啟服務 (restart service)** 是非常常見用來使新設定生效的一種做法。通常我們會在部署完新的設定檔、或是安裝好新的服務後，最後重啟服務讓其生效。因此，我們也習慣在 Ansible 裡把這類型的任務定義成特殊處理事件 (handler)，並由其他一般任務通知這 handler 何時要重啟服務。在 Ansible 中，handler 有以下特點：
 
 1. handler 只會在執行 playbook / role 的最後才會被觸發，以減少部署過程中重複啟動服務的次數，同時也可以避免在服務重啟未完成前就執行後續任務，進而產生衝突的狀況。 
-2. 只有在 task 狀態為 `changed` 時，handler 才會被觸發；同時，就算有多個 tasks 都呼叫 (notify) 了同
-一個 handler，在一次執行過程中被呼叫的 handler 最多只會執行一次。
+2. 只有在 task 狀態為 `changed` 時，handler 才會被觸發；同時，就算有多個 tasks 都呼叫 (notify) 了同一個 handler，在一次執行過程中被呼叫的 handler 最多只會執行一次。
 
 這就是我們現在需要的！因為其實我們只需要在 Jenkins 完成部署後，最後一次重啟服務使其生效就好，所以我們應該要來改寫原本的用法來避免部署中斷。
 
