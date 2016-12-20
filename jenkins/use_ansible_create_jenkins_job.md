@@ -142,6 +142,8 @@ workspace
 
 我們在這個任務中除了定義了 Jenkins 的使用者資訊、密碼、存取網址，還必須描述設定檔參照路徑。因此，我們現在也必須在對應路徑 (`roles/my_first_jenkins_job/templates/`) 下把我們剛剛在遙控主機上的 `config.xml` 貼上，並重新命名為 `config.xml.j2`。其中，`j2` 代表著 Ansible 預設使用的模板引擎 (template engine) - [Jinja2](http://jinja.pocoo.org/)。這個模板引擎提供了開發人員諸多開發便利性，它讓我們在部署及設定檔案時有非常大的彈性進行維護及升級，由於篇幅關係，更詳細的 [Ansible 官方教學](https://docs.ansible.com/ansible-container/container_yml/template.html)請讀者自行查閱。
 
+_注意： 將使用者帳號及密碼寫入 Ansible role 是一個非常危險的行為，在後面的章節我們會利用 Ansible playbook 將這種敏感資料分開。另外，這裡使用 port 8080 而非 port 9080 是因為我們現在是利用 Ansible 在遙控節點上進行部署，而非從外部透過瀏覽器訪問 Jenkins。_
+
 最後，更改我們的 playbook：
 
 ```yml
@@ -171,3 +173,8 @@ fatal: [ironman]: FAILED! => {"changed": false, "failed": true, "msg": "Unable t
 ```
 
 雖然流程完全正確，但我們依舊在部署過程中發生錯誤了。不要害怕！當我們在編寫任何自動化腳本，或甚至開發軟體時遇到錯誤訊息 (error message) 是非常正常且頻繁的情形，雖然可能一開始往往會不太理解發生錯誤的理由，但讓我們試著去閱讀錯誤訊息，我們通常可以在其中發現一些蛛絲馬跡。所以，為什麼這次部署會失敗呢？
+
+#### 使用 Handler 來重啟 Jenkins 服務
+
+從上面的錯誤訊息我們可以發現，
+
