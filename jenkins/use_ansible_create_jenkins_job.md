@@ -176,5 +176,147 @@ fatal: [ironman]: FAILED! => {"changed": false, "failed": true, "msg": "Unable t
 
 #### 使用 Handler 來重啟 Jenkins 服務
 
-從上面的錯誤訊息我們可以發現，
+從上面的錯誤訊息我們可以發現，造成部署失敗的原因是 Unable to validate if job exists, HTTP Error 503: Service Unavailable for http://localhost:8080。若我們仔細觀察 Ansible 部署流程，我們會發現在發生錯誤的這個 task 之前，我們先重啓了 Jenkins 服務，然後緊接著安裝一些需要用到的依賴。但是由於安裝這些依賴的速度太快了，導致前一個 Jenkins 重啓的服務還沒重啓完成，我們就試圖對 Jenkins 進行專案的操作，這也就是為什麼會發生 [HTTP Error 503](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) 的錯誤。
 
+在使用 Ansible 部署各類服務時，**重啟服務 (restart service)** 是非常常見用來使新設定生效的一種做法。通常我們會在部署完新的設定檔、或是安裝好新的服務後，最後重啟服務讓其生效。因此，我們也習慣在 Ansible 裡把這類型的任務定義成特殊處理事件 (handler)，並由其他一般任務通知這 handler 何時要重啟服務。在 Ansible 中，handler 有以下特點：
+
+1. handler 只會在執行 playbook / role 的最後才會被觸發，以減少部署過程中重複啟動服務的次數，同時也可以避免在服務重啟未完成前就執行後續任務，進而產生衝突的狀況。 
+2. 只有在 task 狀態為 `changed` 時，handler 才會被觸發；同時，就算有多個 tasks 都呼叫 (notify) 了同
+一個 handler，在一次執行過程中被呼叫的 handler 最多只會執行一次。
+
+這就是我們現在需要的！因為其實我們只需要在 Jenkins 完成部署後，最後一次重啟服務使其生效就好，所以我們應該要來改寫原本的用法來避免部署中斷。
+
+在 `jenkins` role 中新增 `handlers/main.yml` 如下：
+
+```shell
+workspace
+├── Vagrantfile
+├── ansible.cfg
+├── inventory
+├── playbook.yml
+└── roles
+    ├── ansible-lint
+    ├── curl
+    ├── git
+    ├── jenkins
+    │   ├── defaults
+    │   ├── handlers
+    │   │   └── main.yml
+    │   ├── meta
+    │   └── tasks
+    ├── my_first_jenkins_job
+    └── pip
+```
+
+```yml
+---  
+  - name: restart jenkins
+    service:
+      name: jenkins
+      state: restarted
+    become: yes
+```
+
+接著修改我們原本呼叫重啟服務的片段：
+
+`roles/jenkins/tasks/install_plugins.yml`：
+
+```yml
+---
+  - name: create plugins directory
+    file:
+      path: "{{ jenkins_plugins_path }}"
+      state: directory
+      owner: jenkins
+      group: jenkins
+
+  - name: download plugins
+    get_url:
+      url: http://updates.jenkins-ci.org/latest/{{ item }}.hpi
+      dest: "{{ jenkins_plugins_path }}/{{ item }}.hpi"
+      owner: jenkins
+      group: jenkins
+    with_items:
+      - ace-editor
+      - antisamy-markup-formatter
+		...中略
+      - workflow-support
+      - ws-cleanup
+    notify:
+      - restart jenkins
+```
+
+`roles/my_first_jenkins_job/tasks/main.yml`：
+
+```yml
+---
+  - name: create jenkins job - my_first_jenkins_job
+    jenkins_job:
+      config: "{{ lookup('template', 'templates/config.xml.j2') }}"
+      name: my_first_jenkins_job
+      url: "http://localhost:8080"
+      user: admin
+      password: admin
+    notify:
+      - restart jenkins
+```
+
+接著重新運行 playbook：
+
+```shell
+...上略
+
+TASK [jenkins : download plugins] **********************************************
+ok: [ironman] => (item=ace-editor)
+ok: [ironman] => (item=antisamy-markup-formatter)
+...中略
+ok: [ironman] => (item=workflow-support)
+ok: [ironman] => (item=ws-cleanup)
+
+TASK [jenkins : install jenkins_job dependencies (via apt-get)] ****************
+ok: [ironman] => (item=[u'libxml2-dev', u'libxslt-dev', u'python-dev'])
+
+TASK [jenkins : install jenkins_job dependencies (via pip)] ********************
+ok: [ironman] => (item=lxml)
+ok: [ironman] => (item=python-jenkins)
+
+TASK [my_first_jenkins_job : create jenkins job - my_first_jenkins_job] ********
+changed: [ironman]
+
+RUNNING HANDLER [jenkins : restart jenkins] ************************************
+changed: [ironman]
+```
+
+如上執行結果，因為 `TASK [my_first_jenkins_job : create jenkins job - my_first_jenkins_job]` 的狀態被標示為 `chanaged` 了，在部署過程的最後 Ansible 才呼叫了 `jenkins` role 中的 handler 來重啟 Jenkins。
+
+#### 利用 playbook 來增加 Ansible 使用安全性
+
+在前面的段落內我們有提到將使用者的帳號密碼直接寫入 role 的 task 裡是相當危險的行為，因此，我們要試著利用 playbook 來將這些機密資料從 role 中抽離出來。
+
+修改 `roles/my_first_jenkins_job/tasks/main.yml` 如下：
+
+```yml
+---
+  - name: create jenkins job - my_first_jenkins_job
+    jenkins_job:
+      config: "{{ lookup('template', 'templates/config.xml.j2') }}"
+      name: my_first_jenkins_job
+      url: "http://localhost:8080"
+      user: "{{ user }}"
+      password: "{{ password }}"
+    notify:
+      - restart jenkins
+```
+
+接著修改我們的 playbook：
+
+```yml
+---
+- hosts: ironman
+  roles:
+    - { role: my_first_jenkins_job, become: yes, user: admin, password: admin}
+```
+
+這樣一來，我們 Jenkins 的帳號密碼就變成由 playbook 以變數的形式傳入 `my_first_jenkins_job` 這個 role 裡。就算未來我們將這個 role 分享至公開平台，我們也不會不小心洩漏使用者資料。
+
+一般而言，因為 Ansible role 是被設計成可以被重複利用的，所以我們不會希望把 role 的內容寫死、或是把機密資料直接擺在 role 之中，以便增加 role 的彈性及安全度。不過 playbook 的定位比較不一樣，playbook 比較像我們在組合現有的 role 的規則定義。我們在撰寫 playbook 是有目的針對性的，我們會因為各自需求的不同在 playbook 組合 role 的過程中進行微調，同時也會將比較敏感的資料放在不公開的 playbook 中來保存。藉此，希望讀者可以比較理解 playbook 與 role 使用上本質上的最主要差異，在未來發展自己的 Ansible 系統時也針對需求同時兼顧開發便利性及安全性。
