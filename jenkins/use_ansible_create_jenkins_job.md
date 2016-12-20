@@ -176,7 +176,7 @@ fatal: [ironman]: FAILED! => {"changed": false, "failed": true, "msg": "Unable t
 
 #### 使用 Handler 來重啟 Jenkins 服務
 
-從上面的錯誤訊息我們可以發現，造成部署失敗的原因是 Unable to validate if job exists, HTTP Error 503: Service Unavailable for http://localhost:8080。若我們仔細觀察 Ansible 部署流程，我們會發現在發生錯誤的這個 task 之前，我們先重啓了 Jenkins 服務，然後緊接著安裝一些需要用到的依賴。但是由於安裝這些依賴的速度太快了，導致前一個 Jenkins 重啓的服務還沒重啓完成，我們就試圖對 Jenkins 進行專案的操作，這也就是為什麼會發生 [HTTP Error 503](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) 的錯誤。
+從上面的錯誤訊息我們可以發現，造成部署失敗的原因是 `Unable to validate if job exists, HTTP Error 503: Service Unavailable for http://localhost:8080`。若我們仔細觀察 Ansible 部署流程，我們會發現在發生錯誤的這個 task 之前，我們先重啓了 Jenkins 服務，然後緊接著安裝一些需要用到的依賴。但是由於安裝這些依賴的速度太快了，導致前一個 Jenkins 重啓的服務還沒重啓完成，我們就試圖對 Jenkins 進行專案的操作，這也就是為什麼會發生 [HTTP Error 503](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) 的錯誤。
 
 在使用 Ansible 部署各類服務時，**重啟服務 (restart service)** 是非常常見用來使新設定生效的一種做法。通常我們會在部署完新的設定檔、或是安裝好新的服務後，最後重啟服務讓其生效。因此，我們也習慣在 Ansible 裡把這類型的任務定義成特殊處理事件 (handler)，並由其他一般任務通知這 handler 何時要重啟服務。在 Ansible 中，handler 有以下特點：
 
