@@ -1,4 +1,4 @@
-# 使用 Jenkins 維護 Ansible Git Repository
+# 使用 Jenkins 維護 Ansible GitHub Repository
 
 接下來，我們可以開始試著用 Jenkins 替我們維護放在原始碼代管服務上真正的專案。為了介紹方便，我將以我個人的 [GitHub repository](https://github.com/tsoliangwu0130/tsoliang-ansible) 作為範例。
 
