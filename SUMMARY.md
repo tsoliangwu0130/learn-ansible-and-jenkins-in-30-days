@@ -23,3 +23,4 @@
 	* [4-03. 建置第一個工作專案](jenkins/job_intro.md)
 	* [4-04. 使用 Ansible 部署 Jenkins 工作專案](jenkins/use_ansible_create_jenkins_job.md)
 	* [4-05. 使用 Jenkins 維護 Ansible GitHub Repository](jenkins/jenkins_ansible_lint_job.md)
+	* [4-06. 定時建置 Jenkins 工作專案](jenkins/build_job_periodically.md)
