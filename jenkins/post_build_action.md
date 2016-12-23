@@ -14,7 +14,11 @@
 
 然而，這樣的 E-mail 通知在現實的專案中功能是十分缺乏的，舉例來說，我們很多時候會希望只有在建置失敗的時候才要收到通知、或是在建置成功時通知某些特定聯絡人，甚至希望能夠客製化通知內容等等。所以我們在一開始建議安裝的插件列表中安裝了一個 [email-ext](https://wiki.jenkins-ci.org/display/JENKINS/Email-ext+plugin) 的插件，這個插件將大大地擴展我們使用 E-mail 發送通知的使用彈性。
 
-在 `Add post-build action` 中選擇 `Editable Email Notification`：
+回到 Jenkins 首頁，點擊 `Manage Jenkins` 下的 `Configure System`，我們可以看到有一個 `Extended E-mail Notification` 的欄位，我們可以在這個地方設定 E-mail 的寄送範本及相關格式：
+
+![email_notification_06](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/email_notification_06.png?raw=true)
+
+接著，回到專案設定裡，在 `Add post-build action` 中選擇 `Editable Email Notification`：
 
 ![email_notification_03](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/email_notification_03.png?raw=true)
 
