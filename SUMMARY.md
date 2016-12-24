@@ -25,3 +25,4 @@
 	* [4-05. 使用 Jenkins 維護 Ansible GitHub Repository](jenkins/jenkins_ansible_lint_job.md)
 	* [4-06. 定時建置 Jenkins 工作專案](jenkins/build_job_periodically.md)
 	* [4-07. 專案建置後發送通知](jenkins/post_build_action.md)
+	* [4-08. 使用參數建置專案](jenkins/build_parameterized_job.md)
