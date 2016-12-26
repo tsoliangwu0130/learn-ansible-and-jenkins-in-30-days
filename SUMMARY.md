@@ -27,3 +27,4 @@
 	* [4-07. 專案建置後發送通知](jenkins/post_build_action.md)
 	* [4-08. 使用參數建置專案](jenkins/build_parameterized_job.md)
 	* [4-09. 使用機密檔案維護 Jenkins 的操作安全性](jenkins/use_secret_file_for_safety.md)
+	* [4-10. 使用 SSH 傳送建置產物](jenkins/publish_over_ssh.md)
