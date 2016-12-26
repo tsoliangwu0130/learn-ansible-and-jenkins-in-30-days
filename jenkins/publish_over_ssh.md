@@ -57,3 +57,19 @@ Host ironman_target
 做好基本的伺服器配置後，我們就可以接著利用 Jenkins 操作接下來的步驟了。
 
 #### 安裝 Publish Over SSH 插件
+
+我們這次要介紹的是如何使用 Jenkins 的插件 - [Publish Over SSH](https://wiki.jenkins-ci.org/display/JENKINS/Publish+Over+SSH+Plugin) 來實現透過 SSH 傳送建置產物的需求，因此，我們可以透過 Jenkins 的網路介面先進行插件安裝。
+
+回到 Jenkins 主控制介面，點選 `Manage Jenkins` 的 `Manage Plugins`，並於 `Available` 的標籤頁下搜尋 `Publish Over SSH` 插件。勾選插件後，點擊安裝如下：
+
+![publish_over_ssh_01](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/publish_over_ssh_01.png?raw=true)
+
+進入安裝過程後，勾選 `Restart Jenkins when installation is complete and no jobs are running`，來重啟 Jenkins：
+
+![publish_over_ssh_02](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/publish_over_ssh_02.png?raw=true)
+
+插件安裝完成並重新啟動後，我們可以在 `Installed` 的標籤下看到插件已經安裝完成：
+
+![publish_over_ssh_03](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/publish_over_ssh_03.png?raw=true)
+
+現在插件也已安裝就緒，接著，我們可以開始準備進行伺服器配對了。
