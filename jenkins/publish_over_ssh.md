@@ -76,9 +76,7 @@ Host ironman_target
 
 #### 進行主機 SSH 配對
 
-因為現在 `Vagrantfile` 裡面定義了兩台主機，所以我們在登入主機時必須告訴 Vagrant 我們要登入哪一台主機。
-
-首先，透過以下指令登入我們的 Jenkins 安裝主機，並以 `jenkins` 使用者的身份取得 SSH 公鑰：
+因為現在 `Vagrantfile` 裡面定義了兩台主機，所以我們在登入主機時必須告訴 Vagrant 我們要登入哪一台主機。首先，透過以下指令登入我們的 Jenkins 安裝主機，並以 `jenkins` 使用者的身份取得 SSH 公鑰：
 
 ```shell
 $ vagrant ssh ironman
