@@ -73,3 +73,71 @@ Host ironman_target
 ![publish_over_ssh_03](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/publish_over_ssh_03.png?raw=true)
 
 現在插件也已安裝就緒，接著，我們可以開始準備進行伺服器配對了。
+
+#### 進行主機 SSH 配對
+
+因為現在 `Vagrantfile` 裡面定義了兩台主機，所以我們在登入主機時必須告訴 Vagrant 我們要登入哪一台主機。
+
+首先，透過以下指令登入我們的 Jenkins 安裝主機，並以 `jenkins` 使用者的身份取得 SSH 公鑰：
+
+```shell
+$ vagrant ssh ironman
+$ sudo -u jenkins -i
+$ cat .ssh/id_rsa.pub
+```
+
+接著，開啟一個新的終端機並登入目標部署伺服器，然後使用 [vi](https://zh.wikipedia.org/zh-tw/Vi) 編輯器將剛剛從 Jenkins 安裝主機上取得的公鑰加入授權密鑰清單 (authorized keys) 中：
+
+```shell
+$ vagrant ssh ironman_target
+$ vi .ssh/authorized_keys
+```
+
+#### 在 Jenkins 上新增目標伺服器
+
+在配對完成後，我們現在要在 Jenkins 上新增一個 SSH 伺服器。回到 Jenkins 主控制介面，點選 `Manage Jenkins` 下的 `Configure System`，因為我們在前面已經把 `Publish over SSH` 這個插件安裝好了，所以在這個頁面的最下方現在多出了 `Publish over SSH` 這個設定欄位：
+
+![publish_over_ssh_04](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/publish_over_ssh_04.png?raw=true)
+
+點選 `SSH Servers` 旁的 `Add` 來新增目標伺服器如下：
+
+![publish_over_ssh_05](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/publish_over_ssh_05.png?raw=true)
+
+其中有幾個重點欄位要特別注意：
+
+1. **Hostname**: 目標伺服器的 IP 位置。雖然從 `vagrant ssh-config` 的指令中我們看到 HostName 是 `127.0.0.1`，但 Vagrant 會自動幫所有虛擬機的 localhost IP 轉介成 `10.0.2.2`，以便我們若要從本機端操作虛擬機的時候不至於與本機衝突。
+2. **Username**: 伺服器登入者身份，預設為 `vagrant`。
+3. **Remote Directory**: 遙控目錄。在這裡我們以 `vagrant` 身份的根目錄作為主目錄，在實際案例中，還是建議讀者可以根據專案分層管理，以免造成不必要的混淆。
+4. **Passphrase / Password**: 登入目標伺服器的密碼，預設也是 `vagrant`。
+5. **Port**: 由於所有 Vagrant 產生的虛擬機預設 IP 都是 `10.0.2.2`，因此我們必須在這邊強調不同伺服器對應的 port 口。從上面的 `vagrant ssh-config` 中我們可以看到 Jenkins 安裝主機被分配的 port 是 `2222`，而目標主機的 port 則是 `2200`。
+
+設定完成後，點選 `Test Configuration` 測試連線：
+
+![publish_over_ssh_06](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/publish_over_ssh_06.png?raw=true)
+
+若如上圖一般出現 `Success` 的訊息，就表示我們現在已經正確將 SSH Server 添加至 Jenkins 伺服器管理列表中了，接著儲存設定後離開。
+
+#### 在專案中設定建置後部署動作
+
+在一切就緒後，最後，我們要在專案內設定相關作業。進入 `ansible_lint` 的專案配置，在 `Post-build Actions` 的欄位下，點選 `Send build artifacts over SSH` 的選項如下：
+
+![publish_over_ssh_07](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/publish_over_ssh_07.png?raw=true)
+
+接著設置 `SSH Server` 的設定欄位：
+
+![publish_over_ssh_08](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/publish_over_ssh_08.png?raw=true)
+
+我們可以看到 Jenkins 已經自動將我們剛剛設定的 `ironman_target` 伺服器代入部署主機的 `Name` 欄位中了，若我們今天有多個部署主機，可以在下拉式選單中進行更改。另外，在 `Transfers` 的欄位裡，我們還需要設定部署的動作。在這邊簡單的設定 `*.txt` 將所有 txt 檔都都當作目標傳送至部署伺服器。設定完成後，儲存變更並重建專案，接著到 `Console Output` 中觀看建置結果：
+
+![publish_over_ssh_09](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/publish_over_ssh_09.png?raw=true)
+
+從建置過程裡我們可以看到 Jenkins 在建置完成後透過了 SSH 傳送了一個檔案至 `ironman_target` 部署伺服器上。接著我們可以登入至我們的 `ironman_target`  部署伺服器上確認檔案是否有被正確傳送：
+
+```shell
+$ vagrant ssh ironman_target
+$ ls -al | grep *.txt
+
+-rw-rw-r-- 1 vagrant vagrant    0 Dec 27 02:27 Dev-27-12-16-result.txt
+```
+
+沒有錯！建置產物已經正確被傳送到我們的部署伺服器上了！要特別注意的是，雖然檔案會被傳送到目標伺服器上，但在原本的工作專案目錄 (workspace) 下建置產物還是會有一份備份存在，若不希望建置產物留在 Jenkins 伺服器上，記得要另外在設定內進行調整。
