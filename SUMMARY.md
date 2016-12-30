@@ -30,3 +30,4 @@
 	* [4-10. 使用 SSH 傳送建置產物](jenkins/publish_over_ssh.md)
 	* [4-11. 使用 Role Strategy 插件管理 Jenkins](jenkins/use_role_strategy.md)
 	* [4-12. 使用 View 管理 Jenkins 工作專案](jenkins/jenkins_view.md)
+* [5. 總結](conclusion.md)
