@@ -12,4 +12,4 @@ IT 自動化管理及持續整合是 [DevOps](https://zh.wikipedia.org/wiki/DevO
 
 #### 小結
 
-作為一個 API Developer，因為過去太頻繁地在 API 發布前遇到上述的窘境，所以今年初我花了一些時間摸索了自動化及持續整合系統。在接下來的三十天內，我將會一一介紹如何使用 [Ansible](https://www.ansible.com/) 及 [Jenkins](https://jenkins.io/) 這兩項工具來實現 IT 自動化及持續整合，同時也希望可以將我這一年來摸索的經驗與大家做分享。
+作為一個 API Developer，因為過去太頻繁地在 API 發布前遇到上述的窘境，所以今年初我花了一些時間摸索了自動化及持續整合系統。在接下來的三十天內，我將會一一介紹如何使用 [Ansible](https://www.ansible.com/) 及 [Jenkins](https://jenkins.io/) 這兩項工具來實現 IT 自動化及持續整合，同時也希望可以將我這一年來摸索的經驗與大家分享。
