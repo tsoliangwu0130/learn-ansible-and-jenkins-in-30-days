@@ -17,4 +17,4 @@ IT 自動化管理及持續整合是 [DevOps](https://zh.wikipedia.org/wiki/DevO
 
 #### [Update project 2018]
 
-After one year, there are some new features I learned which I think is worth to be documented and some concepts in this GitBook need to be updated/corrected. Refer to this [project](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/projects) to follow-up related tasks. Feel free to send any pull requests if you have any suggestions :)
+After one year, there are some new features I learned which I think is worth to be documented and some concepts in this GitBook need to be updated/corrected. Refer to this [project](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/projects) to follow-up related tasks. Feel free to send new pull requests if you have any suggestions :)
