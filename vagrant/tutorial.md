@@ -1,8 +1,8 @@
 # Vagrant 基本設定
 
 #### 如何管理 Vagrant boxes？
- 
-如果在網路上找到了一個適合的 box (e.g. [bento/debian-8.6](https://atlas.hashicorp.com/bento/boxes/debian-8.6)) 想要下載並新增 (add) 到本機，可以使用 `vagrant box add <box_name> <box_url>` 並選擇自己需要的版本：
+
+如果在網路上找到了一個適合的 box (e.g. [bento/debian-8.6](https://atlas.hashicorp.com/bento/boxes/debian-8.6)) 想要下載並新增到本機，可以使用 `vagrant box add <box_name> <box_url>` 並選擇自己需要的版本，舉例來說：
 
 ```shell
 $ vagrant box add bento/debian-8.6 https://atlas.hashicorp.com/bento/boxes/debian-8.6
@@ -28,10 +28,10 @@ Enter your choice: 2
 $ vagrant box list
 
 bento/debian-8.6                  (virtualbox, 2.3.0)
-hashicorp/precise64               (virtualbox, 1.1.0)
+bento/ubuntu-14.04                (virtualbox, 201708.22.0)
 ```
 
-同理，如果要移除 (remove) 不再需要的 box，可以使用 `vagrant box remove <box_name>`：
+同理，如果要移除不再需要的 box，可以使用 `vagrant box remove <box_name>`：
 
 ```shell
 $ vagrant box remove bento/debian-8.6
@@ -39,12 +39,12 @@ $ vagrant box remove bento/debian-8.6
 Removing box 'bento/debian-8.6' (v2.3.0) with provider 'virtualbox'...
 ```
 
-確定一下 box 已經被成功移除：
+透過 `vagrant box list` 確定一下 box 已經被成功移除：
 
 ```shell
 $ vagrant box list
 
-hashicorp/precise64               (virtualbox, 1.1.0)
+bento/ubuntu-14.04 (virtualbox, 201708.22.0)
 ```
 
 #### 透過 Vagrantfile 配置測試環境
@@ -65,8 +65,8 @@ Vagrant.configure("2") do |config|
   # https://docs.vagrantup.com.
 
   # Every Vagrant development environment requires a box. You can search for
-  # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "hashicorp/precise64"
+  # boxes at https://vagrantcloud.com/search.
+  config.vm.box = "bento/ubuntu-14.04"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -76,7 +76,13 @@ Vagrant.configure("2") do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
+  # NOTE: This will enable public access to the opened port
   # config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine and only allow access
+  # via 127.0.0.1 to disable public access
+  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -108,13 +114,6 @@ Vagrant.configure("2") do |config|
   # View the documentation for the provider you are using for more
   # information on available options.
 
-  # Define a Vagrant Push strategy for pushing to Atlas. Other push strategies
-  # such as FTP and Heroku are also available. See the documentation at
-  # https://docs.vagrantup.com/v2/push/atlas.html for more information.
-  # config.push.define "atlas" do |push|
-  #   push.app = "YOUR_ATLAS_USERNAME/YOUR_APPLICATION_NAME"
-  # end
-
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
@@ -125,15 +124,15 @@ Vagrant.configure("2") do |config|
 end
 ```
 
-簡單來說，`Vagrantfile` 就是每一台的虛擬機的規格表。每次我們啟動或部署 Vagrant 虛擬機時就是依據這一份設置文件 (configuration file) 來進行定義的。雖然乍看之下這個檔案長得有些驚悚，但仔細研究後會發現目前真正有用到的配置其實只有短短幾行而已：
+簡單來說，`Vagrantfile` 就是每一台的虛擬機的規格表。雖然乍看之下這個檔案長得有些驚悚，但仔細研究後會發現目前真正有用到的配置其實只有以下短短幾行而已：
 
 ```ruby
 Vagrant.configure("2") do |config|
-  config.vm.box = "hashicorp/precise64"
+  config.vm.box = "bento/ubuntu-14.04"
 end
 ```
 
-而這段程式碼就是告訴 Vagrant 我們想要用 `hashicorp/precise64` 當作我們這台虛擬機的 box。我們會在未來的章節隨著需要逐步將需要配置的參數陸續加上，但我還是強烈建議讀者可以稍微閱讀一下 `Vagrantfile` 裡的註解配置，這對操作 Vagrant 虛擬機有相當大的幫助。
+而這段程式碼就是告訴 Vagrant 我們想要用 `bento/ubuntu-14.04` 當作我們這台虛擬機的 box。每次我們啟動或部署 Vagrant 虛擬機時就是依據這一份設置文件來進行配置。其他在註解內的文字是一般我們在開發時常常用到的配置選項，隨著開發需要的不同，我們可以在這個配置文件中客製化我們的開發環境，並分享給團隊其他成員。
 
 #### 如何管理 Vagrant 虛擬機？
 
@@ -152,62 +151,21 @@ suspend the virtual machine. In either case, to restart it again,
 simply run `vagrant up`.
 ```
 
-我們可以清楚發現雖然虛擬機已經成功運行，但主機名稱顯示為 `default`。這種模糊的名稱在管理主機數量多起來後常常會造成開發者的困擾。為了避免混淆，我們可以先用 `vagrant halt` 將目前的虛擬機暫停或是使用 `vagrant destroy` 直接摧毀 (destroy)。接下來，在 `Vagrantfile` 中加入下列設置來替我們的虛擬機命名：
+我們可以清楚發現雖然虛擬機已經成功運行，但主機名稱顯示為 `default`。這種模糊的名稱在管理主機數量多起來後常常會造成開發者的困擾。為了避免混淆，我們可以先用 `vagrant halt` 將目前的虛擬機暫停或是使用 `vagrant destroy` 直接摧毀。接下來，在 `Vagrantfile` 中加入下列設置來替我們的虛擬機命名：
 
 ```ruby
-config.vm.define "ironman"
+config.vm.define "server"
 ```
 
-重新啟動 (up) 一個新的主機：
+接著在重新啟動一個新的主機後檢查其狀況：
 
 ```shell
 $ vagrant up
-
-Bringing machine 'ironman' up with 'virtualbox' provider...
-==> ironman: Importing base box 'hashicorp/precise64'...
-==> ironman: Matching MAC address for NAT networking...
-==> ironman: Checking if box 'hashicorp/precise64' is up to date...
-==> ironman: Setting the name of the VM: workspace_ironman_1480738218546_20931
-==> ironman: Clearing any previously set network interfaces...
-==> ironman: Preparing network interfaces based on configuration...
-    ironman: Adapter 1: nat
-==> ironman: Forwarding ports...
-    ironman: 22 (guest) => 2222 (host) (adapter 1)
-==> ironman: Booting VM...
-==> ironman: Waiting for machine to boot. This may take a few minutes...
-    ironman: SSH address: 127.0.0.1:2222
-    ironman: SSH username: vagrant
-    ironman: SSH auth method: private key
-    ironman:
-    ironman: Vagrant insecure key detected. Vagrant will automatically replace
-    ironman: this with a newly generated keypair for better security.
-    ironman:
-    ironman: Inserting generated public key within guest...
-    ironman: Removing insecure key from the guest if it's present...
-    ironman: Key inserted! Disconnecting and reconnecting using new SSH key...
-==> ironman: Machine booted and ready!
-==> ironman: Checking for guest additions in VM...
-    ironman: The guest additions on this VM do not match the installed version of
-    ironman: VirtualBox! In most cases this is fine, but in rare cases it can
-    ironman: prevent things such as shared folders from working properly. If you see
-    ironman: shared folder errors, please make sure the guest additions within the
-    ironman: virtual machine match the version of VirtualBox you have installed on
-    ironman: your host and reload your VM.
-    ironman:
-    ironman: Guest Additions Version: 4.2.0
-    ironman: VirtualBox Version: 5.0
-==> ironman: Mounting shared folders...
-    ironman: /vagrant => /Users/tsoliang/Desktop/workspace
-```
-
-再檢查一次虛擬機運行狀況：
-
-```shell
 $ vagrant status
 
 Current machine states:
 
-ironman   running (virtualbox)
+server                    running (virtualbox)
 
 The VM is running. To stop this VM, you can run `vagrant halt` to
 shut it down forcefully, or you can run `vagrant suspend` to simply
@@ -215,4 +173,4 @@ suspend the virtual machine. In either case, to restart it again,
 simply run `vagrant up`.
 ```
 
-正如我們預期的，虛擬機有自己的名字啦！
+將虛擬器命名除了方便我們在開發時清楚了解每個虛擬主機的功用，我們也可以直接透過每個主機的別名直接進行操作。
