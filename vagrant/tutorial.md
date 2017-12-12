@@ -173,4 +173,4 @@ suspend the virtual machine. In either case, to restart it again,
 simply run `vagrant up`.
 ```
 
-將虛擬器命名除了方便我們在開發時清楚了解每個虛擬主機的功用，我們也可以直接透過每個主機的別名直接進行操作。
+將虛擬器命名除了方便我們在開發時清楚了解每個虛擬主機的功用，在未來我們也可以直接透過每個主機的別名進行操作。
