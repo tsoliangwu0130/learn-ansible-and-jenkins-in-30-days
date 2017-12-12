@@ -11,7 +11,7 @@
 3. [[Optional] Vagrant Manager for Windows](https://github.com/lanayotech/vagrant-manager-windows/releases)
 4. [[Optional] VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 
-以上除了 Vagrant 本身必須要安裝外，其他軟體讀者可以根據情況自行斟酌是否要進行安裝。另外，在未來的章節內，我將主要以 macOS 作為我們的主要作業系統。
+以上除了 Vagrant 本身必須要安裝外，其他軟體讀者可以根據情況自行斟酌是否要進行安裝。另外，在未來的章節內，我將主要以 macOS 作為我們的作業系統來進行操作。
 
 在 Vagrant 安裝完成後，在終端機 (terminal) 內輸入以下指令：
 
@@ -30,9 +30,7 @@ You're running an up-to-date version of Vagrant!
 
 #### 開始使用 Vagrant
 
-使用 Vagrant 的另一大優點就是大家都可以把自己習慣的開發環境打包給其他人使用。而這些打包後的作業系統在 Vagrant 的世界內就稱為 [Vagrant boxes](https://www.vagrantup.com/docs/boxes.html)。讀者可以依據自己的需求在 [public Vagrant box catalog](https://atlas.hashicorp.com/boxes/search) 上搜尋適合的 box 來使用。值得一提的是官方特別推薦使用 [Bento boxes](https://atlas.hashicorp.com/bento) 這個列表內中的 boxes，除了因為開發者大多皆為知名軟體工作者，其品質相對穩定外，各專案也都已於 GitHub 上開源。
-
-作為示範，我將使用 bento 中的 `bento/ubuntu-14.04` 來作為接下來的標準 box。
+使用 Vagrant 的另一大優點就是大家都可以把自己習慣的開發環境打包給其他人使用。而這些打包後的作業系統在 Vagrant 的世界內就稱為 [Vagrant boxes](https://www.vagrantup.com/docs/boxes.html)。讀者可以依據自己的需求在 [public Vagrant box catalog](https://atlas.hashicorp.com/boxes/search) 上搜尋適合的 box 來使用。值得一提的是官方特別推薦使用 [Bento boxes](https://atlas.hashicorp.com/bento) 這個列表內中的 boxes，除了因為開發者大多皆為知名軟體工作者，其品質相對穩定外，各專案也都已於 GitHub 上開源。作為示範，我將使用 bento 中的 `bento/ubuntu-14.04` 來作為接下來的標準 box。
 
 首先，我們可以先在桌面上建立一個 workspace 給這次的專案使用：
 
@@ -54,7 +52,7 @@ $ vagrant init bento/ubuntu-14.04
 $ vagrant up
 ```
 
-第一次啟動必須要下載整份 box 的檔案，所以可能會花幾分鐘的時間來啟動。啟動完成後，透過 [SSH](https://zh.wikipedia.org/wiki/Secure_Shell) 來登入該虛擬機：
+因為第一次啟動必須要下載整份 box 的檔案，所以可能會花幾分鐘的時間來啟動。在啟動完成後，透過 [SSH](https://zh.wikipedia.org/wiki/Secure_Shell) 來登入該虛擬機：
 
 ```shell
 $ vagrant ssh
