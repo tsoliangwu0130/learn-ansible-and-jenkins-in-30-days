@@ -45,8 +45,7 @@ $ cd ~/Desktop/workspace
 $ vagrant init bento/ubuntu-14.04
 ```
 
-你可能已經注意到此時 Vagrant 在 workspace 中初始化了一個 `Vagrantfile`，不過我們暫時先不用管它。
-接著，啟動我們的第一台虛擬機：
+你可能已經注意到此時 Vagrant 在 workspace 中初始化了一個 `Vagrantfile`，不過我們暫時先不用管它。接著，啟動我們的第一台虛擬機：
 
 ```shell
 $ vagrant up
