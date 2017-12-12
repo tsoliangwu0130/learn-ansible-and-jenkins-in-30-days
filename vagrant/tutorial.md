@@ -35,8 +35,6 @@ bento/ubuntu-14.04                (virtualbox, 201708.22.0)
 
 ```shell
 $ vagrant box remove bento/debian-8.6
-
-Removing box 'bento/debian-8.6' (v2.3.0) with provider 'virtualbox'...
 ```
 
 透過 `vagrant box list` 確定一下 box 已經被成功移除：
