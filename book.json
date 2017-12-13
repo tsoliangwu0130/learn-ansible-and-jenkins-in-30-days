@@ -1,0 +1,8 @@
+{
+    "plugins": ["disqus"],
+    "pluginsConfig": {
+        "disqus": {
+            "shortName": "learn-ansible-and-jenkins-in-30-days"
+        }
+    }  
+}
