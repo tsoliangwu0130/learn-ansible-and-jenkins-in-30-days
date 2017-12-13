@@ -2,7 +2,7 @@
 
 #### 什麼是 Ansible Playbook？
 
-當確認 Ansible 已經正確地安裝在控制主機上之後，我們現在就可以準備透過 Ansible 對遙控節點進行部署了。然而，我們要如何告訴 Ansible 我們想要對遙控節點做些什麼呢？在 Ansible 的世界裡，我們是透過編寫劇本 (playbook) 來告訴 Ansible 接下來需要做的事項。由於 Ansible 的劇本是用 [YAML (YAML Ain't Markup Language)](http://yaml.org/) 這種語言來撰寫，而這個語言最大的特色就是具有高度可讀性，因此無論有沒有程式語言的基礎，理論上任何人在看到一份好的 Ansible playbook 的時候應該都是非常容易理解及著手修改維護的。
+當確認 Ansible 已經正確地安裝在 control machine 上之後，我們現在就可以準備透過 Ansible 對 managed node 進行部署了。然而，我們要如何告訴 Ansible 我們想要對 managed node 做些什麼呢？在 Ansible 的世界裡，我們是透過編寫劇本 (playbook) 來告訴 Ansible 接下來需要做的事項。由於 Ansible 的 playbook 是使用 [YAML (YAML Ain't Markup Language)](http://yaml.org/) 這種標記語言來撰寫，而這個語言最大的特色就是具有高度可讀性，因此無論有沒有程式語言的基礎，理論上任何人在看到一份好的 Ansible playbook 的時候應該都是非常容易理解及著手修改維護的。
 
 #### 我的第一個 playbook
 
@@ -10,7 +10,7 @@
 
 ```yml
 ---
-- hosts: ironman
+- hosts: server
   tasks:
     # task 1
     - name: test connection
@@ -23,13 +23,13 @@
         msg: "{{ message }}"
 ```
 
-相信大家就算從來沒有寫過 Ansible 的 playbook，應該還是不難猜出這份 playbook 在做些什麼。簡單來說，我們在這份 playbook 中定義了任務清單 `tasks` 以及部署對象 `hosts: ironman`。這也是為什麼在之前的章節中我們提到了最好把每一個虛擬主機都做命名。主機命名後，我們可以直接透過主機的名稱直接進行操作（我們會在接下來的章節中提到若不透過 Vagrant 要如何命名主機）。除此之外，我們可以透過 `name` 這個標籤替任務清單中的每個 task 分別命名。在接下來運行 playbook 的過程中若發生錯誤，我們也會比較清楚是在哪一個環節上出了問題。
+相信大家就算從來沒有寫過 Ansible 的 playbook，應該還是不難猜出這份 playbook 在做些什麼。簡單來說，我們在這份 playbook 中定義了任務清單 `tasks` 以及部署對象 `hosts: server`。這也是為什麼在之前的章節中我們提到了最好把每一個虛擬主機都做命名。主機命名後，我們可以直接透過主機的名稱直接進行操作（我們會在接下來的章節中提到若不透過 Vagrant 要如何命名主機）。除此之外，我們可以透過 `name` 這個標籤替任務清單中的每個 task 分別命名。在接下來運行 playbook 的過程中若發生錯誤，我們也會比較清楚是在哪一個環節上出了問題。
 
 在這個 playbook 中，我們定義了兩個 task：
 
 1. test connection
 
-	我們在這個 task 中，呼叫了 Ansible 的內建測試模組 (module) - [ping](http://docs.ansible.com/ansible/ping_module.html)。這個模組的目的非常類似在學習每個語言一開始練習的 ["Hello World"](https://zh.wikipedia.org/wiki/Hello_World) 程式。其主要是用來測試操控主機是否可以正確地與遙控節點進行溝通，如果連線正常，遙控節點就會回傳一個 "pong" 的訊息給控制主機。接著，我們透過另一個 Ansible 內建模組 - [register](http://docs.ansible.com/ansible/playbooks_variables.html#registered-variables) 把遙控節點回傳的訊息存成變數 (variable) 的形式。
+	我們在這個 task 中，呼叫了 Ansible 的內建測試模組 (module) - [ping](http://docs.ansible.com/ansible/ping_module.html)。這個模組的目的非常類似在學習每個語言一開始練習的 ["Hello World"](https://zh.wikipedia.org/wiki/Hello_World) 程式。其主要是用來測試 control machine 是否可以正確地與 managed node 進行溝通，如果連線正常，遙控節點就會回傳一個 "pong" 的訊息給控制主機。接著，我們透過另一個 Ansible 內建模組 - [register](http://docs.ansible.com/ansible/playbooks_variables.html#registered-variables) 把 managed node 回傳的訊息儲存在 `message` 這個變數 (variable) 中。
 
 	_注意：此處的 ping 並非建立在 [ICMP 協定](https://zh.wikipedia.org/wiki/%E4%BA%92%E8%81%94%E7%BD%91%E6%8E%A7%E5%88%B6%E6%B6%88%E6%81%AF%E5%8D%8F%E8%AE%AE)下的 [ping](https://zh.wikipedia.org/wiki/Ping) 指令，只是純 Ansible 開發的一個簡單測試模組。_
 
@@ -48,7 +48,7 @@ $ ansible-lint playbook.yml
 如果沒有看到任何輸出就表示你的 playbook 完全沒有問題！不過為了展示 Ansible-lint 的提示效果，我在 playbook 的第五行句尾加上一個空白：
 
 ```yml
-    - name: test connection 
+    - name: test connection
                            ~
 ```
 
@@ -71,3 +71,7 @@ playbook.yml:5
 ![sublime_ansible](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/raw/master/images/sublime_ansible.png "Sublime Plugin for Ansible")
 
 在定義好了我們的第一個 playbook 後，接下來就是如何運行我們寫好的 playbook 啦！
+
+#### [Optional] Atom 插件 - language-ansible + linter-ansible-linting
+
+與上述 Sublime 插件相當類似，若讀者使用 [Atom](https://atom.io/) 作為開發編輯器，也可以考慮安裝 `language-ansible` 與 `linter-ansible-linting` 來作為語法高亮以及即時 linter 作為輔助。除此之外，Atom 上還提供了相當多強大的插件例如 `autocomplete-ansible` 等等，讀者可以根據需求自行安裝。
