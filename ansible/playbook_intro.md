@@ -37,6 +37,8 @@
 
 	在上一個 task 中，我們已經把 ping 後的結果存在 `message` 這個變數中了。我們可以利用 [debug](http://docs.ansible.com/ansible/debug_module.html) 這個模組把儲存的訊息輸出到我們的終端機上。在 Ansible 中，若要調用儲存變數，我們必須在變數名稱外加上兩個大括弧 - {{ }} 來告訴 Ansible 大括弧內的是一個變數 （[如果變數在描述句 (statement) 的開頭，還必須要額外加上一個雙引號 - ""](http://docs.ansible.com/ansible/playbooks_variables.html#hey-wait-a-yaml-gotcha)）。
 
+在定義好了我們的第一個 playbook 後，接下來就是如何運行我們寫好的 playbook 啦！
+
 #### 利用 Ansible-lint 來檢查 playbook
 
 上一個章節中，我有提到 [Ansible-lint](https://github.com/willthames/ansible-lint) 這個語法提示工具，如果沒有安裝的讀者可以自行跳過這個部分。使用 Ansible-lint 的方法相當簡單，只要在終端機中利用 `ansible-lint` 輸入需要檢查的檔案 (e.g. `playbook.yml`) 即可：
@@ -69,8 +71,6 @@ playbook.yml:5
 如果讀者使用的編輯器是 [Sublime Text](https://www.sublimetext.com/)，在這裡推薦一個不錯的語法高亮器 (Syntax Highlighting) 給大家。因為在 Sublime 中，語法高亮並沒有原生支援 Ansible 的語法，所以我們只能預設使用 YAML 來加亮語法。[Syntax highlighting for Ansible files](https://github.com/clifford-github/sublime-ansible) 這套插件補強了 Ansible 在 Sublime 上的顯示效果，非常推薦使用 Sublime 的讀者安裝這套插件。
 
 ![sublime_ansible](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/raw/master/images/sublime_ansible.png "Sublime Plugin for Ansible")
-
-在定義好了我們的第一個 playbook 後，接下來就是如何運行我們寫好的 playbook 啦！
 
 #### [Optional] Atom 插件 - language-ansible + linter-ansible-linting
 
