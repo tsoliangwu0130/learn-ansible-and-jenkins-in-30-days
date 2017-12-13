@@ -1,6 +1,6 @@
 # Ansible 安裝
 
-#### 什麼是控制主機 (Control Machine) 及管理節點 (Managed Node)？
+#### 什麼是控制主機 (Control Machine) 及被控節點 (Managed Node)？
 
 在 Ansible 裡，我們會把所有機器的角色做以下兩種區分：
 

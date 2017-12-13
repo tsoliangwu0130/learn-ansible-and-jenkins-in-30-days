@@ -15,4 +15,4 @@
 1. 安裝 Python (2.6, 2.7 or 3.5 版以上)
 2. 透過 [SSH](https://en.wikipedia.org/wiki/Secure_Shell) 進行連線
 
-而在現在大部分的 Linux 主機上，基本上 Python 已經都是預裝的基本配備了，所以這樣的要求等於沒有要求。我們只需要在安裝好 Ansible 的主控端 (control machine) 上透過 SSH 與被控節點進行溝通，就可以輕鬆做到一鍵部署啦！
+而在現在大部分的 Linux 主機上，基本上 Python 已經都是預裝的基本配備了，所以這樣的要求等於沒有要求。我們只需要在安裝好 Ansible 的控制主機 (control machine) 上透過 SSH 與被控節點進行溝通，就可以輕鬆做到一鍵部署啦！
