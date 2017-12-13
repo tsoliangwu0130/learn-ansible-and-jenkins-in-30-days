@@ -1,4 +1,6 @@
 {
+    "title": "30 天入門 Ansible 及 Jenkins",
+    "language": "zh-tw",
     "plugins": ["disqus"],
     "pluginsConfig": {
         "disqus": {
