@@ -39,9 +39,9 @@
 
 在定義好了我們的第一個 playbook 後，接下來就是如何運行我們寫好的 playbook 啦！
 
-#### 利用 Ansible-lint 來檢查 playbook
+#### [Optional] 利用 Ansible-lint 來檢查 playbook
 
-上一個章節中，我有提到 [Ansible-lint](https://github.com/willthames/ansible-lint) 這個語法提示工具，如果沒有安裝的讀者可以自行跳過這個部分。使用 Ansible-lint 的方法相當簡單，只要在終端機中利用 `ansible-lint` 輸入需要檢查的檔案 (e.g. `playbook.yml`) 即可：
+上一個章節中，筆者有提到 [Ansible-lint](https://github.com/willthames/ansible-lint) 這個語法提示工具，如果沒有安裝的讀者可以自行跳過這個部分。使用 Ansible-lint 的方法相當簡單，只要在終端機中利用 `ansible-lint` 輸入需要檢查的檔案 (e.g. `playbook.yml`) 即可：
 
 ```shell
 $ ansible-lint playbook.yml
