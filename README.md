@@ -1,6 +1,6 @@
 # 30 天入門 Ansible 及 Jenkins [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-在軟體開發領域中，IT 自動化 (automation) 及持續整合 (continuous integration, CI) 是 [DevOps](https://zh.wikipedia.org/wiki/DevOps) 精神中相當重要的兩個部分。尤其當團隊開始實踐敏捷開發 (agile development) 等概念時，這兩項技能往往可以讓實踐更加事半功倍。作為入門手冊，我將會在接下來 30 天內透過 [Ansible](https://www.ansible.com/) 與 [Jenkins](https://jenkins.io/) 這兩個非常熱門的開源軟體來分別介紹上述的概念。
+在軟體開發領域中，IT 自動化 (automation) 及持續整合 (continuous integration, CI) 是 [DevOps](https://zh.wikipedia.org/wiki/DevOps) 精神中相當重要的兩個部分。尤其當團隊開始導入敏捷開發 (agile development) 等概念時，這兩項技能往往可以讓實踐更加事半功倍。作為入門手冊，我將會在接下來 30 天內透過 [Ansible](https://www.ansible.com/) 與 [Jenkins](https://jenkins.io/) 這兩個非常熱門的開源軟體來分別介紹上述的概念。
 
 #### 為什麼需要 IT 自動化？
 
