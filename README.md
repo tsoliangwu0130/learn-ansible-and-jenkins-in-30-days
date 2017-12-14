@@ -1,6 +1,6 @@
 # 30 天入門 Ansible 及 Jenkins [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-在軟體開發領域中，IT 自動化管理 (IT automation) 及持續整合 (Continuous integration, CI) 是 [DevOps](https://zh.wikipedia.org/wiki/DevOps) 精神中相當重要的兩個概念。尤其當團隊引入敏捷軟體開發 (Agile software development) 時，這兩項技巧往往更是密不可分。作為入門手冊，我將會在接下來 30 天內透過 [Ansible](https://www.ansible.com/) 與 [Jenkins](https://jenkins.io/) 這兩個非常熱門的開源軟體來分別介紹上述的概念。
+在軟體開發領域中，IT 自動化 (automation) 及持續整合 (continuous integration, CI) 是 [DevOps](https://zh.wikipedia.org/wiki/DevOps) 精神中相當重要的兩個部分。尤其當團隊開始實踐敏捷開發 (agile development) 等概念時，這兩項技能往往可以讓實踐更加事半功倍。作為入門手冊，我將會在接下來 30 天內透過 [Ansible](https://www.ansible.com/) 與 [Jenkins](https://jenkins.io/) 這兩個非常熱門的開源軟體來分別介紹上述的概念。
 
 #### 為什麼需要 IT 自動化？
 
@@ -8,4 +8,4 @@
 
 #### 為什麼需要持續整合？
 
-而在環境成功搭建後，對服務本身的維護及監控也是在開發流程中相當重要一環。當我們從原始碼代管服務 (e.g. GitHub) 上取得原始碼後，如何確保產品在發布前品質無虞一直以來都是開發人員需要細思的課題之一。由於現在大多數的開發團隊都會透過版本控制系統來提交並整合開發人員們各自的修改，在合併分支時若衝突沒有處理恰當，往往在產品發布後才會意識到發生了不可預期的錯誤。因此，透過使用持續整合的技術，我們將可以在產品發布前定期地做各種測試及分析，以確保軟體每一次的發布更新都是穩定且高品質的。
+而在環境成功搭建後，對服務本身的維護及監控也是在開發流程中相當重要一環。當我們從原始碼代管服務 (e.g. GitHub) 上取得原始碼後，如何確保產品在發布前品質無虞，一直以來都是開發人員需要細思的課題之一。由於現在大多數的開發團隊都會透過版本控制系統來提交並整合開發人員們各自的修改，若在合併分支時沒有將合併衝突 (conflict) 處理恰當，或是合併程式碼後產生了某些隱性邏輯上的地雷，往往會到產品發布以後才意識到發生了不可預期的錯誤。在持續整合，甚至是持續交付 (continuous delivery, CD)、持續部署 (continuous deployment, CD) 的機制下，我們可以透過高頻的整合、測試並分析程式碼品質，在最短的時間內發現問題及其發生點，進而確保確保產品每一次的發布都是穩定且高品質的。
