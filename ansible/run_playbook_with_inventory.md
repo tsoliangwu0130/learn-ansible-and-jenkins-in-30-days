@@ -1,4 +1,4 @@
-# 透過 Ansible 運行 playbook
+# 運行 playbook 以及配置 inventory file
 
 #### Ansible 如何運行 playbook？
 
