@@ -80,11 +80,18 @@ PLAY RECAP *********************************************************************
 127.0.0.1                  : ok=0    changed=0    unreachable=1    failed=0
 ```
 
-現在 Ansible 知道誰是 `server` 了！不過，看起來 Ansible 似乎並沒有將我們 playbook 中定義內容成功地部署到 `server` 上。
+透過 inventory file 的配置，我們可以輕易的將不同部署環境做有系統的整理。舉例來說，在軟體開發實務上根據開發階段的不同，我們常常會有[多種不同的部署環境](https://en.wikipedia.org/wiki/Deployment_environment)，好比說最常見的 testing, development 以及 production。其中，每個環境可能又有不止一台的主機需要被維護，因此我們可以將每個環境需要配置的細節清楚定義在不同的 inventory file 中，然後透過類似以下指令來透過 Ansible 真正實現一鍵部署：
+
+```shell
+$ ansible-playbook -i devl-inventory devl-playbook.yml
+$ ansible-playbook -i prod-inventory prod-playbook.yml
+```
+
+關於 inventory file 更進一步的寫法，可以參考[官方文件](http://docs.ansible.com/ansible/latest/intro_inventory.html)。現在 Ansible 知道誰是 `server` 了！不過，看起來 Ansible 似乎並沒有將我們 playbook 中定義內容成功地部署到 `server` 主機上。
 
 #### 設定 PRIVATE_KEY_FILE
 
-從上面的錯誤訊息中我們可以知道部署失敗的原因發生在 SSH 連線失敗。還記得我們說過使用 Ansible 操作 managed node 必須要透過 SSH 連線嗎？一般來說，我們如果要透過 SSH 存取主機 (由於篇幅的限制，我們在這次的教學文中就不對 SSH 設定著墨太深，有興趣的讀者可以上網搜尋相關資料或是參考 [GitHub](https://help.github.com/articles/generating-an-ssh-key/) 的 SSH 設定教學) 我們會預設將產生出來的公用金鑰 (public key) 存放在 `~/.ssh/` 的路徑下，然後再手動將這組金鑰加到我們想要授權的服務列表上。不過，因為我們是使用 Vagrant 建立起一台虛擬主機作為練習，Vagrant 其實已經事先幫我們把控制主機與遙控節點做好 SSH 配對了，所以我們並不需要手動設定這個部分。從上面的 `vagrant ssh-config` 輸出的結果中，我們可以看到一個特殊的參數：
+從上面的錯誤訊息中我們可以知道部署失敗的原因發生在 SSH 連線失敗。還記得我們說過使用 Ansible 操作 managed node 必須要透過 SSH 連線嗎？一般來說，我們如果要透過 SSH 存取主機 (由於篇幅的限制，我們在這次的教學文中就不對 SSH 設定著墨太深，有興趣的讀者可以上網搜尋相關資料或是參考 [GitHub](https://help.github.com/articles/generating-an-ssh-key/) 的 SSH 設定教學) 我們會預設將產生出來的公用金鑰 (public key) 存放在 `~/.ssh/` 的路徑下，然後再手動將這組金鑰加到我們想要授權的服務列表 (authorized_keys) 上。不過，因為我們是使用 Vagrant 建立起一台虛擬主機作為練習，Vagrant 其實已經事先幫我們把控制主機與遙控節點做好 SSH 配對了，所以我們並不需要手動設定這個部分。從上面的 `vagrant ssh-config` 輸出的結果中，我們可以看到一個特殊的參數：
 
 ```
 IdentityFile /Users/tsoliang/Desktop/workspace/.vagrant/machines/server/virtualbox/private_key
@@ -122,4 +129,4 @@ PLAY RECAP *********************************************************************
 127.0.0.1                  : ok=3    changed=0    unreachable=0    failed=0
 ```
 
-大功告成！成功接收到從 `server` 回傳回來的 "pong" 了！
+大功告成！我們成功接收到從 `server` 回傳回來的 "pong" 了！在未來的章節內，我們還會介紹如何透過 `ansible.cfg` 這個檔案的設定來告訴 Ansible SSH 金鑰以及 inventory file 的位置，來讓整個部署流程看起來更加簡潔也讓開發人員更易維護。

@@ -2,7 +2,7 @@
 
 #### Vagrant 如何運行 playbook？
 
-除了直接使用 Ansible 的 `ansible-playbook` 指令來對遙控節點進行部署外，若我們是用 Vagrant 搭建虛擬主機的話，我們還可以利用 Vagrant 內建的[配置 (provision) 功能](https://www.vagrantup.com/docs/provisioning/ansible.html)直接運行 playbook。由於 Vagrant 已經知道管理主機的各項資訊，因此我們可以完全省略在上一個章節中設定 `inventory` 及 `PRIVATE_KEY_FILE` 的部分。
+除了直接使用 Ansible 的 `ansible-playbook` 指令來對 managed node 進行部署外，在若我們是用 Vagrant 搭建虛擬主機的話，我們還可以利用 Vagrant 內建的[配置 (provision) 功能](https://www.vagrantup.com/docs/provisioning/ansible.html)直接運行 playbook。由於 Vagrant 已經知道管理主機的各項資訊，因此我們可以完全省略在上一個章節中設定 `inventory` 及 `PRIVATE_KEY_FILE` 的部分。
 
 首先，在 `Vagrantfile` 中添加以下內容來告訴 Vagrant 要以哪個 playbook 來做部署配置：
 
