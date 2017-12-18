@@ -1,68 +1,26 @@
 # 撰寫第一個 Ansible Role
 
-在了解 playbook 的基本架構與運行方式後，我會在接下來的章節內介紹如何使用 Ansible 搭建起 [Jenkins](https://jenkins.io/) 的運行環境。透過實際的例子，相信讀者會對操作 Ansible 將會更加熟練與靈活。然而，我並不會在這個章節內過度著墨 Jenkins 的部分。關於 Jenkins 持續整合的使用，會在未來的章節內做更詳細的介紹。
+在了解 playbook 的基本架構與運行方式後，我會在接下來的章節內介紹如何使用 Ansible 搭建起 [Jenkins](https://jenkins.io/) 的運行環境。透過實際的例子，相信讀者會對操作 Ansible 將會更加熟練與靈活。
 
-#### 嘗試手動安裝 Jenkins
+#### 使用 Docker 運行 Jenkins
 
-首先，讓我們先試著不要透過 Ansible，手動安裝 Jenkins 在我們的主機上。因為在這系列文章中，我們用的是 Ubuntu 的 box 來運行虛擬機，因此根據 Jenkins [官方的 Ubuntu 安裝教學](https://wiki.jenkins-ci.org/display/JENKINS/Installing+Jenkins+on+Ubuntu)，我們可以直接透過系統內建的 apt 套件管理進行 Jenkins 安裝：
+安裝 Jenkins 有許多方法，根據作業環境的不同也有可能會有安裝上的差異。這次我會介紹如何在 managed node 上安裝 [Docker](https://www.docker.com/) 這個容器技術工具，並將我們的 Jenkins 部署在容器之下運行。
 
-先透過 `vagrant ssh` 登入我們的虛擬主機：
+使用容器技術來部署產品有相當多好處，一來是容器通常非常輕量級，啟動一個容器所需的資源都遠比運行一整個虛擬機例如 Vagrant 來的少許多，因此使用容器來分享開發環境及部署產品是業界中越來越常見的手法。除此之外，由於容器之間的資源是互相隔離的，這樣也同時可以避免應用程式之間常見的資源互相污染的狀況發生。礙於篇幅限制，Docker 容器的教學就不在這裡多加著墨，關於更進一步的介紹有興趣的讀者可以自行在網路上搜尋。
 
-```shell
-$ vagrant ssh
+要使用 Docker 運行 Jenkins 我們需要建立一個 Docker 的映像檔 (image)，我們當然大可以從頭自己撰寫一個 `Dockerfile` 來建立容器環境，但所幸 Jenkins 也在 Docker Hub 上釋出了[官方的 Jenkins image](https://hub.docker.com/_/jenkins/)，所以對使用者來說，所有繁瑣的安裝細節都已經被 Docker 包辦，我們剩下要做的就只剩：
 
-Welcome to Ubuntu 12.04 LTS (GNU/Linux 3.2.0-23-generic x86_64)
-
- * Documentation:  https://help.ubuntu.com/
-New release '14.04.5 LTS' available.
-Run 'do-release-upgrade' to upgrade to it.
-
-Welcome to your Vagrant-built virtual machine.
-Last login: Fri Dec  9 03:10:01 2016 from 10.0.2.2
-```
-
-接著跟著官方的安裝教學進行安裝：
-
-```shell
-$ wget -q -O - https://pkg.jenkins.io/debian/jenkins-ci.org.key | sudo apt-key add -
-$ sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
-$ sudo apt-get update
-$ sudo apt-get install jenkins
-```
-
-當在終端機輸出內容的最後看到以下訊息，就代表現在 Jenkins 已經成功安裝在我們的遙控節點上了：
-
-```shell
-Setting up jenkins (2.19.4) ...
- * Starting Jenkins Continuous Integration Server jenkins                                                                                                                  [ OK ]
-Processing triggers for libc-bin ...
-ldconfig deferred processing now taking place
-```
-
-根據官方的說明，當 Jenkins 安裝好以後，我們可以透過 `port 8080` 對 Jenkins 進行存取操作，因此，我們可以嘗試打開瀏覽器，並在網址列輸入 `http://localhost:8080/` 看看 Jenkins 是否已經正確運行在主機上，結果如下：
-
-![localhost_8080_unable_to_connect](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/raw/master/images/localhost_8080_unable_to_connect.png)
-
-顯然地，我們還不可以透過 `http://localhost:8080/` 存取 Jenkins。這是因為雖然 Jenkins 已經被安裝完成，但是它目前是運行在我們的 Vagrant 虛擬主機內。在還沒有調整 `Vagrantfile` 的設定前，我們是無法在控制主機上相對應 的 port 上看到 Jenkins 的介面的。
-
-雖然目前我們還不能從主控端使用瀏覽器存取 Jenkins，但我們可以使用 [cURL](https://en.wikipedia.org/wiki/CURL) 這個指令從遙控主機內部對 Jenkins 傳送 [HTTP 請求資訊 (HTTP request message)](https://zh.wikipedia.org/wiki/%E8%B6%85%E6%96%87%E6%9C%AC%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE)：
-
-```shell
-$ curl http://localhost:8080
-
-The program 'curl' is currently not installed.  You can install it by typing:
-sudo apt-get install curl
-```
-
-雖然 cURL 這個指令在 Unix / Linux 系統的主機上常常被開發人員大量使用，可是很不幸地，並不是所有的 box 或作業系統都有預先安裝好這個工具。為了能夠順利將 cURL 安裝在遙控節點上並將所有安裝的過程自動化，我們可以試著利用 Ansible 完成所有安裝程序。
+1. 在 managed node 上安裝 Docker
+2. 下載 Jenkins image
+3. 在 Docker container 內運行 Jenkins
 
 #### 什麼是 Ansible Role？
 
-我們在前面的章節內學習了如何撰寫 Ansible playbook，並將我們的工作清單以 task 的方式在 playbook 中表列下來。然而，如果 Ansible 只能做到這樣的程度，充其量我們只能說這是一個比較方便閱讀的 Shell script 罷了。若是今天我們清單中的任務有上百個，這樣我們的 playbook 也可能會變得非常冗長，就算語法再如何易讀，整體而言 playbook 還是會變得十分難以理解。另外，很多時候其實我們會希望有部分的部署內容是可以被其他不同的 playbook 重新使用。舉例來說，很多服務都可以直接使用 pip 這個套件管理來進行安裝，我們並不會希望在每一個不同的 playbook 中都要重新定義一次 pip 的安裝方法。因此，為了解決上述的問題，Ansible 提供了我們在撰寫自動化腳本時一個[角色 (role)](http://docs.ansible.com/ansible/playbooks_roles.html) 的概念。我們可以透過撰寫屬於自己的 role 來讓所有 playbook 重複使用，藉此提升透過 Ansible 自動化的靈活度。
+我們在前面的章節內學習了如何撰寫 Ansible playbook，並將我們的工作清單以 task 的方式在 playbook 中表列下來。然而，如果 Ansible 只能做到這樣的程度，充其量我們只能說這是一個比較方便閱讀的 Shell script 罷了。若是今天我們清單中的任務有上百個，這樣我們的 playbook 也可能會變得非常冗長，就算語法再如何易讀，整體而言 playbook 還是會變得十分難以理解。另外，很多時候其實我們會希望有部分的部署內容是可以被其他不同的 playbook 重新使用。舉例來說，很多服務都可以直接使用 [pip](https://en.wikipedia.org/wiki/Pip_(package_manager)) 這個套件管理來進行安裝，我們並不會希望在每一個不同的 playbook 中都要重新定義一次 pip 的安裝方法。因此，為了解決上述的問題，Ansible 提供了我們在撰寫自動化腳本時一個[角色 (role)](http://docs.ansible.com/ansible/playbooks_roles.html) 的概念。我們可以透過撰寫屬於自己的 role 來讓所有 playbook 重複使用，藉此提升透過 Ansible 自動化的靈活度。
 
 #### 我的第一個 role
 
-考量到由於安裝 cURL 的這個工作很可能會在未來頻繁地被不同的 playbook 重複使用，因此，我會選擇把安裝 cURL 的方法寫成一個可以重複被利用的 role ，而非 playbook 中的一個 task。
+考量到在安裝 Docker 的過程中會需要用到 [cURL](https://en.wikipedia.org/wiki/CURL) 這項工具，同時，這個工具很可能會在未來頻繁地被不同的 playbook 重複使用，因此，我們在這裡就來介紹如何透過 Ansible 來安裝 cURL ，並將其寫成一個可以重複被利用的 role ，而非 playbook 中的一個 task。
 
 讓我們在工作資料夾下依照以下結構新增檔案 (新增 `roles/curl/main.yml`)：
 
@@ -90,7 +48,7 @@ workspace
 
 ```shell
 ---
-- hosts: ironman
+- hosts: server
   roles:
     - { role: curl, become: yes }
 ```
@@ -101,13 +59,13 @@ workspace
 最後，重新運行我們的 playbook，並得到以下結果：
 
 ```shell
-PLAY [ironman] *****************************************************************
+PLAY [server] *****************************************************************
 
 TASK [setup] *******************************************************************
-ok: [ironman]
+ok: [server]
 
 PLAY RECAP *********************************************************************
-ironman                    : ok=1    changed=0    unreachable=0    failed=0
+server                    : ok=1    changed=0    unreachable=0    failed=0
 ```
 
 雖然 playbook 被正確運行了，可是很顯然地，我們用來安裝 cURL 的 role 並沒有被其呼叫成功。
