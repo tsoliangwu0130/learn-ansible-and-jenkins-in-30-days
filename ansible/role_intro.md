@@ -56,7 +56,7 @@ workspace
 
 接著，打開我們的 `playbook.yml`，並修改為以下內容：
 
-```
+```yml
 ---
 - hosts: server
   roles:
