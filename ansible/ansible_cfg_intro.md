@@ -2,28 +2,28 @@
 
 #### 什麼是 ansible.cfg？
 
-從上面的結果中，我們可以發現雖然 playbook 已經成功被執行，但 Ansible 並沒有辦法找到我們剛剛新建 role 的位置。因此，我們必須透過設定 [Ansible 的配置檔案](http://docs.ansible.com/ansible/intro_configuration.html) - `ansible.cfg` 來設置 [role 路徑 (path)](http://docs.ansible.com/ansible/intro_configuration.html#roles-path)。
+從上面的結果中，我們可以發現雖然 playbook 已經成功被執行，但 Ansible 並沒有辦法找到我們剛剛新建 role 的位置。因此，我們必須透過設定 [Ansible 的配置檔案](http://docs.ansible.com/ansible/intro_configuration.html) - `ansible.cfg` 來設置 [role 的路徑 (path)](http://docs.ansible.com/ansible/intro_configuration.html#roles-path)。
 
 新增一個檔案 `ansible.cfg` 並加入以下內容：
 
 ```
-[ironman]
+[server]
 roles_path = ./roles
 ```
 
 雖然只有短短兩行，但 Ansible 就會依此路徑去找到我們 role 的存放位置。接著重新執行我們的 playbook：
 
 ```shell
-PLAY [ironman] *****************************************************************
+PLAY [server] *****************************************************************
 
 TASK [setup] *******************************************************************
-ok: [ironman]
+ok: [server]
 
 TASK [curl : install curl] *****************************************************
-changed: [ironman]
+changed: [server]
 
 PLAY RECAP *********************************************************************
-ironman                    : ok=2    changed=1    unreachable=0    failed=0
+server                    : ok=2    changed=1    unreachable=0    failed=0
 ```
 
 看起來好像成功了！現在讓我們登入進去遙控節點看看是否 cURL 已經可以運作了：

@@ -20,9 +20,18 @@
 
 #### 我的第一個 role
 
-考量到在安裝 Docker 的過程中會需要用到 [cURL](https://en.wikipedia.org/wiki/CURL) 這項工具，同時，這個工具很可能會在未來頻繁地被不同的 playbook 重複使用，因此，我們在這裡就來介紹如何透過 Ansible 來安裝 cURL ，並將其寫成一個可以重複被利用的 role ，而非 playbook 中的一個 task。
+考量到在安裝 Docker 的過程中會需要用到 pip 這項工具，同時，這個工具很可能會在未來頻繁地被其他的 playbook 重複使用，因此，我們在這裡就來介紹如何透過 Ansible 來安裝 pip ，並將其寫成一個可以重複被利用的 role ，而非僅僅只是 playbook 中的一個 task。
 
-讓我們在工作資料夾下依照以下結構新增檔案 (新增 `roles/curl/main.yml`)：
+在 Ubuntu 系統下，一般來說我們可以利用以下這段簡單的指令來安裝 pip：
+
+```shell
+$ apt-get update
+$ apt-get install python-pip
+```
+
+作為我們的第一個 Ansible role，讓我們嘗試將這段指令翻譯成 Ansible 的腳本。
+
+首先，在工作資料夾下依照以下結構新增檔案 (新增 `roles/pip/main.yml`)：
 
 ```shell
 workspace
@@ -30,52 +39,45 @@ workspace
 ├── inventory
 ├── playbook.yml
 └── roles
-    └── curl
+    └── pip
         └── tasks
             └── main.yml
 ```
 
-在這個結構下， `curl` 就是我們的第一個 role 的名稱，而這個 role 的工作流程就會被我們定義在下面的 `tasks/main.yml` 之中。現在打開 `curl/tasks/main.yml` 並在其中寫入以下內容：
+在這個結構下， `pip` 就是我們的第一個 role 的名稱，而這個 role 的工作流程就會被我們定義在下面的 `tasks/main.yml` 之中。現在打開 `pip/tasks/main.yml` 並在其中寫入以下內容：
 
 ```yml
 ---
-  - name: install curl
+  - name: Install pip
     apt:
-      name: curl
+      name: python-pip
+      update_cache: yes
 ```
 
-我們在這個 role 的內容中呼叫了 Ansible 內建模組 [apt](http://docs.ansible.com/ansible/apt_module.html)，並利用它直接進行 cURL 的安裝。接著，打開我們的 `playbook.yml`，並修改為以下內容：
+我們在這個 role 的內容中呼叫了 Ansible 內建模組 [apt](http://docs.ansible.com/ansible/apt_module.html)，並利用它來安裝 python-pip 這個套件。其中 `update_cache: yes` 等效於在安裝前執行 `apt-get update` 這個指令。
+
+接著，打開我們的 `playbook.yml`，並修改為以下內容：
 
 ```
 ---
 - hosts: server
   roles:
-    - { role: curl, become: yes }
+    - { role: pip, become: yes }
 ```
 
-我們刪除了之前用來測試的 ping 劇碼 (play)，並在這個 playbook 中告訴 Ansible 我們想要執行 `curl` 這個我們剛定義好的 role。其中要特別注意的是，[become](http://docs.ansible.com/ansible/become.html) 代表我們要升高當前使用者權限 （等效於 Unix / Linux 中的 `sudo` 指令）來運行當前工作。
+我們刪除了之前用來測試的 ping 劇碼 (play)，並在這個 playbook 中告訴 Ansible 我們想要執行 `pip` 這個我們剛定義好的 role。其中要特別注意的是，[become](http://docs.ansible.com/ansible/become.html) 代表我們要升高當前使用者權限 （等效於 Unix / Linux 中的 `sudo` 指令）來運行當前工作。
 
 在這裡我們使用了 Ansible [最常見的方式](http://docs.ansible.com/ansible/latest/playbooks_reuse_roles.html#using-roles)來調用我們剛剛寫好的 role。如果有一連串的 role 要被執行，可以將其定義在 roles 這個 list 之下，比如：
 
 ```
 - hosts: server
   roles:
-    - { role: curl, become: yes }
     - { role: pip, become: yes }
+    - { role: curl, become: yes }
     - { role: docker, become: yes }
 ```
 
-這樣一來，Ansible 就會依序執行每一個 roles。同時，我們還可以根據每個不同的 role 來傳遞不同的參數值如下：
-
-```
-- hosts: server
-  roles:
-    - { role: curl, become: yes }
-    - { role: pip, become: yes, var: foo }
-    - { role: docker, become: yes, var: bar }
-```
-
-最後，重新運行我們的 playbook，並得到以下結果：
+這樣一來，Ansible 就會依序執行每一個 role。最後，重新運行我們的 playbook，並得到以下結果：
 
 ```shell
 PLAY [server] *****************************************************************
@@ -87,4 +89,4 @@ PLAY RECAP *********************************************************************
 server                    : ok=1    changed=0    unreachable=0    failed=0
 ```
 
-雖然 playbook 被正確運行了，可是很顯然地，我們用來安裝 cURL 的 role 並沒有被其呼叫成功。
+雖然 playbook 被正確運行了，可是很顯然地，我們用來安裝 pip 的 role 並沒有被其呼叫成功。
