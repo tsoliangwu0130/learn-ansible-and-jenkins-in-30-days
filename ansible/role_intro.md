@@ -46,7 +46,7 @@ workspace
 
 我們在這個 role 的內容中呼叫了 Ansible 內建模組 [apt](http://docs.ansible.com/ansible/apt_module.html)，並利用它直接進行 cURL 的安裝。接著，打開我們的 `playbook.yml`，並修改為以下內容：
 
-```shell
+```
 ---
 - hosts: server
   roles:
@@ -55,6 +55,25 @@ workspace
 
 我們刪除了之前用來測試的 ping 劇碼 (play)，並在這個 playbook 中告訴 Ansible 我們想要執行 `curl` 這個我們剛定義好的 role。其中要特別注意的是，[become](http://docs.ansible.com/ansible/become.html) 代表我們要升高當前使用者權限 （等效於 Unix / Linux 中的 `sudo` 指令）來運行當前工作。
 
+在這裡我們使用了 Ansible [最常見的方式](http://docs.ansible.com/ansible/latest/playbooks_reuse_roles.html#using-roles) 來調用我們剛剛寫好的 role。如果有一連串的 role 要被執行，可以將其定義在 roles 這個 list 之下，比如：
+
+```
+- hosts: server
+  roles:
+    - { role: curl, become: yes }
+    - { role: pip, become: yes }
+    - { role: docker, become: yes }
+```
+
+這樣一來，Ansible 就會依序執行每一個 roles。同時，我們還可以根據每個不同的 role 來傳遞不同的參數值如下：
+
+```
+- hosts: server
+  roles:
+    - { role: curl, become: yes }
+    - { role: pip, become: yes, var: foo }
+    - { role: docker, become: yes, var: bar }
+```
 
 最後，重新運行我們的 playbook，並得到以下結果：
 
