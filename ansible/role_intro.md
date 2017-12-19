@@ -52,9 +52,7 @@ workspace
       update_cache: yes
 ```
 
-我們在這個 role 的內容中呼叫了 Ansible 內建模組 [apt](http://docs.ansible.com/ansible/apt_module.html)，並利用它來安裝 python-pip 這個套件。其中 `update_cache: yes` 等效於在安裝前執行 `apt-get update` 這個指令。
-
-接著，打開我們的 `playbook.yml`，並修改為以下內容：
+我們在這個 role 的內容中呼叫了 Ansible 內建模組 [apt](http://docs.ansible.com/ansible/apt_module.html)，並利用它來安裝 python-pip 這個套件。其中 `update_cache: yes` 等效於在安裝前執行 `apt-get update` 這個指令。接著，打開我們的 `playbook.yml`，並修改為以下內容：
 
 ```yml
 ---
