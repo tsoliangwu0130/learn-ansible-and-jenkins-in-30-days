@@ -29,9 +29,7 @@ $ apt-get update
 $ apt-get install python-pip
 ```
 
-作為我們的第一個 Ansible role，讓我們嘗試將這段指令翻譯成 Ansible 的腳本。
-
-首先，在工作資料夾下依照以下結構新增檔案 (新增 `roles/pip/main.yml`)：
+作為我們的第一個 Ansible role，讓我們嘗試將這段指令翻譯成 Ansible 的腳本。首先，在工作資料夾下依照以下結構新增檔案 (新增 `roles/pip/main.yml`)：
 
 ```shell
 workspace
