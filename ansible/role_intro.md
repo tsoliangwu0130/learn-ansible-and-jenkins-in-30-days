@@ -47,7 +47,7 @@ workspace
             └── main.yml
 ```
 
-在這個結構下， `pip` 就是我們的第一個 role 的名稱，而這個 role 的工作流程就會被我們定義在下面的 `tasks/main.yml` 之中。現在打開 `pip/tasks/main.yml` 並在其中寫入以下內容：
+在這個結構下，`pip` 就是我們的第一個 role 的名稱，而這個 role 的工作流程就會被我們定義在下面的 `tasks/main.yml` 之中。現在打開 `pip/tasks/main.yml` 並在其中寫入以下內容：
 
 ```yml
 ---
