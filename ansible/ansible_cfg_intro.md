@@ -1,17 +1,19 @@
 # 配置 ansible.cfg
 
+我們在上一個章節中在 Ansible 預設查找的路徑下建立了我們的第一個 role 並成功執行部署。然而，若今天我們希望 Ansible 根據我們自己定義的路徑來執行 role 呢？以筆者自身的經驗而言，根據 role 屬性的不同，可能有些 role 我們認為較為是通用的就會放在 public repo 上，但有些 roles 則因為安全性的考量，所以需要放在 private repo 裡。我們並不希望將這兩類的 roles 全部丟到同一個路徑下，這樣既不好管理也容易產生混淆。那在這樣的情況下，我們有辦法透過任何方式來解決這個問題嗎？
+
 #### 什麼是 ansible.cfg？
 
-因此，我們可以透過設定 Ansible 的配置檔案 - [ansible.cfg](http://docs.ansible.com/ansible/intro_configuration.html) 來指定 [role 的路徑 (path)](http://docs.ansible.com/ansible/intro_configuration.html#roles-path)。
+答案顯然是有的。在 Ansible 中，我們可以透過配置 Ansible 的組態檔案 - [ansible.cfg](http://docs.ansible.com/ansible/intro_configuration.html)，來指定 Ansible 要去哪裡查找 [role 的路徑](http://docs.ansible.com/ansible/intro_configuration.html#roles-path)。
 
 在工作目錄新增一個檔案 `ansible.cfg` 並加入以下內容：
 
 ```
 [defaults]
-roles_path = ./roles
+roles_path = /path/to/roles
 ```
 
-如此一來，Ansible 就會依此路徑去找到我們 role 的存放位置。假設有多個 role 路徑需要設定，以筆者自身的經驗而言，我們可能有些 role 是放在 public repo 上，有些 roles 則因為安全性的考量需要放在 private repo 裡，我們可以透過 `:` 來串接 role 的路徑，比如：
+如此一來，Ansible 除了預設查找路徑外，還會依此指定路徑去找到我們 role 的存放位置。假設有多個 role 路徑需要設定，我們還可以透過 `:` 來串接不同 role 的存放路徑，比如：
 
 ```
 [defaults]
