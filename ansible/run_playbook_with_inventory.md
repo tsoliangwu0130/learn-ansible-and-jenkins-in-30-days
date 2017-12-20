@@ -116,7 +116,7 @@ email_receivers=test@gmail.com
 email_receivers=devl@gmail.com
 ```
 
-關於 inventory file 更進一步的寫法，可以參考這份[官方文件](http://docs.ansible.com/ansible/latest/intro_inventory.html)。撰寫清楚的 inventory file 不但能夠讓我在我們使用 Ansible 管理 managed node 的過程中更清楚操作對象的資訊，以大幅降低人為疏失的的機率，也能夠有效提升我們進行部署工作時的效率。
+關於 inventory file 更進一步的寫法，可以參考這份[官方文件](http://docs.ansible.com/ansible/latest/intro_inventory.html)。撰寫清楚的 inventory file 不但能夠讓我們在使用 Ansible 管理 managed node 的過程中更清楚操作對象的資訊，以大幅降低人為疏失的的機率，也能夠有效提升我們進行部署工作時的效率。
 
 現在 Ansible 知道哪台主機是 `server` 了！不過，看起來 Ansible 似乎並沒有將我們 playbook 中定義內容成功地部署到 `server` 主機上。
 
