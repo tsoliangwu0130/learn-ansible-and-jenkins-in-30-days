@@ -65,7 +65,7 @@ workspace
 ├── inventory
 ├── playbook.yml
 └── roles
-    └── curl
+    └── pip
         └── tasks
             └── main.yml
 ```
