@@ -34,7 +34,7 @@ $ apt-get install python-pip
 1. 與被執行 playbook 位於同一層的 `roles` 資料夾
 2. `/etc/ansible/roles`
 
-因此，根據這樣的規則，讓我在工作資料夾下依照以下結構新增檔案 (新增 `roles/pip/main.yml`)：
+因此，根據這樣的規則，讓我們在工作資料夾下依照以下結構新增檔案 (新增 `roles/pip/main.yml`)：
 
 ```shell
 workspace
