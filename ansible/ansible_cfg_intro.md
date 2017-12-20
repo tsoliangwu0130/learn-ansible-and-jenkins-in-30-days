@@ -2,16 +2,23 @@
 
 #### 什麼是 ansible.cfg？
 
-從上面的結果中，我們可以發現雖然 playbook 已經成功被執行，但 Ansible 並沒有辦法找到我們剛剛新建 role 的位置。因此，我們必須透過設定 [Ansible 的配置檔案](http://docs.ansible.com/ansible/intro_configuration.html) - `ansible.cfg` 來設置 [role 的路徑 (path)](http://docs.ansible.com/ansible/intro_configuration.html#roles-path)。
+從上面的結果中，我們可以發現雖然 playbook 已經成功被執行，但 Ansible 並沒有辦法找到我們剛剛新建 role 的位置。因此，我們可以透過設定 Ansible 的配置檔案 - [ansible.cfg](http://docs.ansible.com/ansible/intro_configuration.html) 來指定 [role 的路徑 (path)](http://docs.ansible.com/ansible/intro_configuration.html#roles-path)。
 
-新增一個檔案 `ansible.cfg` 並加入以下內容：
+在工作目錄新增一個檔案 `ansible.cfg` 並加入以下內容：
 
 ```
-[server]
+[defaults]
 roles_path = ./roles
 ```
 
-雖然只有短短兩行，但 Ansible 就會依此路徑去找到我們 role 的存放位置。接著重新執行我們的 playbook：
+如此一來，Ansible 就會依此路徑去找到我們 role 的存放位置。假設有多個 role 路徑需要設定，以筆者自身的經驗而言，我們可能有些 role 是放在 public repo 上，有些 roles 則因為安全性的考量需要放在 private repo 裡，我們可以透過 `:` 來串接 role 的路徑，比如：
+
+```
+[defaults]
+roles_path = /path/to/public_roles:/path/to/private_roles
+```
+
+接下來重新執行我們的 playbook：
 
 ```shell
 PLAY [server] *****************************************************************
@@ -19,39 +26,39 @@ PLAY [server] *****************************************************************
 TASK [setup] *******************************************************************
 ok: [server]
 
-TASK [curl : install curl] *****************************************************
+TASK [pip : Install pip] ＊*****************************************************
 changed: [server]
 
 PLAY RECAP *********************************************************************
 server                    : ok=2    changed=1    unreachable=0    failed=0
 ```
 
-看起來好像成功了！現在讓我們登入進去遙控節點看看是否 cURL 已經可以運作了：
+大功告成！我們可以使用 `vagrant ssh` 連線至 managed node 中確認 `pip` 已經被正確安裝：
 
 ```shell
-$ curl -I http://localhost:8080
+$ pip --version
 
-HTTP/1.1 403 Forbidden
-Date: Fri, 09 Dec 2016 09:03:44 GMT
-X-Content-Type-Options: nosniff
-Set-Cookie: JSESSIONID.4689751a=1o67mouadl3zhq80h5b2xxxu6;Path=/;HttpOnly
-Expires: Thu, 01 Jan 1970 00:00:00 GMT
-Content-Type: text/html;charset=UTF-8
-X-Hudson: 1.395
-X-Jenkins: 2.19.4
-X-Jenkins-Session: e765255c
-X-You-Are-Authenticated-As: anonymous
-X-You-Are-In-Group:
-X-Required-Permission: hudson.model.Hudson.Administer
-Content-Length: 677
-Server: Jetty(9.2.z-SNAPSHOT)
+pip 1.5.4 from /usr/lib/python2.7/dist-packages (python 2.7)
 ```
 
-先姑且不論結果是否是我們要的，至少我們現在確定 cURL 已經被 Ansible 正確安裝到遙控節點上了！
+如此一來，我們的第一個 role 就算簡單完成了。
 
-若點進官方配置文件的[說明頁面](http://docs.ansible.com/ansible/intro_configuration.html)，可以發現除了 `roles_path` 之外還有一大堆參數可以依據使用者的需求進行非常有彈性的配置。其中值得注意的是，在這個示範裡面我是將 `ansible.cfg` 這個配置檔案置於我們工作資料夾之下，目前具體資料夾結構如下：
+#### ansible.cfg 還可以做什麼？
 
-```shell
+若點進官方配置文件的[說明頁面](http://docs.ansible.com/ansible/intro_configuration.html)，可以發現除了 `roles_path` 之外還有一大堆參數可以依據使用者的需求進行非常有彈性的配置。還記得我們在之前的章節中，必須要在運行 `ansible-playbook` 的時候同時加上 `-i` 以及 `--private-key` 的參數來告訴 Ansible 我們的 inventory file 跟 SSH 金鑰的存放位置嗎？我們並不想要在每次運行都要輸入這一大串資料，因此我們可以在 ansible.cfg 裡定義 `inventory` 跟 `private_key_file` 來方便我們管理這類資訊：
+
+```
+[defaults]
+private_key_file = /path/to/private_key
+inventory = /path/to/inventory
+roles_path = /path/to/roles
+```
+
+定義完成後，在未來我們只需要運行 `ansible-playbook playbook.yml` 簡單一行指令就可以輕鬆使用 Ansible 來進行部署拉！
+
+其中值得注意的是，在這個示範裡面我是將 `ansible.cfg` 這個配置檔案置於我們工作資料夾之下，目前具體資料夾結構如下：
+
+```
 workspace
 ├── Vagrantfile
 ├── ansible.cfg
