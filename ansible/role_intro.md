@@ -29,7 +29,12 @@ $ apt-get update
 $ apt-get install python-pip
 ```
 
-作為我們的第一個 Ansible role，讓我們嘗試將這段指令翻譯成 Ansible 的腳本。首先，在工作資料夾下依照以下結構新增檔案 (新增 `roles/pip/main.yml`)：
+作為我們的第一個 Ansible role，讓我們嘗試將這段指令翻譯成 Ansible 的腳本。根據[官方文件](http://docs.ansible.com/ansible/latest/playbooks_reuse_roles.html#role-search-path)，Ansible 預設會在以下路徑來尋找可執行的 roles：
+
+1. 與被執行 playbook 位於同一層的 `roles` 資料夾
+2. `/etc/ansible/roles`
+
+因此，根據這樣的規則，讓我在工作資料夾下依照以下結構新增檔案 (新增 `roles/pip/main.yml`)：
 
 ```shell
 workspace
@@ -82,8 +87,19 @@ PLAY [server] *****************************************************************
 TASK [setup] *******************************************************************
 ok: [server]
 
+TASK [pip : Install pip] ＊*****************************************************
+changed: [server]
+
 PLAY RECAP *********************************************************************
-server                    : ok=1    changed=0    unreachable=0    failed=0
+server                    : ok=2    changed=1    unreachable=0    failed=0
 ```
 
-雖然 playbook 被正確運行了，可是很顯然地，我們用來安裝 pip 的 role 並沒有被其呼叫成功。
+大功告成！我們可以使用 `vagrant ssh` 連線至 managed node 中確認 `pip` 已經被正確安裝：
+
+```shell
+$ pip --version
+
+pip 1.5.4 from /usr/lib/python2.7/dist-packages (python 2.7)
+```
+
+如此一來，我們的第一個 role 就算簡單完成了。

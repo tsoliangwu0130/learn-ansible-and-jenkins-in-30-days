@@ -2,7 +2,7 @@
 
 #### 什麼是 ansible.cfg？
 
-從上面的結果中，我們可以發現雖然 playbook 已經成功被執行，但 Ansible 並沒有辦法找到我們剛剛新建 role 的位置。因此，我們可以透過設定 Ansible 的配置檔案 - [ansible.cfg](http://docs.ansible.com/ansible/intro_configuration.html) 來指定 [role 的路徑 (path)](http://docs.ansible.com/ansible/intro_configuration.html#roles-path)。
+因此，我們可以透過設定 Ansible 的配置檔案 - [ansible.cfg](http://docs.ansible.com/ansible/intro_configuration.html) 來指定 [role 的路徑 (path)](http://docs.ansible.com/ansible/intro_configuration.html#roles-path)。
 
 在工作目錄新增一個檔案 `ansible.cfg` 並加入以下內容：
 
@@ -17,31 +17,6 @@ roles_path = ./roles
 [defaults]
 roles_path = /path/to/public_roles:/path/to/private_roles
 ```
-
-接下來重新執行我們的 playbook：
-
-```shell
-PLAY [server] *****************************************************************
-
-TASK [setup] *******************************************************************
-ok: [server]
-
-TASK [pip : Install pip] ＊*****************************************************
-changed: [server]
-
-PLAY RECAP *********************************************************************
-server                    : ok=2    changed=1    unreachable=0    failed=0
-```
-
-大功告成！我們可以使用 `vagrant ssh` 連線至 managed node 中確認 `pip` 已經被正確安裝：
-
-```shell
-$ pip --version
-
-pip 1.5.4 from /usr/lib/python2.7/dist-packages (python 2.7)
-```
-
-如此一來，我們的第一個 role 就算簡單完成了。
 
 #### ansible.cfg 還可以做什麼？
 
