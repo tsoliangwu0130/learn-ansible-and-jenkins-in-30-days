@@ -87,7 +87,38 @@ $ ansible-playbook -i devl-inventory devl-playbook.yml
 $ ansible-playbook -i prod-inventory prod-playbook.yml
 ```
 
-關於 inventory file 更進一步的寫法，可以參考[官方文件](http://docs.ansible.com/ansible/latest/intro_inventory.html)。現在 Ansible 知道誰是 `server` 了！不過，看起來 Ansible 似乎並沒有將我們 playbook 中定義內容成功地部署到 `server` 主機上。
+當然，也有人喜歡將所有不同環境都定義在同一份 inventory file 中，例如這樣：
+
+```
+[test]
+127.0.0.1 ansible_port=2222 ansible_user=test_user
+
+[devl]
+127.0.0.1 ansible_port=3333 ansible_user=devl_user
+
+[prod]
+127.0.0.1 ansible_port=4444 ansible_user=prod_user
+```
+
+這也是一種相當常見的做法，但筆者比較偏向把不同環境的 inventory file 各自獨立出來各自管理。這沒有什麼對錯，純粹就是個人習慣上的問題而已。在 inventory file 中，我們也可以根據環境的不同來定義一些變數，比方說：
+
+```
+[test]
+127.0.0.1 ansible_port=2222 ansible_user=test_user
+
+[test:vars]
+email_receivers=test@gmail.com
+
+[devl]
+127.0.0.1 ansible_port=2222 ansible_user=devl_user
+
+[devl:vars]
+email_receivers=devl@gmail.com
+```
+
+關於 inventory file 更進一步的寫法，可以參考這份[官方文件](http://docs.ansible.com/ansible/latest/intro_inventory.html)。撰寫清楚的 inventory file 不但能夠讓我在我們使用 Ansible 管理 managed node 的過程中更清楚操作對象的資訊，以大幅降低人為疏失的的機率，也能夠有效提升我們進行部署工作時的效率。
+
+現在 Ansible 知道哪台主機是 `server` 了！不過，看起來 Ansible 似乎並沒有將我們 playbook 中定義內容成功地部署到 `server` 主機上。
 
 #### 設定 PRIVATE_KEY_FILE
 
