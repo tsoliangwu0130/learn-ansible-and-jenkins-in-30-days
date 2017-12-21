@@ -50,9 +50,11 @@ my-ansible/
 ```
 
 * 根目錄
+
     * 舉凡 `LICENSE`, `README.md`, `Vagrantfile` 以及 `ansible.cfg` 這類的說明、設定檔案，我都習慣將他們直接放在根目錄下。
     * 另外，由於在這個專案內我只有一個 inventory file，所以我也直接將其擺放在根目錄下。
     * 除此之外，這個 Ansbile 專案內，我還放了三份不同的 playbook。
+
 * `roles/`
 
     在這裡我存放了所有跟這個專案有關的 roles。由於每個 role 的結構類似，所以我以其中的 `docker-jenkins` 這個 role 來做簡單介紹：
