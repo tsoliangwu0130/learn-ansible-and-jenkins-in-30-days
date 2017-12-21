@@ -1,6 +1,70 @@
-# 建立 Ansible Role 的依賴關係
+# Ansible 的最佳實踐
 
-在完成第一個簡單的 role 之後，讓我們試著把安裝 Jenkins 的步驟也自動化。
+#### 什麼是最佳實踐 (Best Practice)？
+
+因為 Ansible 給予開發者那麼大的彈性，隨著參與開發的人數增加，或者專案規模的擴大，若沒有一個參考的標準，很難避免因為有多種撰寫風格、結構鬆散等因素，最後導致專案最後走向難以維護的死胡同裡。其實，現今大部分的程式語言、框架或者開發工具都會提供一套最佳實踐 (best practice) 的文件給開發者們作為設計參考，當然，身為熱門開源專案的 Ansible 也不例外。
+
+然而，我並不認為所謂的 best practice 是用來限制開發人員都不可以有任何彈性的緊箍咒。根據背景的不同，每個開發團隊本來就有可能有屬於自己的一套風格。Best practice 只是某種程度上提供了一個建議，來讓不同的開發團隊都可以在最快的時間內建立出最有效且有一定品質的產品。就算是單人工作者，也可以透過 best practice 的概念來迅速掌握網路上不同專案的邏輯及目的。
+
+#### Ansible 的最佳實踐
+
+在 Ansible 官方提供的 [best practice 文件](http://docs.ansible.com/ansible/latest/playbooks_best_practices.html)中，從專案架構、inventory file 的撰寫到 task 之間是否需要斷行都有描述。我會建議讀者可以花時間稍微瀏覽一下，這對未來 Ansible 設計的掌握會很有幫助。接下來，我會用我在自己的 GitHub 上的一個[小專案](https://github.com/tsoliangwu0130/my-ansible)來介紹怎麼使用 Ansible 的最佳實踐來設計自己的 Ansible 專案。
+
+#### 專案架構
+
+根據 best practice 文件，Ansible 官方提供了兩種專案架構模型 - [directory layout](http://docs.ansible.com/ansible/latest/playbooks_best_practices.html#directory-layout) 以及 [alternative directory layout](http://docs.ansible.com/ansible/latest/playbooks_best_practices.html#alternative-directory-layout)。以下面這個 directory layout 來說：
+
+```
+production                # inventory file for production servers
+staging                   # inventory file for staging environment
+
+group_vars/
+   group1                 # here we assign variables to particular groups
+   group2                 # ""
+host_vars/
+   hostname1              # if systems need specific variables, put them here
+   hostname2              # ""
+
+library/                  # if any custom modules, put them here (optional)
+module_utils/             # if any custom module_utils to support modules, put them here (optional)
+filter_plugins/           # if any custom filter plugins, put them here (optional)
+
+site.yml                  # master playbook
+webservers.yml            # playbook for webserver tier
+dbservers.yml             # playbook for dbserver tier
+
+roles/
+    common/               # this hierarchy represents a "role"
+        tasks/            #
+            main.yml      #  <-- tasks file can include smaller files if warranted
+        handlers/         #
+            main.yml      #  <-- handlers file
+        templates/        #  <-- files for use with the template resource
+            ntp.conf.j2   #  <------- templates end in .j2
+        files/            #
+            bar.txt       #  <-- files for use with the copy resource
+            foo.sh        #  <-- script files for use with the script resource
+        vars/             #
+            main.yml      #  <-- variables associated with this role
+        defaults/         #
+            main.yml      #  <-- default lower priority variables for this role
+        meta/             #
+            main.yml      #  <-- role dependencies
+        library/          # roles can also include custom modules
+        module_utils/     # roles can also include custom module_utils
+        lookup_plugins/   # or other types of plugins, like lookup in this case
+
+    webtier/              # same kind of structure as "common" was above, done for the webtier role
+    monitoring/           # ""
+    fooapp/               # ""
+```
+
+
+
+--- 9/20 --- 
+
+
+
 
 #### 自動化 Jenkins 安裝
 
@@ -165,4 +229,3 @@ ironman                    : ok=5    changed=1    unreachable=0    failed=0
 結果完全一樣！根據 role 的新結構，我們每次只要呼叫 `jenkins` 這個 role，在安裝 Jenkins 之前，Ansible 就會自動先幫我們把所有定義在 `meta` 中的服務依賴安裝好。若未來在 `jenkins` 這個 role 上要新增或移除服務依賴，我們只需要回到 `meta` 中做修改即可。
 
 透過定義 role 之間的依賴關係，我們可以在 playbook 中只單純呼叫需要的 role，而不用回到底層思考運行這個 role 之前我們還需要安裝什麼額外的服務。這樣的設計邏輯不但可以將每一個 role 都視為已經完全可以用的工具，在維護的角度上也使安裝結構更佳清晰易懂。開發人員過去往往因為繁瑣的安裝流程難免疏忽其中幾個前置服務安裝，進而導致後面部署流程發生的錯誤，透過這樣的設計流程，將可以徹底被解決。
-
