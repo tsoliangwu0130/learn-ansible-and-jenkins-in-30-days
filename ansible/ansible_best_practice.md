@@ -51,9 +51,7 @@ my-ansible/
 
 * 根目錄
 
-    * 舉凡 `LICENSE`, `README.md`, `Vagrantfile` 以及 `ansible.cfg` 這類的說明、設定檔案，我都習慣將他們直接放在根目錄下。
-    * 另外，由於在這個專案內我只有一個 inventory file，所以我也直接將其擺放在根目錄下。
-    * 除此之外，這個 Ansbile 專案內，我還放了三份不同的 playbook。
+    舉凡 `LICENSE`, `README.md`, `Vagrantfile` 以及 `ansible.cfg` 這類的說明、設定檔案，我都習慣將他們直接放在根目錄下。另外，由於在這個專案內我只有一個 inventory file，所以我也直接將其擺放在根目錄下，如果有多個 inventory files，還可以加入 `group_vars/` 以及 `host_vars/` 來定義不同環境會用到的變數。除此之外，這個 Ansbile 專案內，我還放了三份不同的 playbook。
 
 * `roles/`
 
