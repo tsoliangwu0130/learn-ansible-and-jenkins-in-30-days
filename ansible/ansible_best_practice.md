@@ -55,17 +55,29 @@ my-ansible/
     * 除此之外，這個 Ansbile 專案內，我還放了三份不同的 playbook。
 * `roles/`
     在這裡我存放了所有跟這個專案有關的 roles。由於每個 role 的結構類似，所以我以其中的 `docker-jenkins` 這個 role 來做簡單介紹：
+
     * `defaults/`
-        在這個資料夾下，通常被用來定義優先度較低的變數。我會習慣將只跟這個 role 相關的變數放在 `vars/` 的資料夾下來做使用目的上的區分。
+
+        在這個資料夾下，通常被用來定義優先度較低的變數。習慣上我會將只跟這個 role 相關的變數放在 `vars/` 的資料夾下來做使用目的上的區分。
+
     * `files/`
+
         這個資料夾內通常存放著這個 role 在部署過程中會需要使用或執行的檔案。
+
     * `templates/`
+
         由於 Ansible 是用 Python 開發的一個自動化工具，所以也原生支援 `Jinja2` 這套模版引擎 (templating engine)。與 `files/` 下的檔案不同，這個資料夾下的檔案通常都以 `.j2` 作為副檔名，並會根據執行環境、傳遞參數等等的不同，來對 template file 做某種程度上調整。
+
     * `tasks/`
+
         整個 role 中最核心的部分。這裡面定義了這個 role 的運行邏輯以及部署任務。在這個資料夾下可以不只有一個檔案，然後在 `main.yml` 裡呼叫其他檔案。
+
     * `meta/`
+
         `meta/` 資料夾內定義了這個 role 的依賴 (dependencies) 關係。以這個 `docker-jenkins` 為例，`docker` 這個 role 就是其依賴。在運行時，會先運行 `meta/` 內定義的 dependencies 才接著執行 role 本身的任務。我們可以充分利用這個特色來重複組合及利用已經定義好的 role，避免[重造輪子](https://zh.wikipedia.org/wiki/%E9%87%8D%E9%80%A0%E8%BD%AE%E5%AD%90)。
+
     * `handlers/`
+
         我們會將 [handlers](http://docs.ansible.com/ansible/latest/playbooks_intro.html#handlers-running-operations-on-change) 事件存放在這個目錄下。雖然這個專案並沒有使用到任何 handler，但 handler 是 Ansible 中非常好用的一個功能。我們可以根據 Ansible 運行時 tasks 狀態的改變來通知 (notify) handlers。最重要的特色是，無論有多少個 task notify 同一個 handler，該 handler 都只會運行一次。非常常見的 handler 的實踐之一就是在檔案被修改後重啟 services。
 
 大致上來說，這就是一個專案基本上比較常見的結構。隨著專案規模的擴展，往往複雜程度也會隨之提高。因此維持一個好的習慣，對於開發者管理專案，以及幫助其他團隊成員理解設計邏輯有相當大的好處。
