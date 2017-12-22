@@ -45,13 +45,34 @@ server_config.vm.network "forwarded_port", guest: 8080, host: 8080
 
 在運行 playbook 後，根據定義的規則，Ansible 會直接調用 [docker-jenkins](https://github.com/tsoliangwu0130/my-ansible/tree/master/roles/docker-jenkins) 這個 role。然而，如同我在之前提到的一樣，因為這個 role 有其依賴，所以 Ansible 在執行這個 role 之前，會先依序將 `meta/` 下的所有 `dependencies` 運行一遍，而在這裡被呼叫 role 的就是 [docker](https://github.com/tsoliangwu0130/my-ansible/tree/master/roles/docker)。
 
-##### 迴圈 - roles/docker
+##### Error Handling - roles/pip
 
-因為 docker 是一個獨立的 role，所以在這個 role 底下並沒有 `meta/` 目錄的需要。如果沒有任何前置作業，Ansible 就會去 [tasks/main.yml](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker/tasks/main.yml) 裡面開始執行定義的任務。
+同樣的，由於在 Docker 安裝的過程中，會需要使用 pip 來安裝一些套件 (package)，因此在 docker 裡面又再度調用了 [pip](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/pip/tasks/main.yml) 這個 role。最後，因為 pip 並沒有任何前置作業，所以 Ansible 就會開始從 [tasks/main.yml](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/pip/tasks/main.yml) 執行定義的任務：
 
-在這個任務清單中，大致上來說執行了以下幾個步驟：
+```yml
+---
+- name: Check if pip is already installed
+  command: pip --version
+  ignore_errors: true
+  changed_when: false
+  register: pip_is_installed
 
-1. 由於我們要使用 [https://download.docker.com/linux/ubuntu/gpg](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker/defaults/main.yml#L3) 來當作 Docker 在 apt 上的 keyserver，因此在新增這個 key 之前需要先在 Ubuntu 上安裝一些套件 (package) 來讓 apt 可以使用 [HTTPS](https://en.wikipedia.org/wiki/HTTPS)：
+- name: Install pip
+  apt:
+    name: python-pip
+    update_cache: yes
+  when: pip_is_installed.rc != 0
+```
+
+跟之前的例子不一樣的是，在這裡我替這個 role 加上了一個執行[條件](http://docs.ansible.com/ansible/latest/playbooks_conditionals.html#the-when-statement)。如果讀者有試著運行我們在前面章節撰寫的 pip 安裝流程，應該會發現安裝 pip 其實需要花費不少的時間。所以設計上我希望在安裝 pip 之前先透過 `pip --version` 的指令來確認 pip 是否已經安裝，如果已經安裝，就跳過接下來的安裝步驟。我並不希望每一次 Ansible 都強制將其更新、然後重新安裝一次。
+
+這裡利用了 Ansible 的 [error handling](http://docs.ansible.com/ansible/latest/playbooks_error_handling.html) 來做指令檢查。因為如果 pip 並沒有被安裝而我們仍然執行了 `pip --version` 這條指令，會導致 Ansible 抱怨 pip 並沒有被正確安裝，接著在該任務失敗之後中斷整個安裝步驟。為了避免以上狀況，我們在第一個 task 下了參數 `ignore_errors: yes` 來通知 Ansible 若該任務失敗就[忽略](http://docs.ansible.com/ansible/latest/playbooks_error_handling.html#ignoring-failed-commands)它，但依然透過前面使用過的 `register` 技巧來把執行結果儲存在 `pip_is_installed` 的變數裡，並依據該結果來判斷是否要執行 pip 安裝。
+
+##### Loop - roles/docker
+
+在安裝完 pip 之後，Ansible 緊接著就會回來執行 docker 這個 role。在這個任務清單中，大致上來說執行了以下幾個步驟：
+
+1. 由於我們要使用 [https://download.docker.com/linux/ubuntu/gpg](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker/defaults/main.yml#L3) 來當作 Docker 在 apt 上的 keyserver，因此在新增這個 key 之前需要先在 Ubuntu 上安裝一些套件來讓 apt 可以使用 [HTTPS](https://en.wikipedia.org/wiki/HTTPS)：
 
     ```yml {% raw %}
     - name: Install packages to allow apt to use a repository over HTTPS
@@ -80,3 +101,5 @@ server_config.vm.network "forwarded_port", guest: 8080, host: 8080
     ```
 
     這樣一來，在第一次的迭代中 `item.name` 與 `item.groups` 分別會被迭代成 `testuser1` 與 `wheel`，但在第二次的迭代中則會變成 `testuser2` 與 `root`。
+
+2.
