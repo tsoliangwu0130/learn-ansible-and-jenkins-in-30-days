@@ -40,3 +40,43 @@ server_config.vm.network "forwarded_port", guest: 8080, host: 8080
 另外，在 playbook 中我還定義了 `vars` 這個群組變數。這裡面的變數是用來初始化 Jenkins 的預設管理者 (admin) 的。這裡讀者可能會有的疑問是，在之前的章節中，不是有提過變數可以被定義每個 role 資料下的 `defaults/` 或是 `vars/` 中嗎？為什麼這裡又需要在 playbook 中定義其他變數呢？這是因為很多時候我們都會將開發好的 role 分享給團隊的其他成員，甚至是在網路上開源，這時候如果將變數寫死在 role 的 `defaults/` 或是 `vars/` 中，一來除了會大大降低這個 role 的運用彈性外，二來也有可能會不小心將一些機密資料 (e.g. API token 或是 user account/password) 暴露在要分享的 role 之中。
 
 因此，為了兼顧 Ansible 的彈性及安全性，我會習慣把這類比較敏感的變數資料透過 playbook 傳遞到 role 當中。然後在 repository 內建立一個類似 [playbook_example](https://github.com/tsoliangwu0130/my-ansible/blob/master/playbook_example.yml) 的指引，或是在 README 文件中提示使用者運行該 playbook 需要設定的變數及注意事項。
+
+#### roles
+
+在運行 playbook 後，根據定義的規則，Ansible 會直接調用 [docker-jenkins](https://github.com/tsoliangwu0130/my-ansible/tree/master/roles/docker-jenkins) 這個 role。然而，如同我在之前提到的一樣，因為這個 role 有其依賴，所以 Ansible 在執行這個 role 之前，會先依序將 `meta/` 下的所有 `dependencies` 運行一遍，而在這裡被呼叫 role 的就是 [docker](https://github.com/tsoliangwu0130/my-ansible/tree/master/roles/docker)。
+
+##### roles/docker - 變數與迴圈
+
+因為 docker 是一個獨立的 role，所以在這個 role 底下並沒有 `meta/` 目錄的需要。如果沒有任何前置作業，Ansible 就會去 [tasks/main.yml](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker/tasks/main.yml) 裡面開始執行定義的任務。
+
+在這個任務清單中，大致上來說執行了以下幾個步驟：
+
+1. 由於我們要使用 [https://download.docker.com/linux/ubuntu/gpg](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker/defaults/main.yml#L3) 來當作 Docker 在 apt 上的 keyserver，因此在新增這個 key 之前需要先在 Ubuntu 上安裝一些套件 (package) 來讓 apt 可以使用 [HTTPS](https://en.wikipedia.org/wiki/HTTPS)。
+
+```yml
+- name: Install packages to allow apt to use a repository over HTTPS
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - software-properties-common
+```
+
+其中請特別留意，`with_items` 與 `item` 是 Ansible 中的標準[迴圈 (loop)](http://docs.ansible.com/ansible/latest/playbooks_loops.html#standard-loops) 寫法。如果今天有多個項目需要依次迭代 (iterate)，就可以用這樣的寫法來實現迴圈。這是在 Ansible 開發中一定會一直使用到的一種技巧。另外，如果每一次的迭代有不只一個變數，還可以運用下面這種技巧：
+
+```yml
+- name: add several users
+  user:
+    name: "{{ item.name }}"
+    state: present
+    groups: "{{ item.groups }}"
+  with_items:
+    - { name: 'testuser1', groups: 'wheel' }
+    - { name: 'testuser2', groups: 'root' }
+```
+
+這樣一來，在第一次的迭代中 `item.name` 與 `item.groups` 分別會被迭代成 `testuser1` 與 `wheel`，但在第二次的迭代中則會變成 `testuser2` 與 `root`。
+
+另外還要補充一點，`{{ item }}` 周圍的兩個大括號是 Ansible 基於 Jinja2 系統下[使用變數](http://docs.ansible.com/ansible/latest/playbooks_variables.html#using-variables-about-jinja2)的方式。若變數是在描敘句的開頭，則還需要再[加上兩個引號 (quote)](http://docs.ansible.com/ansible/latest/playbooks_variables.html#hey-wait-a-yaml-gotcha)。
