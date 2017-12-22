@@ -13,7 +13,7 @@
 	* [3-06. 撰寫第一個 Ansible Role](ansible/role_intro.md)
 	* [3-07. 配置 ansible.cfg](ansible/ansible_cfg_intro.md)
 	* [3-08. Ansible 的最佳實踐](ansible/ansible_best_practice.md)
-	* [3-09. 強化 Ansible Role 跨系統的靈活度](ansible/role_accross_os.md)
+	* [3-09. Ansible 實戰](ansible/practical-ansible.md)
 	* [3-10. 設定 Vagrant forward port](ansible/vagrant_forward_port.md)
 	* [3-11. 使用 Ansible 安裝 Jenkins 插件](ansible/use_ansible_install_jenkins_plugins.md)
 	* [3-12. 安全性與便利性的平衡](ansible/automation_vs_security.md)
