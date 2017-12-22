@@ -35,7 +35,7 @@
 
 2. print debug message
 
-	在上一個 task 中，我們已經把 ping 後的結果存在 `message` 這個變數中了。我們可以利用 [debug](http://docs.ansible.com/ansible/debug_module.html) 這個模組把儲存的訊息輸出到我們的終端機上。在 Ansible 中，若要調用儲存變數，我們必須在變數名稱外加上兩個大括弧 - {{ }} 來告訴 Ansible 大括弧內的是一個變數 （[如果變數在描述句 (statement) 的開頭，還必須要額外加上一個雙引號 - ""](http://docs.ansible.com/ansible/playbooks_variables.html#hey-wait-a-yaml-gotcha)）。
+	在上一個 task 中，我們已經把 ping 後的結果存在 `{% raw %}{{ message }}{% endraw %}` 這個變數中了。我們可以利用 [debug](http://docs.ansible.com/ansible/debug_module.html) 這個模組把儲存的訊息輸出到我們的終端機上。周圍的兩個大括號是 Ansible 基於 Jinja2 系統下[使用變數](http://docs.ansible.com/ansible/latest/playbooks_variables.html#using-variables-about-jinja2)的方式。若變數是在描敘句的開頭，則還需要再[加上兩個引號 (quote)](http://docs.ansible.com/ansible/latest/playbooks_variables.html#hey-wait-a-yaml-gotcha)。
 
 在定義好了我們的第一個 playbook 後，接下來就是如何運行我們寫好的 playbook 啦！
 
