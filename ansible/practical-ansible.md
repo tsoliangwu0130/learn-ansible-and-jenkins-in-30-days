@@ -67,6 +67,7 @@ server_config.vm.network "forwarded_port", guest: 8080, host: 8080
     其中請特別留意，`with_items` 與 `item` 是 Ansible 中的標準[迴圈 (loop)](http://docs.ansible.com/ansible/latest/playbooks_loops.html#standard-loops) 寫法。如果今天有多個項目需要依次迭代 (iterate)，就可以用這樣的寫法來實現迴圈。這是在 Ansible 開發中一定會一直使用到的一種技巧。另外，如果每一次的迭代有不只一個變數，還可以運用下面這種技巧：
 
     ```yml
+    {% raw %}
     - name: add several users
       user:
         name: "{{ item.name }}"
@@ -75,8 +76,9 @@ server_config.vm.network "forwarded_port", guest: 8080, host: 8080
       with_items:
         - { name: 'testuser1', groups: 'wheel' }
         - { name: 'testuser2', groups: 'root' }
+    {% endraw %}
     ```
 
     這樣一來，在第一次的迭代中 `item.name` 與 `item.groups` 分別會被迭代成 `testuser1` 與 `wheel`，但在第二次的迭代中則會變成 `testuser2` 與 `root`。
 
-    另外還要補充一點，`{{ item }}` 周圍的兩個大括號是 Ansible 基於 Jinja2 系統下[使用變數](http://docs.ansible.com/ansible/latest/playbooks_variables.html#using-variables-about-jinja2)的方式。若變數是在描敘句的開頭，則還需要再[加上兩個引號 (quote)](http://docs.ansible.com/ansible/latest/playbooks_variables.html#hey-wait-a-yaml-gotcha)。
+    另外還要補充一點，{{ item }} 周圍的兩個大括號是 Ansible 基於 Jinja2 系統下[使用變數](http://docs.ansible.com/ansible/latest/playbooks_variables.html#using-variables-about-jinja2)的方式。若變數是在描敘句的開頭，則還需要再[加上兩個引號 (quote)](http://docs.ansible.com/ansible/latest/playbooks_variables.html#hey-wait-a-yaml-gotcha)。
