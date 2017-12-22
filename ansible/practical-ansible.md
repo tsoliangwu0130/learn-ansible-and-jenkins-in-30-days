@@ -45,13 +45,13 @@ server_config.vm.network "forwarded_port", guest: 8080, host: 8080
 
 在運行 playbook 後，根據定義的規則，Ansible 會直接調用 [docker-jenkins](https://github.com/tsoliangwu0130/my-ansible/tree/master/roles/docker-jenkins) 這個 role。然而，如同我在之前提到的一樣，因為這個 role 有其依賴，所以 Ansible 在執行這個 role 之前，會先依序將 `meta/` 下的所有 `dependencies` 運行一遍，而在這裡被呼叫 role 的就是 [docker](https://github.com/tsoliangwu0130/my-ansible/tree/master/roles/docker)。
 
-##### 變數與迴圈 - roles/docker 
+##### 變數與迴圈 - roles/docker
 
 因為 docker 是一個獨立的 role，所以在這個 role 底下並沒有 `meta/` 目錄的需要。如果沒有任何前置作業，Ansible 就會去 [tasks/main.yml](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker/tasks/main.yml) 裡面開始執行定義的任務。
 
 在這個任務清單中，大致上來說執行了以下幾個步驟：
 
-1. 由於我們要使用 [https://download.docker.com/linux/ubuntu/gpg](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker/defaults/main.yml#L3) 來當作 Docker 在 apt 上的 keyserver，因此在新增這個 key 之前需要先在 Ubuntu 上安裝一些套件 (package) 來讓 apt 可以使用 [HTTPS](https://en.wikipedia.org/wiki/HTTPS)。
+1. 由於我們要使用 [https://download.docker.com/linux/ubuntu/gpg](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker/defaults/main.yml#L3) 來當作 Docker 在 apt 上的 keyserver，因此在新增這個 key 之前需要先在 Ubuntu 上安裝一些套件 (package) 來讓 apt 可以使用 [HTTPS](https://en.wikipedia.org/wiki/HTTPS)：
 
     ```yml
     - name: Install packages to allow apt to use a repository over HTTPS
