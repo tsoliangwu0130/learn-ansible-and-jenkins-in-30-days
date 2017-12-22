@@ -1,262 +1,42 @@
-# 強化 Ansible Role 跨系統的靈活度
+# Ansible 實戰
 
-目前為止，我們在安裝 Jenkins 的遙控主機上只有額外安裝 `curl` 這項工具。不過在未來的章節中，我們還會需要一些其他工具的幫忙。因此，我將在這個章節內新增幾個額外的 role，並介紹如何使用單一個 role 同時支援不同作業系統的主機。
+對 Ansible 有了初步認識了以後，接下來我會用前面提過的[這個專案](https://github.com/tsoliangwu0130/my-ansible)來在主機上安裝並運行 Jenkins。雖然一定還有很多改進的空間，但希望可以透過這個真實的例子，來介紹一些我在開發 Ansible 上的設計概念以及常用技巧。
 
-#### 安裝 Git
+#### Vagrantfile
 
-在本系列文章一開始的簡介中，我們有提到 Jenkins 是一個可以幫我們從原始碼託管服務（在這次的教學系列文中將以 [GitHub](https://github.com/) 作為範例）上維護產品的一個持續整合服務。因此為了讓 Jenkins 運行的主機可以使用對應的版本控制系統 - [Git](https://git-scm.com/)，我們接下來會寫另一個獨立的 role 來安裝 Git。
+由於在實務上，我們很常會碰到要同時操作多台主機的情況（例如同時有 web server 以及 database server ）因此我會習慣在 `Vagrantfile` 裡面將不同主機的配置做[區隔](https://www.vagrantup.com/docs/multi-machine/#defining-multiple-machines)。
 
-依照以下結構新增 `git` 這個 role：
+除此之外，讀者可以看到我在這個專案的 [Vagrantfile](https://github.com/tsoliangwu0130/my-ansible/blob/master/Vagrantfile) 裡還多配置了以下這一行：
 
-```shell
-workspace
-├── Vagrantfile
-├── ansible.cfg
-├── inventory
-├── playbook.yml
-└── roles
-    ├── curl
-    │   └── tasks
-    │       └── main.yml
-    ├── git
-    │   └── tasks
-    │       └── main.yml
-    └── jenkins
-        ├── meta
-        │   └── main.yml
-        └── tasks
-            └── main.yml
+```ruby
+server_config.vm.network "forwarded_port", guest: 8080, host: 8080
 ```
 
-並在 `roles/git/tasks/main.yml` 中寫入以下內容：
+這是因為當 Jenkins 服務啟動時，預設運行的埠口 (port) 是 8080，但由於 Jenkins 是運行在 Vagrant 虛擬機中，我們必須將虛擬機的 port 8080 轉發 (forward) 到本機端的 port 8080 上，我們才可以透過本機端的瀏覽器來訪問 Jenkins。如果本機端的 8080 已經有其他服務在使用，讀者可以自行調整 `host: 8080` 到想要 forward 的 port 上。
+
+#### inventory & ansible.cfg
+
+在本專案中的 [inventory](https://github.com/tsoliangwu0130/my-ansible/blob/master/inventory) 以及 [ansible.cfg](https://github.com/tsoliangwu0130/my-ansible/blob/master/ansible.cfg) 非常單純，在前面幾個章節內的介紹就大概有涵蓋到這裡的配置，所以在這裡就不再重述。
+
+#### playbook
+
+我們這次要運行的是 [docker-jenkins.yml](https://github.com/tsoliangwu0130/my-ansible/blob/master/docker-jenkins.yml) 這份 playbook。這個 playbook 的主要功能就是透過 Ansible 在名為 `server` 的 managed node 上啟動一個 Docker 容器，並在該容器內運行 Jenkins。
+
+眼尖的讀者可能發現我在 playbook 內只定義了一個運行的 role: [docker-jenkins](https://github.com/tsoliangwu0130/my-ansible/tree/master/roles/docker-jenkins)，但在這個 role 的[任務流程](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker-jenkins/tasks/main.yml)內並沒有提到如何安裝 Docker。這是因為我已經將 Docker 的安裝流程定義在另外一個 [docker](https://github.com/tsoliangwu0130/my-ansible/tree/master/roles/docker) 這個 role 裡面了。我不希望 Docker 的安裝步驟被寫死在 docker-jenkins 中，這樣的做法在未來若有其他服務也需要安裝 Docker 會比較方便我重複利用。我在 docker-jenkins 裡的 [meta/](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker-jenkins/meta/main.yml#L3) 中定義了這個 role 的依賴關係，所以雖然今天我只在 playbook 中呼叫 docker-jenkins 這個 role，但 Ansbile 依然會先執行 meta 內的 role。如果讀者不喜歡這樣的做法，也可以將 playbook 改寫成以下這樣：
 
 ```yml
 ---
-  - name: install git
-    yum:
-      name: git-all
-    when: ansible_distribution == 'CentOS'
-
-  - name: install git
-    apt:
-      name: git
-    when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+- hosts: server
+  roles:
+    - { role: docker, become: yes }
+    - { role: docker-jenkins, become: yes }
+  vars:
+    - jenkins_admin_user: admin
+    - jenkins_admin_pass: admin
 ```
 
-除了非常類似於之前 `curl` 這個 role 的安裝流程，這次我們在 role 裡面加上了系統[判斷條件](http://docs.ansible.com/ansible/playbooks_conditionals.html)。由於 Ubuntu 跟 Debian 這兩種主要的 Linux 作業系統預設都是搭載 apt 做為套件管理，所以當我們今天只要運行這個 role，並判斷遙控主機是這兩個作業系統之一的時候，我們就會運行上面定義的任務。另外，由於 `git` 這個 role 理論上在未來被重複利用到的頻率會非常高，因此我在這裡同時也新增了在 CentOS 這套作業系統上使用 [yum](http://docs.ansible.com/ansible/yum_module.html) 安裝 Git 的方法（在 yum 套件管理系統中，Git 套件的名稱與 apt 系統並不相同），以增加這個 role 的使用靈活性。
+可能有部分讀者會覺得這樣的寫法比較清楚，因為這兩種做法是完全等效的，所以選擇一個自己比較喜歡的風格即可。
 
-同理，我們也可以將之前寫的 `curl` 略作更改：
+另外，在 playbook 中我還定義了 `vars` 這個群組變數。這裡面的變數是用來初始化 Jenkins 的預設管理者 (admin) 的。這裡讀者可能會有的疑問是，在之前的章節中，不是有提過變數可以被定義每個 role 資料下的 `defaults/` 或是 `vars/` 中嗎？為什麼這裡又需要在 playbook 中定義其他變數呢？這是因為很多時候我們都會將開發好的 role 分享給開發團隊的其他成員甚至是在網路上開源，這時候如果將變數寫死在 role 的 `defaults/` 或是 `vars/` 中，一來除了會大大降低這個 role 的運用彈性外，二來也有可能會不小心將一些機密資料 (e.g. API token 或是 user account/password) 暴露在分享的 role 當中。
 
-```yml
----
-  - name: install curl
-    yum:
-      name: curl
-    when: ansible_distribution == 'CentOS'
-
-  - name: install curl
-    apt:
-      name: curl
-    when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
-```
-
-#### 安裝 pip 以及 Ansible-lint
-
-除此之外，由於在未來的章節中，我會讓 Jenkins 使用 [Ansible-lint](https://github.com/willthames/ansible-lint) 這個語法檢查器來反向檢查我們所有的 Ansible playbook 及 roles，以確保我們每次放在 GitHub 上的程式碼都是最佳狀態。為了安裝 Ansible-lint，我們需要先安裝 pip 這個 Python 套件管理工具在主機上：
-
-```shell
-workspace
-├── Vagrantfile
-├── ansible.cfg
-├── inventory
-├── playbook.yml
-└── roles
-    ├── curl
-    │   └── tasks
-    │       └── main.yml
-    ├── git
-    │   └── tasks
-    │       └── main.yml
-    ├── jenkins
-    │   ├── meta
-    │   │   └── main.yml
-    │   └── tasks
-    │       └── main.yml
-    └── pip
-        └── tasks
-            └── main.yml
-```
-
-並在 `roles/pip/tasks/main.yml` 中寫入以下內容：
-
-```yml
----
-  - name: Add EPEL repository
-    yum_repository:
-      name: EPEL
-      description: EPEL yum repo
-      baseurl: http://download.fedoraproject.org/pub/epel/$releasever/$basearch/
-      gpgkey: /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-6
-    when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '6'
-
-  - name: install EPEL
-    yum:
-      name: epel-release
-    when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'
-
-  - name: install pip
-    yum:
-      name: python-pip
-      state: installed
-      update_cache: yes
-    when: ansible_distribution == 'CentOS'
-
-  - name: install pip
-    apt:
-      name: python-pip
-      update_cache: yes
-    when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
-```
-
-雖然 pip 也是在一般操作系統中非常常用的套件管理工具，但在 CentOS 作業系統中安裝 pip 會稍微比其他 Linux / Unix 的安裝步驟更加麻煩一點，我們會需要先安裝 [EPEL (Extra Packages for Enterprise Linux)](https://fedoraproject.org/wiki/EPEL) 才可以進行 pip 的安裝，而其中又以 CentOS 6.x 版本的安裝更加繁瑣。由於我們這次的重點並非討論其中的差異，因此我只將我個人的 role 在這裡分享給大家，若有興趣了解的讀者可以在網路上自行研究其差異 (e.g. [CentOS 6.x](http://sharadchhetri.com/2014/05/30/install-pip-centos-rhel-ubuntu-debian/), [CentOS 7.x](http://sharadchhetri.com/2014/09/07/install-epel-repo-centos-7-rhel-7/))。
-
-接著，使用剛安裝好的 `pip` 來安裝 Ansible-lint：
-
-```shell
-workspace
-├── Vagrantfile
-├── ansible.cfg
-├── inventory
-├── playbook.yml
-└── roles
-    ├── ansible-lint
-    │   ├── meta
-    │   │   └── main.yml
-    │   └── tasks
-    │       └── main.yml
-    ├── curl
-    │   └── tasks
-    │       └── main.yml
-    ├── git
-    │   └── tasks
-    │       └── main.yml
-    ├── jenkins
-    │   ├── meta
-    │   │   └── main.yml
-    │   └── tasks
-    │       └── main.yml
-    └── pip
-        └── tasks
-            └── main.yml
-```
-
-在 `roles/ansible-lint/meta/main.yml` 中添加 `pip` 為其角色依賴：
-
-```yml
----
-  dependencies:
-    - { role: pip, become: yes }
-```
-
-接著在 `roles/ansible-lint/tasks/main.yml` 新增內容：
-
-```yml
----
-  - name: install ansible-lint dependencies (via pip)
-    pip:
-      name: "{{ item }}"
-    with_items:
-      - markupsafe
-      - PyYAML
-
-  - name: install ansible-lint dependencies (via apt-get)
-    apt:
-      name: "{{ item }}"
-      update_cache: yes
-    with_items:
-      - python-keyczar
-      - python-httplib2
-      - python-jinja2
-      - python-paramiko
-      - python-setuptools
-      - python-six
-      - python-dev
-    when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
-
-  - name: install ansible-lint
-    pip:
-      name: ansible-lint
-```
-
-由於我們使用的是相當乾淨的環境，在安裝 Ansible-lint 之前，我們還必須要分別使用 apt 及 pip 來安裝一些 Ansible-lint 需要的 Python 依賴。在這裡順便介紹一下 Ansible 基本[迴圈](http://docs.ansible.com/ansible/playbooks_loops.html)的寫法。我們可以使用 `{{ item }}` 跟 `with_items` 的組合來實現類似於一般程式語言中的 [For 迴圈](https://zh.wikipedia.org/zh-hant/For%E8%BF%B4%E5%9C%88)概念。Ansible 在進入帶有 `with_items` 迴圈的 task 後，會依序將 `with_items` 下的清單代入 `{{ item }}` 的位置。
-
-最後，更新 `jenkins` 的 `meta` 依賴：
-
-```yml
----
-  dependencies:
-    - { role: curl, become: yes }
-    - { role: git, become: yes }
-    - { role: ansible-lint, become: yes }
-```
-
-運行 playbook 後結果如下：
-
-```
-PLAY [ironman] *****************************************************************
-
-TASK [setup] *******************************************************************
-ok: [ironman]
-
-TASK [curl : install curl] *****************************************************
-skipping: [ironman]
-
-TASK [curl : install curl] *****************************************************
-ok: [ironman]
-
-TASK [git : install git] *******************************************************
-skipping: [ironman]
-
-TASK [git : install git] *******************************************************
-changed: [ironman]
-
-TASK [pip : Add EPEL repository] ***********************************************
-skipping: [ironman]
-
-TASK [pip : install EPEL] ******************************************************
-skipping: [ironman]
-
-TASK [pip : install pip] *******************************************************
-skipping: [ironman]
-
-TASK [pip : install pip] *******************************************************
-changed: [ironman]
-
-TASK [ansible-lint : install ansible-lint dependencies (via pip)] **************
-changed: [ironman] => (item=markupsafe)
-changed: [ironman] => (item=PyYAML)
-
-TASK [ansible-lint : install ansible-lint dependencies (via apt-get)] **********
-changed: [ironman] => (item=[u'python-keyczar', u'python-httplib2', u'python-jinja2', u'python-paramiko', u'python-setuptools', u'python-six', u'python-dev'])
-
-TASK [ansible-lint : install ansible-lint] *************************************
-changed: [ironman]
-
-TASK [jenkins : add jenkins key] ***********************************************
-ok: [ironman]
-
-TASK [jenkins : add jenkins repository] ****************************************
-ok: [ironman]
-
-TASK [jenkins : install jenkins] ***********************************************
-changed: [ironman]
-
-PLAY RECAP *********************************************************************
-ironman                    : ok=7    changed=3    unreachable=0    failed=0
-```
-
-我們可以看到 Ansible 會根據對應的作業系統判斷哪些 tasks 可以被略過 (`skipping`)，這也是為什麼我們不需要特別為不同作業系統保存多份版本的 role，只要專注在同一個 role 中開發當前任務即可。另外，若仔細閱讀在終端機上顯示的 Ansible 安裝流程，應該會發現已經被安裝過的服務並不會一直重複被安裝。顯示為 `changed` 表示遙控主機在這次運行 playbook 的過程裡，Ansible 在該項 task 中對系統做了改變；`ok` 則表示該 task 的完成條件已滿足，所以 Ansible 並不會額外對主機做其他變動。特別需要解釋的是，若我們使用了 `update_cache: yes` 這項屬性來透過套件管理工具安裝服務。我們每次安裝服務前都會試圖將套件管理工具的版本都更新到當前最新版本，然後才進行安裝步驟，因此每次 task 的狀態都將會顯示為 `changed`。
-
-#### [Optional] Ansible Galaxy
-
-[Ansible Galaxy](https://galaxy.ansible.com/) 是一個 Ansible 官方提供的 Ansible Role 共享平台。所有 Ansible 的使用者都可以自由上傳自己的 role 與全世界的開發人員分享。在接到任務需求前，建議讀者可以花個幾分鐘在上面稍微[瀏覽](https://galaxy.ansible.com/list#/roles?page=1&page_size=10)一下，看看是否有適合自己使用的現成 role 的可以立刻拿來使用。不過，為避免讀者混淆，這次就不特別介紹如何使用 `ansible-galaxy` 來調用其他開發者的 role，有興趣的讀者可以自行參閱[官方使用教學](http://docs.ansible.com/ansible/galaxy.html)。
+因此，為了兼顧 Ansible 的彈性及安全性，我會習慣把這類比較敏感的變數資料透過 playbook 傳遞到 role 當中。然後在 repository 內建立一個類似 [playbook_example](https://github.com/tsoliangwu0130/my-ansible/blob/master/playbook_example.yml) 的指引，或是在 README 文件中提示使用者運行該 playbook 需要設定的變數及注意事項。
