@@ -45,7 +45,7 @@ server_config.vm.network "forwarded_port", guest: 8080, host: 8080
 
 在運行 playbook 後，根據定義的規則，Ansible 會直接調用 [docker-jenkins](https://github.com/tsoliangwu0130/my-ansible/tree/master/roles/docker-jenkins) 這個 role。然而，如同我在之前提到的一樣，因為這個 role 有其依賴，所以 Ansible 在執行這個 role 之前，會先依序將 `meta/` 下的所有 `dependencies` 運行一遍，而在這裡被呼叫 role 的就是 [docker](https://github.com/tsoliangwu0130/my-ansible/tree/master/roles/docker)。
 
-##### Error Handling - roles/pip
+#### roles/pip - Error Handling
 
 同樣的，由於在 Docker 安裝的過程中，會需要使用 pip 來安裝一些套件 (package)，因此在 docker 裡面又再度調用了 [pip](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/pip/tasks/main.yml) 這個 role。最後，因為 pip 並沒有任何前置作業，所以 Ansible 就會開始從 [tasks/main.yml](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/pip/tasks/main.yml) 執行定義的任務：
 
@@ -68,7 +68,7 @@ server_config.vm.network "forwarded_port", guest: 8080, host: 8080
 
 這裡利用了 Ansible 的 [error handling](http://docs.ansible.com/ansible/latest/playbooks_error_handling.html) 來做指令檢查。因為如果 pip 並沒有被安裝而我們仍然執行了 `pip --version` 這條指令，會導致 Ansible 抱怨 pip 並沒有被正確安裝，接著在該任務失敗之後中斷整個安裝步驟。為了避免以上狀況，我們在第一個 task 下了參數 `ignore_errors: yes` 來通知 Ansible 若該任務失敗就[忽略](http://docs.ansible.com/ansible/latest/playbooks_error_handling.html#ignoring-failed-commands)它，但依然透過前面使用過的 `register` 技巧來把執行結果儲存在 `pip_is_installed` 的變數裡，並依據該結果來判斷是否要執行 pip 安裝。
 
-##### Loop - roles/docker
+#### roles/docker - Loop
 
 在安裝完 pip 之後，Ansible 緊接著就會回來執行 docker 這個 role。在這個任務清單中，大致上來說執行了以下幾個步驟：
 
