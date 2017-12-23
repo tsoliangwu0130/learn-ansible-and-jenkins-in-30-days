@@ -103,5 +103,5 @@ server_config.vm.network "forwarded_port", guest: 8080, host: 8080
     這樣一來，在第一次的迭代中 `item.name` 與 `item.groups` 分別會被迭代成 `testuser1` 與 `wheel`，但在第二次的迭代中則會變成 `testuser2` 與 `root`。
 
 2. 接著依序加入 Docker 的 apt_key 和 apt_repository，然後開始執行 Docker 的套件安裝。
-3. 透過 pip 安裝 docker-py 這個 Python 套件，這樣接下來的 role 才可以使用 Ansible 的 [docker](http://docs.ansible.com/ansible/latest/docker_module.html) module 來操作 Docker。讀者在查找 Ansible module 的時候要特別注意一下是否有使用上的需求 (requirements)，因為並非所有 Ansible 的 module 都是預設可用的 (e.g. [docker](http://docs.ansible.com/ansible/latest/docker_module.html), [jenkins_job](http://docs.ansible.com/ansible/latest/jenkins_job_module.html),  [jenkins_plugin](http://docs.ansible.com/ansible/latest/jenkins_plugin_module.html))。
+3. 透過 pip 安裝 docker-py 這個 Python 套件，這樣接下來的 role 才可以使用 Ansible 的 [docker](http://docs.ansible.com/ansible/latest/docker_module.html) module 來操作 Docker。讀者在查找 Ansible module 的時候要特別注意一下該模組是否有使用上的需求 (requirements)，因為並非所有 Ansible 的 module 都是預設可用的 (e.g. [docker](http://docs.ansible.com/ansible/latest/docker_module.html), [jenkins_job](http://docs.ansible.com/ansible/latest/jenkins_job_module.html),  [jenkins_plugin](http://docs.ansible.com/ansible/latest/jenkins_plugin_module.html))。
 4. 最後，建立 docker 的主目錄 (home directory)。至此，Docker 的安裝就順利完成了。
