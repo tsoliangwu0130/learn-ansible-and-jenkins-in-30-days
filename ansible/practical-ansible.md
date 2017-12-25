@@ -137,3 +137,30 @@ server_config.vm.network "forwarded_port", guest: 8080, host: 8080
 ```
 
 來確保若還有接下來的部署任務，在進入下一個任務前 Jenkins 已經正確運行，進而避免當需要直接操作 Jenkins 時產生沒有回應的問題。
+
+#### 總結
+
+總結一下我們安裝 Jenkins 的流程：
+
+1. 使用 git-clone 下載專案並切換至專案目錄：
+
+```shell
+$ git clone git@github.com:tsoliangwu0130/my-ansible.git
+$ cd my-ansible
+```
+
+2. 使用 Vagrant 啟動虛擬機
+
+```
+$ vagrant up
+```
+
+3. 修改並運行 playbook 進行部署：
+
+```
+$ ansible-playbook docker-jenkins.yml
+```
+
+4. 等到部署流程完成後，在瀏覽器上訪問 `http://localhost:8080/`，並確認可以使用設定的系統使用者帳號密碼登入 Jenkins。
+
+只要四個步驟！我們只用了四條指令就簡單利用 Ansible 將 Jenkins 安裝至 managed node 啦！希望讀者有透過這個例子感受到 Ansible 的強大！接下來，我們就可以正式進入 Jenkins 的章節囉！
