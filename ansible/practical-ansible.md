@@ -108,7 +108,7 @@ server_config.vm.network "forwarded_port", guest: 8080, host: 8080
 
 #### roles/docker-jenkins - Template
 
-安裝好 Docker 以後，最後終於來到 [docker-jenkins](https://github.com/tsoliangwu0130/my-ansible/tree/master/roles/docker-jenkins) 這個 role 了。在 [tasks/main.yml](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker-jenkins/tasks/main.yml) 的一開始，我使用了 `include` 來調用了 [tasks/setup.yml](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker-jenkins/tasks/setup.yml) 來進行一些前置作業。這種做法可以有效讓我們將任務清單根據用途做一個簡單的區分，並只將主要輪廓定義在 main.yml 內，這樣一來增加易讀性，二來也可以減少未來在維護上的難度。
+安裝好 Docker 以後，最後終於來到 [docker-jenkins](https://github.com/tsoliangwu0130/my-ansible/tree/master/roles/docker-jenkins) 這個 role 了。在 [tasks/main.yml](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker-jenkins/tasks/main.yml) 的一開始，我使用了 `include` 來調用了 [tasks/setup.yml](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker-jenkins/tasks/setup.yml) 進行一些前置作業。這種做法可以有效讓我們將任務清單根據用途做一個簡單的區分，並只將主要輪廓定義在 main.yml 內，這樣一來增加易讀性，二來也可以減少未來在維護上的難度。
 
 > 註：雖然 `include` 描述句在 Ansible 2.4 版後已經被官方棄用 (deprecate)，但現階段還是可以使用。然而，筆者仍然建議讀者儘速將 `include` 使用 `import_tasks` 以及 `include_tasks` 做替換。更多細節可以參考這份[官方文件](http://docs.ansible.com/ansible/latest/playbooks_reuse.html#creating-reusable-playbooks)。
 
