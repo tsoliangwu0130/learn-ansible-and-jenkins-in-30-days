@@ -105,3 +105,35 @@ server_config.vm.network "forwarded_port", guest: 8080, host: 8080
 2. 接著依序加入 Docker 的 apt_key 和 apt_repository，然後開始執行 Docker 的套件安裝。
 3. 透過 pip 安裝 docker-py 這個 Python 套件，這樣接下來的 role 才可以使用 Ansible 的 [docker](http://docs.ansible.com/ansible/latest/docker_module.html) module 來操作 Docker。讀者在查找 Ansible module 的時候要特別注意一下該模組是否有使用上的需求 (requirements)，因為並非所有 Ansible 的 module 都是預設可用的 (e.g. [docker](http://docs.ansible.com/ansible/latest/docker_module.html), [jenkins_job](http://docs.ansible.com/ansible/latest/jenkins_job_module.html))。
 4. 最後，建立 docker 的主目錄 (home directory)。至此，Docker 的安裝就順利完成了。
+
+#### roles/docker-jenkins - Template
+
+安裝好 Docker 以後，最後終於來到 [docker-jenkins](https://github.com/tsoliangwu0130/my-ansible/tree/master/roles/docker-jenkins) 這個 role 了。在 [tasks/main.yml](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker-jenkins/tasks/main.yml) 的一開始，我使用了 `include` 來調用了 [tasks/setup.yml](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker-jenkins/tasks/setup.yml) 來進行一些前置作業。這種做法可以有效讓我們將任務清單根據用途做一個簡單的區分，並只將主要輪廓定義在 main.yml 內，這樣一來增加易讀性，二來也可以減少未來在維護上的難度。
+
+> 註：雖然 `include` 描述句在 Ansible 2.4 版後已經被官方棄用 (deprecate)，但現階段還是可以使用。然而，筆者仍然建議讀者儘速將 `include` 使用 `import_tasks` 以及 `include_tasks` 做替換。更多細節可以參考這份[官方文件](http://docs.ansible.com/ansible/latest/playbooks_reuse.html#creating-reusable-playbooks)。
+
+在 setup.yml 中，先依序建立了 `docker-jenkins` 的工作目錄，並將 `files/plugin.txt` 複製到該目錄下。這個 plugin 清單是 Jenkins 在初始安裝過程中需要被安裝的列表，在等等的安裝過程會被使用到。接著，我們透過了 Ansible 的 [template](http://docs.ansible.com/ansible/latest/template_module.html) 來將 [security.groovy](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker-jenkins/templates/security.groovy.j2) 以及 [Dockerfile](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker-jenkins/templates/Dockerfile.j2) 這兩個檔案複製到 managed node 上。
+
+1. security.groovy.j2
+
+    這個檔案的主要功能是讓我們在使用 Ansible 部署 Jenkins 的時候可以直接初始化一個系統管理者，而不用中斷部署流程來手動進行使用者設定。還記得我們在運行 playbook 時傳遞的 [jenkins_admin_user 以及 jenkins_admin_pass](https://github.com/tsoliangwu0130/my-ansible/blob/master/docker-jenkins.yml#L5-L7) 這兩個變數嗎？透過 template 的模組，我們就可以將之前定義的變數套用到這個[初始化腳本](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker-jenkins/templates/security.groovy.j2#L10-L11)。這樣一來，我們就可以這個 role 分享給開發團隊成員，而不用擔心系統管理者的資料不小心洩漏出去。
+
+2. Dockerfile.j2
+
+    這個檔案定義了 Docker 要如何建立我們的容器映像檔 (image)，某種程度上與 Vagrantfile 蠻類似的。在[這裡](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker-jenkins/templates/Dockerfile.j2#L5-L11)我還利用了 Jinja2 的[條件語句](http://jinja.pocoo.org/docs/2.10/templates/#if)來判斷變數是否有定義。
+
+接著，將所需檔案都準備好之後，接著回到 docker-jenkins，使用 [docker-image](http://docs.ansible.com/ansible/latest/docker_image_module.html#docker-image) 以及 [docker_container](http://docs.ansible.com/ansible/latest/docker_container_module.html#docker-container) 這兩個在 Ansible 2.1 後釋出的模組來直接操作 Docker image 的建立與運行容器。
+
+最後，因為當 Jenkins 在安裝完成後，會需要約 10 至 30 秒的時間來作啟動，所以我們希望透過下面這個任務：
+
+```yml
+- name: Wait for jenkins to come up
+  uri:
+    url: "{{jenkins_url}}"
+  register: jenkins_url_result
+  until: jenkins_url_result.status == 200
+  retries: 5
+  delay: 10
+```
+
+來確保若還有接下來的部署任務，在進入下一個任務前 Jenkins 已經正確運行，進而避免當需要直接操作 Jenkins 時產生沒有回應的問題。
