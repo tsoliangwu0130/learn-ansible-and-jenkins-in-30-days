@@ -7,7 +7,7 @@
 * [3. 使用 Ansible 部署環境](ansible/README.md)
 	* [3-01. Ansible 介紹](ansible/ansible-intro.md)
 	* [3-02. Ansible 安裝](ansible/ansible-installation.md)
-	* [3-03. 撰寫第一個 Ansible Playbook](ansible/playbook-intro.md)
+	* [3-03. 撰寫第一個 Ansible Playbook](ansible/ansible-playbook-intro.md)
 	* [3-04. 運行 playbook 以及配置 inventory file](ansible/run-playbook-with-inventory.md)
 	* [3-05. 透過 Vagrant 運行 playbook](ansible/run-playbook-by-vagrant.md)
 	* [3-06. 撰寫第一個 Ansible Role](ansible/ansible-role-intro.md)
