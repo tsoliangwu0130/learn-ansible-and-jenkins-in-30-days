@@ -16,4 +16,5 @@
 	* [3-09. 實戰 Ansible](ansible/practical-ansible.md)
 * [4. 使用 Jenkins 實現持續整合](jenkins/README.md)
 	* [4-01. Jenkins 介紹](jenkins/jenkins-intro.md)
+	* [4-02. 我的第一個 Jenkins Job](jenkins/jenkins-job-intro.md)
 * [5. 總結](conclusion.md)
