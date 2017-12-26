@@ -8,7 +8,7 @@
 
 #### 如何安裝 Jenkins？
 
-[Jenkins](https://jenkins.io/)其實已經在官網釋出大部分作業系統的安裝檔，甚至還提供了 [Docker](https://www.docker.com/) 容器 (container) 的映像檔 (image)，因此在手動安裝上可以說是幾乎沒有任何難度。正如同前面提到的，身為開源軟體，Jenkins 的改版速度幾乎每個禮拜就會有一到二個新版本釋出 (weekly release)。除了每週的新版本外，Jenkins 也提供了穩定版本 (Long-Term Support, LTS) 的下載。穩定版本是每十二個月中最穩定的版本，因此，在選擇安裝的版本上可以根據開發團隊的需求挑選適合的版本來進行安裝。
+[Jenkins](https://jenkins.io/) 其實已經在官網釋出大部分作業系統的安裝檔，甚至還提供了 [Docker](https://www.docker.com/) 容器 (container) 的映像檔 (image)，因此在手動安裝上可以說是幾乎沒有任何難度。正如同前面提到的，身為開源軟體，Jenkins 的改版速度幾乎每個禮拜就會有一到二個新版本釋出 (weekly release)。除了每週的新版本外，Jenkins 也提供了穩定版本 (Long-Term Support, LTS) 的下載。穩定版本是每十二個月中最穩定的版本，因此，在選擇安裝的版本上可以根據開發團隊的需求挑選適合的版本來進行安裝。
 
 若非使用前一章節透過 Ansible 進行安裝的讀者，在安裝好 Jenkins 後應該會依序看到以下畫面：
 
