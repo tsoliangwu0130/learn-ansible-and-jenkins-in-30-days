@@ -10,7 +10,7 @@
 
 [Jenkins](https://jenkins.io/) 其實已經在官網釋出大部分作業系統的安裝檔，甚至還提供了 [Docker](https://www.docker.com/) 容器 (container) 的映像檔 (image)，因此在手動安裝上可以說是幾乎沒有任何難度。正如同前面提到的，身為開源軟體，Jenkins 的改版速度幾乎每個禮拜就會有一到二個新版本釋出 (weekly release)。除了每週的新版本外，Jenkins 也提供了穩定版本 (Long-Term Support, LTS) 的下載。穩定版本是每十二個月中最穩定的版本，因此，在選擇安裝的版本上可以根據開發團隊的需求挑選適合的版本來進行安裝。
 
-假如讀者不是透過前一章的 Ansible 實戰進行安裝，而是選擇手動安裝 Jenkins，那在安裝好之後應該會依序看到以下畫面：
+假如讀者不是透過前一章的[實戰 Ansible](https://tsoliangwu0130.gitbooks.io/learn-ansible-and-jenkins-in-30-days/content/ansible/practical-ansible.html) 進行安裝，而是選擇手動安裝 Jenkins，那在安裝好之後應該會依序看到以下畫面：
 
 1. 使用初始管理密碼 (initial admin password) 解鎖 Jenkins：
 
@@ -24,7 +24,7 @@
 
 2. 將密碼複製貼入後，Jenkins 會詢問是否要安裝 plugins。在這裡可以選 Install suggested plugins 就好：
 
-    > 註：之前在[實戰 Ansible](../ansible/practical-ansible.md) 中提到過的 [plugins.txt](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker-jenkins/files/plugins.txt) 就是安裝這裡所有的 suggested plugins。
+    > 註：之前在[實戰 Ansible](https://tsoliangwu0130.gitbooks.io/learn-ansible-and-jenkins-in-30-days/content/ansible/practical-ansible.html) 中提到過的 [plugins.txt](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker-jenkins/files/plugins.txt) 就是安裝這裡所有的 suggested plugins。
 
     ![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-02.png?raw=true)
 

@@ -2,7 +2,7 @@
 
 Jenkins 作為一個持續整合的工具，與原始碼管理系統的整合尤其重要。在這個章節內，我們會介紹如何在 Jenkins 上透過原始碼管理 (source code management, SCM) 系統，例如 GitHub 來獲得專案的原始碼，並設置建置觸發程序 (build triggers) 來實踐持續整合。
 
-接下來我一樣會使用[這個專案](https://github.com/tsoliangwu0130/my-ansible)來當作範例。我要利用 [ansible-lint](https://github.com/willthames/ansible-lint) 這個語法檢查工具來持續檢查我的專案是否都有符合規範。因此，為了使用這個工具，我們必須在 Jenkins 運行的環境下先安裝好 ansible-lint 才可以。如果是跟著實戰 Ansible 的方式安裝 Jenkins 的話，眼尖的讀者可能發現我在 [docker-jenkins/defaults/main.yml](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker-jenkins/defaults/main.yml#L14) 這裡已經先在運行的容器內安裝好 ansible-lint 了。當然，如果你希望運行的是更乾淨或更客製化的環境，可以在這裡任意刪除或增加套件。
+接下來我一樣會使用[這個專案](https://github.com/tsoliangwu0130/my-ansible)來當作範例。我要利用 [ansible-lint](https://github.com/willthames/ansible-lint) 這個語法檢查工具來自動檢查我的專案是否都有符合規範。因此，為了讓 Jenkins 可以使用 ansible-lint，我們必須在 Jenkins 運行的環境下先安裝好這個工具。如果是跟著[實戰 Ansible](https://tsoliangwu0130.gitbooks.io/learn-ansible-and-jenkins-in-30-days/content/ansible/practical-ansible.html) 的方式安裝 Jenkins 的話，眼尖的讀者可能發現我在 [docker-jenkins/defaults/main.yml](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker-jenkins/defaults/main.yml#L14) 這裡已經先在運行的容器內安裝好 ansible-lint 了。當然，如果你希望運行的是更乾淨或更客製化的環境，可以在這裡任意刪除或增加套件。
 
 #### 建置專案
 
