@@ -84,17 +84,7 @@ Jenkins 作為一個持續整合的工具，與原始碼管理系統的整合尤
 
         6. 將產生的 token 複製下來
 
-    2. 進入 Jenkins 專案組態頁面，到原始碼管理的地方將 **Repository URL** 從原本的
-
-    ```{%raw%}
-    https://github.com/tsoliangwu0130/my-ansible.git
-    ```
-
-    修改為
-
-    ```
-    https://{github-token}@github.com/twistresources/arbys.git
-    ```
+    2. 進入 Jenkins 專案組態頁面，到原始碼管理的地方將 **Repository URL** 從原本的 `https://github.com/tsoliangwu0130/my-ansible.git` 修改為 `https://{github-token}@github.com/twistresources/arbys.git`
 
     其中 `github-token` 是在第一步建立出來的 GitHub token。接著，在下面**建置觸發程序**的地方勾選 **GitHub hook trigger for GITScm polling** 並儲存離開。
 
