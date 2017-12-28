@@ -98,6 +98,8 @@ Jenkins 作為一個持續整合的工具，與原始碼管理系統的整合尤
 
         4. 輸入 **Jenkins hook url** 後點選 **Add service** 離開
 
+            ![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-trigger-07.png?raw=true)
+
         > 註：由於我們現在是將 Jenkins 運行在本機端，所以 Jenkins URL 是 `http://localhost:8080`。然而，GitHub 並不知道誰是 localhost，為了練習，我們可以透過 [ngrok](https://ngrok.com/) 這套簡單的小工具來暫時將 `localhost:8080` 推送到網路上。ngrok 的使用方式非常簡單，只要將檔案下載下來後，透過 command line 切換到下載目錄，並執行：
 
         > ```shell
@@ -106,8 +108,6 @@ Jenkins 作為一個持續整合的工具，與原始碼管理系統的整合尤
 
         > 應該就可以看到類似以下畫面：             ![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-trigger-06.png?raw=true)
         > 其中 `http://c84557ae.ngrok.io` 就是我們這次將 `localhost:8080` 推送網路上的網址。
-
-            ![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-trigger-07.png?raw=true)
 
     如此一來，Jenkins 就可以自動監控專案的變化並自動執行建置了。讀者可以根據使用上的需求，同時搭配定時建置以及自動監測的建置模式來建置專案，來徹底實踐持續整合的概念。
 
