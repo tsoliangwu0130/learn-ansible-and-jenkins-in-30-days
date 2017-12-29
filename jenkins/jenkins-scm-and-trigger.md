@@ -122,18 +122,38 @@ do
 done
 ```
 
-最後，點擊**儲存**來離開專案組態的設定。
+這裡利用一個了簡單的 Shell script 迴圈來對所有 YAML file 進行 ansible-lint 的檢查。最後，點擊**儲存**來離開專案組態的設定。
 
 #### 建置結果
 
-如我們預期的，每隔 15 分鐘 Jenkins 就自動執行一次專案建置：
+在**工作目錄**標籤下，我們可以看到 Jenkins 根據我們在組態的設定，從 GitHub 下載了整份專案到工作目錄：
 
 ![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-trigger-08.png?raw=true)
 
-點擊第一個建置，我們也可以看到該次建置是由計時器所發動的：
+我們可以隨時透過這個標籤來檢視實際的工作目錄狀況，而不用再手動進入主機確認。而如我們預期的，在建立歷程裡，因為我們設置了定時建置的觸發器，所以每隔 15 分鐘 Jenkins 就自動執行一次專案建置：
 
 ![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-trigger-09.png?raw=true)
 
-作為測試，我在 09:57 的時候 push 了一個 commit 到 GitHub 上，雖然當下並非建置的排程時間，但由於我們還有設置自動監測的觸發建置條件，因此 Jenkins 仍然執行了第四次的建置，而我們在建置頁面上也可以看到是 GitHub 上的哪位使用者觸發這次建置的：
+點擊第一個建置，我們也可以看到該次建置是由計時器所發動的：
 
 ![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-trigger-10.png?raw=true)
+
+作為測試，我在 09:57 的時候 push 了一個 commit 到 GitHub 上，雖然當下並非建置的排程時間，但由於我們還有設置自動監測的觸發建置條件，因此 Jenkins 仍然執行了第四次的建置，而我們從該次建置結果中也可以看到是 GitHub 上的哪位使用者觸發這次建置的：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-trigger-11.png?raw=true)
+
+回到專案建置結果頁面，我們可以看到左邊有一個 **GitHub Hook Log** 的標籤，在該標籤下可以看到更詳細的觸發 GitHub hook 的紀錄：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-trigger-12.png?raw=true)
+
+#### [Optional] 編輯建構資訊
+
+在當 Jenkins 建置記錄越來越多後，我們可以透過編輯建構資訊來註記一些比較特別的建置，以便未來方便管理。在這裡我們以第四的建置為例，點擊該次建置紀錄後，選擇左邊的 **編輯建構資訊**
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-trigger-13.png?raw=true)
+
+填寫完建構資訊後，選擇**儲存**離開。接著回到建置紀錄頁面，我們就會看到第四次的建置紀錄已經被加上更清楚的建置細節：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-trigger-14.png?raw=true)
+
+如果專案有些特殊的建置需求，筆者常常透過這個小技巧來管理這些特殊的建置。這樣一來，若在未來需要回頭查找這些建置，也會比較方便與節省時間。
