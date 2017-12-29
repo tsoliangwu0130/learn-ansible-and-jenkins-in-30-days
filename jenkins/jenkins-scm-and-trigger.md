@@ -148,7 +148,7 @@ done
 
 #### [Optional] 編輯建構資訊
 
-在當 Jenkins 建置記錄越來越多後，我們可以透過編輯建構資訊來註記一些比較特別的建置，以便未來方便管理。在這裡我們以第四的建置為例，點擊該次建置紀錄後，選擇左邊的 **編輯建構資訊**
+在當 Jenkins 建置記錄越來越多後，我們可以透過編輯建構資訊來註記一些比較特別的建置，以便未來方便管理。在這裡我們以第四次的建置為例，點擊該次建置紀錄後，選擇左邊的 **編輯建構資訊**
 
 ![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-trigger-13.png?raw=true)
 
