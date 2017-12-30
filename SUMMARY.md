@@ -18,4 +18,5 @@
 	* [4-01. Jenkins 介紹](jenkins/jenkins-intro.md)
 	* [4-02. 我的第一個 Jenkins Job](jenkins/jenkins-job-intro.md)
 	* [4-03. 原始碼管理與建置觸發程序](jenkins/jenkins-scm-and-trigger.md)
+	* [4-04. 參數化建置](jenkins/jenkins_parameterized_job.md)
 * [5. 總結](conclusion.md)
