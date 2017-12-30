@@ -32,10 +32,12 @@ echo "Building Environment: $VAR"
 
 ![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-parameterized-build-03.png?raw=true)
 
-點選 **Build with Parameters** 後，在下拉式選單中我們可以任意選擇這次建置作業的參數。接著，隨便選擇一個參數後點選**建置**：
+點選 **Build with Parameters** 後，在下拉式選單中我們可以任意選擇這次建置作業的參數。接著，隨便選擇一個參數後點選**建置**。建置完成後，在 **Console Output** 的結果中就可以看到 Jenkins 成功地根據我們讓使用者傳入的參數進行建置：
 
 ![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-parameterized-build-04.png?raw=true)
 
-建置完成後，在 **Console Output** 的結果中就可以看到 Jenkins 成功地根據我們讓使用者傳入的參數進行建置：
+除了 **Console Output**，我們也可以在左手邊的**參數**標籤下查看這次建置的參數是什麼：
 
-![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-parameterized-build-04.png?raw=true)
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-parameterized-build-05.png?raw=true)
+
+以上，大概就是如何使用參數化建置作業的一個簡單介紹。建議讀者可以試著練習加入其他不同型態的參數來建置專案，掌握這個技巧可以讓我們未來在使用 Jenkins 上來的更加靈活。
