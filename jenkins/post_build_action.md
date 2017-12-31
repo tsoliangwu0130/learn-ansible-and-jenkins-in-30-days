@@ -1,33 +1,30 @@
-# 專案建置後發送通知
+# 建置後動作
 
-由於我們希望 Jenkins 能夠無時無刻自動地幫我們處理大部分的工作，因此在建置後我們可以利用插件讓 Jenkins 主動通知我們建置結果。
+建置作業完成之後，我們還可以讓使用**建置後動作**來告訴 Jenkins 依據建置結果的不同該採取何種動作。
 
-#### E-mail 條件式通知
 
-現在重新打開 `ansible_lint` 的專案配置，在 `Post-build Actions` 的欄位下點擊 `Add post-build action`，並選擇 `E-mail Notification`：
+#### 電子郵件通知
 
-![email_notification_01](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/email_notification_01.png?raw=true)
+進入專案組態，在**建置後動作**的欄位下選擇**電子郵件通知**：
 
-這個欄位是 Jenkins 初始預設提供給使用者的 E-mail 通知配置，我們可以在這個欄位設定建置完後的通知名單，並選擇被標記為 `unstable` 狀態的專案是否要寄送通知、或是選擇是否要寄送信件通知造成建置失敗的開發人員，配置畫面如下：
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-post-build-actions-01.png?raw=true)
 
-![email_notification_02](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/email_notification_02.png?raw=true)
+這個欄位是 Jenkins 初始預設提供給使用者的 E-mail 通知配置，我們可以在這個欄位設定建置完成後的收件人清單，並在建置失敗、不穩定或是恢復穩定時寄送通知：
 
-然而，這樣的 E-mail 通知在現實的專案中功能是十分缺乏的，舉例來說，我們很多時候會希望只有在建置失敗的時候才要收到通知、或是在建置成功時通知某些特定聯絡人，甚至希望能夠客製化通知內容等等。所以我們在一開始建議安裝的插件列表中安裝了一個 [email-ext](https://wiki.jenkins-ci.org/display/JENKINS/Email-ext+plugin) 的插件，這個插件將大大地擴展我們使用 E-mail 發送通知的使用彈性。
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-post-build-actions-02.png?raw=true)
 
-回到 Jenkins 首頁，點擊 `Manage Jenkins` 下的 `Configure System`，我們可以看到有一個 `Extended E-mail Notification` 的欄位，我們可以在這個地方設定 E-mail 的寄送範本及相關格式：
+然而，這樣的 E-mail 通知在現實的專案中仍舊過於陽春。舉例來說，我們很多時候會希望只有在建置失敗的時候才要收到通知、或是在建置成功時通知某些特定聯絡人，甚至希望能夠客製化通知內容等等。因此，我們接下來會透過 [Email Extension](https://plugins.jenkins.io/email-ext) 這個插件來擴展我們使用 E-mail 發送通知的使用彈性。由於這個插件也是 Jenkins 預設的建議安裝插件，所以如果一開始有安裝建議插件的讀者就不用另行做安裝了。
 
-![email_notification_06](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/email_notification_06.png?raw=true)
+回到 Jenkins 首頁，點擊**管理 Jenkins** 下的**設定系統**，我們會看到有一個** 擴充電子郵件通知**的欄位：
 
-接著，回到專案設定裡，在 `Add post-build action` 中選擇 `Editable Email Notification`：
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-post-build-actions-03.png?raw=true)
 
-![email_notification_03](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/email_notification_03.png?raw=true)
+在這裡我們可以輸入全域的 E-mail 寄送範本及相關設定。接著，回到專案組態裡，在**建置後動作**中選擇**可編式電子郵件通知**：
 
-我們可以看到這個插件比起之前的基本 E-mail 通知強大了不少，我們可以在這裡面根據不同需求做非常細節地調整：
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-post-build-actions-04.png?raw=true)
 
-![email_notification_04](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/email_notification_04.png?raw=true)
+在這裡除了我們可以直接使用呼叫環境變數的方式調用剛剛在全域設定裡的收件人清單、信件內容模板等變數之外，也可以根據專案的不同做額外的調整。另外，在 **Advanced Settings** 裡，我們還可以找到一個名為 **Triggers** 的欄位：
 
-值得留意的是，在 `Advanced Settings` 下的 `Triggers` 裡，我們可以設定觸發通知的條件，比如當建置失敗時通知的名單跟建置成功時通知的名單：
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-post-build-actions-05.png?raw=true)
 
-![email_notification_05](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/email_notification_05.png?raw=true)
-
-這在現實中的專案是非常重要的功能，隨著專案的數量增加以及各專案優先程度的不同，如何聰明地使用開發工具 (e.g. Jenkins) 來幫助我們有系統地管理專案是非常重要且必備的技能。由於這個章節的教學並沒有太多技術成分，大部分內容都蠻直覺且易使用，在這個章節就不做太多冗餘的介紹，讀者自行研究嘗試即可。
+這裡可以選擇各種不同觸發通知的條件。依據建置狀態的不同讓 Jenkins 主動寄送通知給相關的收件人，不但幫我們可以過濾掉一些不相關的建置通知外，也可以在問題發生時有效地讓負責人員能在第一時間就將問題解決。
