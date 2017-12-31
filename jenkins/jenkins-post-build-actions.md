@@ -22,7 +22,7 @@
 
 ![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-post-build-actions-04.png?raw=true)
 
-在這裡除了我們可以直接使用呼叫環境變數的方式調用剛剛在全域設定裡的收件人清單、信件內容模板等變數之外，也可以根據專案的不同做額外的調整。另外，在 **Advanced Settings** 裡，我們還可以找到一個名為 **Triggers** 的欄位：
+在這裡除了可以直接利用呼叫環境變數的方式調用剛剛在全域設定裡的收件人清單、信件內容模板等變數之外，也可以根據專案的不同做額外的調整。另外，在 **Advanced Settings** 裡，我們還可以找到一個名為 **Triggers** 的欄位：
 
 ![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-post-build-actions-05.png?raw=true)
 
