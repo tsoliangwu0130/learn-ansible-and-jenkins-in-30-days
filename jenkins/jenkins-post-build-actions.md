@@ -27,3 +27,45 @@
 ![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-post-build-actions-05.png?raw=true)
 
 這裡可以選擇各種不同觸發通知的條件。依據建置狀態的不同讓 Jenkins 主動寄送通知給相關的收件人，不但幫我們可以過濾掉一些不相關的建置通知外，也可以在問題發生時有效地讓負責人員能在第一時間就將問題解決。
+
+#### Slack Notification
+
+由於現在使用 [Slack](https://slack.com/) 作為溝通平台的開發團隊越來越多，所以將 Jenkins 的建置結果傳送到 Slack 頻道內也是一個相當方便的通知做法。讀者可以先自行在 Slack 申請一個帳號並建立一個 workspace 作為測試。
+
+申請好帳號及 workspace 後，在瀏覽器上瀏覽 `https://{workspace-url}.slack.com/apps` 並搜尋 **Jenkins CI** 這個應用程式進行安裝：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-post-build-actions-06.png?raw=true)
+
+安裝好後，選擇想要將 Jenkins 通知傳送到哪一個頻道 (channel) 內：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-post-build-actions-07.png?raw=true)
+
+這邊我以 **#general** 這個頻道作為示範，如果讀者想要建立一個獨立的頻道來接收訊息也完全沒有問題。完成後點選 **Add Jenkins CI integration**，接著應該就會看到非常詳細的 Jenkins 端設定教學：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-post-build-actions-08.png?raw=true)
+
+在 **Step 3** 中，我們會看到這裡有一個 **Base URL** 與 **Integration Token**，這是等等要串接 Jenkins 時會用到的資訊。接著點擊最下面的 **Save Settings** 後儲存離開。
+
+接著回到 Jenkins 的**管理外掛程式**頁面，選擇 **Slack Notification Plugin** 點擊安裝：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-post-build-actions-09.png?raw=true)
+
+> 註：如果是直接使用在 Ansible 章節的範例來安裝 Jenkins，這個插件已經在 [plugins.txt](https://github.com/tsoliangwu0130/my-ansible/blob/master/roles/docker-jenkins/files/plugins.txt#L53) 中被我預先搭載了。讀者可以根據自己的需求修改這份安裝列表，或是利用 Ansible 的 [jenkins_plugin](http://docs.ansible.com/ansible/latest/jenkins_plugin_module.html) 模組來管理 Jenkins 插件。
+
+安裝好之後，回到**管理 Jenkins** 下的**設定系統**，找到 **Global Slack Notifier Settings**，並依序將剛剛在 Slack 安裝應用程式中的 **Base URL** 與 **Integration Token** 分別填入對應位置：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-post-build-actions-10.png?raw=true)
+
+這裡也可以設定預設的通知頻道，設定完後可以點選 **Test Connection** 來測試連線。如果設定一切都沒意外，應該就會在 Slack 裡看到 Jenkins 的測試通知如下：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-post-build-actions-11.png?raw=true)
+
+設定完成後點選**儲存**離開。最後，回到專案**組態**設定，在**建置後動作**的欄位選擇 **Slack Notification**：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-post-build-actions-12.png?raw=true)
+
+在這裡我們可以選擇要建置作業在何種情況下發送通知，同時如果有不同於全域的 Slack 設定，可以在**進階**中覆寫掉。依據需求選擇好建置情況後，點選**儲存**離開組態設定，並執行建置。建置完成後，我們應該會在 Slack 頻道中看到這次的建置結果類似下圖的效果：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-post-build-actions-13.png?raw=true)
+
+這樣一來，Slack 與 Jenkins 的整合就大功告成了！
