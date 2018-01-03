@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
 	# Server: ironman
 	config.vm.define :ironman do |ironman_config|
 		ironman_config.vm.box = "hashicorp/precise64"
-		ironman_config.vm.network "forwarded_port", guest: 8080, host: 9080
+		ironman_config.vm.network "forwarded_port", guest: 8080, host: 8080
 
 		# run Ansible playbook from Vagrant host
 		ironman_config.vm.provision "ansible" do |ansible|
@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
 	# Server: ironman_target
 	config.vm.define :ironman_target do |ironman_target_config|
 		ironman_target_config.vm.box = "hashicorp/precise64"
-	  end	
+	  end
 end
 ```
 
@@ -105,7 +105,7 @@ $ vi .ssh/authorized_keys
 
 1. **Hostname**: 目標伺服器的 IP 位置。雖然從 `vagrant ssh-config` 的指令中我們看到 HostName 是 `127.0.0.1`，但 Vagrant 會自動幫所有虛擬機的 localhost IP 轉介成 `10.0.2.2`，以便我們若要從本機端操作虛擬機的時候不至於與本機衝突。
 2. **Username**: 伺服器登入者身份，預設為 `vagrant`。
-3. **Remote Directory**: 遙控目錄。在這裡我們以 `vagrant` 身份的根目錄作為主目錄，在實際案例中，還是建議讀者可以根據專案分層管理，以免造成不必要的混淆。
+3. **Remote Directory**: 透過 SSH 傳輸檔案的傳輸目的地。
 4. **Passphrase / Password**: 登入目標伺服器的密碼，預設也是 `vagrant`。
 5. **Port**: 由於所有 Vagrant 產生的虛擬機預設 IP 都是 `10.0.2.2`，因此我們必須在這邊強調不同伺服器對應的 port 口。從上面的 `vagrant ssh-config` 中我們可以看到 Jenkins 安裝主機被分配的 port 是 `2222`，而目標主機的 port 則是 `2200`。
 

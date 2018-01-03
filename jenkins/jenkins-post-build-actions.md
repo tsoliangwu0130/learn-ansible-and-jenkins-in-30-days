@@ -69,3 +69,150 @@
 ![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-post-build-actions-13.png?raw=true)
 
 這樣一來，Slack 與 Jenkins 的整合就大功告成了！
+
+#### Publish Over SSH
+
+除了發送通知外，Jenkins 也可以在建置後透過 SSH 替我們將建置產物傳送至目標伺服器上，以下將簡單介紹如何實現這樣的功能。
+
+##### 使用 Vagrant 模擬目標伺服器
+
+因為在這個章節中我們會需要另外一台主機來擔任部署伺服器的角色，我們可以利用 Vagrant 先創建另外一台伺服器。編輯 `Vagrantfile` 添加第二台主機：
+
+```ruby
+Vagrant.configure("2") do |config|
+	# server config
+	config.vm.define :server do |server_config|
+		server_config.vm.box = "bento/ubuntu-14.04"
+		server_config.vm.network "forwarded_port", guest: 8080, host: 8080
+
+		# run playbook from Vagrant host
+		server_config.vm.provision "ansible" do |ansible|
+			ansible.playbook = "jenkins-ansible-lint.yml"
+		end
+	end
+
+    # target config
+    config.vm.define :target do |target_config|
+        target_config.vm.box = "bento/ubuntu-14.04"
+    end
+end
+```
+
+我們稍微改寫了一下原本的 `Vagrantfile` 。現在我們定義了第二台虛擬主機，並將其命名為 `target`。由於這台主機並不需要安裝 Jenkins，所以我們只需要單純地告訴 Vagrant 它的作業系統即可。設置完畢後運行 `vagrant reload` 重新啟動主機並載入新的 `Vagrantfile`。重啟完畢後透過 `vagrant ssh-config` 查看虛擬機狀況：
+
+```
+Host server
+  HostName 127.0.0.1
+  User vagrant
+  Port 2222
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  IdentityFile /path/to/private_key
+  IdentitiesOnly yes
+  LogLevel FATAL
+
+Host target
+  HostName 127.0.0.1
+  User vagrant
+  Port 2200
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  IdentityFile /path/to/private_key
+  IdentitiesOnly yes
+  LogLevel FATAL
+```
+
+沒有意外的話可以看到現在我們已經有兩台虛擬機準備好了。做好基本的伺服器配置後，我們就可以接著利用 Jenkins 操作接下來的步驟了。
+
+
+##### 安裝 Publish Over SSH 插件
+
+回到 Jenkins 插件管理頁面，搜尋 **Publish Over SSH** 這個插件並進行安裝：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-post-build-actions-14.png?raw=true)
+
+##### SSH 金鑰配對
+
+安裝完成後，將兩台主機的 SSH 金鑰進行配對。因為現在我們的 `Vagrantfile` 裡定義了兩台主機，因為在使用 `vagrant ssh` 時我們要在後面加上主機名稱才知道要登入哪一台，舉例來說，我想要在 target 的主目錄下建立一個 jenkins_artifacts 的資料夾可以這樣做：
+
+```shell
+$ vagrant ssh target
+
+Welcome to Ubuntu 14.04.5 LTS (GNU/Linux 3.13.0-128-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com/
+
+  System information as of Wed Jan  3 01:58:53 UTC 2018
+
+  System load:  0.01              Processes:           89
+  Usage of /:   2.7% of 38.02GB   Users logged in:     0
+  Memory usage: 6%                IP address for eth0: 10.0.2.15
+  Swap usage:   0%
+
+  Graph this data and manage this system at:
+    https://landscape.canonical.com/
+
+$ mkdir jenkins_artifacts
+```
+
+建立好資料夾後記得還要與 server 主機進行 SSH 金鑰配對。我們可以在 sever 的虛擬機上使用以下指令來確認 server 可以使用 SSH 登入至 target 虛擬機上：
+
+```shell
+$ vagrant ssh server
+$ ssh vagrant@10.0.2.15
+$ Are you sure you want to continue connecting (yes/no)? yes
+```
+
+如果一切順利這時候就應該會在 server 端上看到我們成功使用 vagrant 的身份登入 target 虛擬機了。
+
+> 如果是使用 Ansible 實戰安裝 Jenkins 的讀者，由於我是將 Jenkins 運行在 Docker 內，所以在登入 server 虛擬機後，還需要透過以下指令進入運行 Jenkins 的容器：
+> ```
+> $ sudo docker exec -it docker-jenkins /bin/bash
+> ```
+> 登入以後再依正常方式進行 SSH 配對即可。
+
+##### 在 Jenkins 上新增 SSH 伺服器
+
+配對完成後，我們現在要在 Jenkins 上新增一個 SSH 伺服器。回到 Jenkins 組態管理介面，並找到 **Publish over SSH** 欄位，點選 **Add** 來新增目標伺服器：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-post-build-actions-15.png?raw=true)
+
+其中有幾個重點欄位要特別注意：
+
+1. **Name**: SSH 伺服器名稱。
+2. **Hostname**: 目標伺服器的 IP 位置。雖然從 `vagrant ssh-config` 的指令中我們看到 HostName 是 `127.0.0.1`，但 Vagrant 會預設自動幫所有虛擬機的 localhost IP 轉介成 `10.0.2.2`，以便我們若要從本機端操作虛擬機的時候不至於與本機衝突。
+3. **Username**: 伺服器登入者身份，預設為 `vagrant`。
+4. **Remote Directory**: 透過 SSH 傳輸檔案的傳輸目的地。
+5. **Passphrase / Password**: 登入目標伺服器的密碼，預設也是 `vagrant`。
+6. **Port**: 由於所有本地端的 Vagrant 虛擬機預設 IP 都是 `10.0.2.2`，因此我們必須在這邊強調不同伺服器對應的 port 口。從上面的 `vagrant ssh-config` 中我們可以看到 Jenkins 安裝主機被分配的 port 是 `2222`，而 target 主機的 port 則是 `2200`。
+
+設定完成後，點選 **Test Configuration** 測試連線，如果出現 **Success** 的訊息，就表示我們現在已經正確將 SSH Server 添加至 Jenkins 伺服器管理列表中了，接著儲存設定後離開。
+
+##### 設定專案建置後動作
+
+在一切就緒後，最後，我們要在專案內設定相關作業。進入專案組態設定後，修改建置動作為：
+
+```shell
+echo "Building Environment: $VAR" > env_var.txt
+```
+
+我們在這裡將建置結果輸出為 `env_var.txt` 以模擬一個建置產物。接著在**建置後動作**的欄位下，選擇 **Send build artifacts over SSH**。在 **SSH Server** 的下拉式選單中可以選擇剛剛設定好的 SSH 主機，若我們今天有多個部署主機，可以在下拉式選單中進行更改。另外，在 **Transfers** 的欄位裡我們可以設定要傳輸的檔案、結構目錄以及是否要對傳輸檔案進行其他動作：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-post-build-actions-16.png?raw=true)
+
+設定完成後點選**儲存**離開並建置專案。從建置過程裡我們可以看到 Jenkins 在建置完成後透過了 SSH 傳送了一個檔案至 **target** 伺服器上：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-post-build-actions-17.png?raw=true)
+
+我們可以登入至我們的 target 主機上，確認檔案是否有被正確傳送：
+
+```shell
+$ vagrant ssh target
+$ ls /home/vagrant/jenkins_artifacts
+
+env_var.txt
+```
+
+正如我們預期的，建置產物已經正確被傳送到我們的部署伺服器上了！這邊要特別注意的是，雖然檔案會被傳送到目標伺服器上，但在原本的工作專案目錄 (workspace) 下還是會有一份原始建物存在，若不希望建置產物留在 Jenkins 伺服器上，記得要另外在組態內進行調整。
