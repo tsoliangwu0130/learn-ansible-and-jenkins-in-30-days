@@ -16,9 +16,7 @@
 
 ![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-node-03.png?raw=true)
 
-除了 node 本身的設定外，我們也可以看到在下方還可以根據不同的節點來設置不同的環境變數或工具，這在未來管理節點上有相當大的幫助。設定完成後點選**儲存**離開。
-
-回到管理節點頁面後，我們應該會看到下面的狀態：
+除了 node 本身的設定外，我們也可以看到在下方還可以根據不同的節點來設置不同的環境變數或工具，這在未來管理節點上有相當大的幫助。設定完成後點選**儲存**離開。回到管理節點頁面後，我們應該會看到下面的狀態：
 
 ![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-node-04.png?raw=true)
 
@@ -26,7 +24,7 @@
 
 ![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-node-05.png?raw=true)
 
-此時可以看到 Jenkins 提供了兩種方式讓我們運行該節點，第一個方式相當容易，只要點擊 **Launch** 按鈕後，瀏覽器會自動下載一個 **slave-agent.jnlp** 的檔案，接著只要在 agent node 的主機上點擊這個檔案運行即可。但有時候我們無法在 slave 節點上使用瀏覽器，因此第二個方法可以讓我們透過使用命令列來啟動節點。首先先點擊下圖中用紅色框起來的 `slave.jar` 檔，下載完成後使用命令切換到下載目錄下執行整行程式碼，接著應該會看到類似以下訊息：
+此時可以看到 Jenkins 提供了兩種方式讓我們運行該節點，第一個方式相當容易，只要點擊 **Launch** 按鈕後，瀏覽器會自動下載一個 **slave-agent.jnlp** 的檔案，接著只要在 agent node 的主機上點擊這個檔案運行即可。但有時候我們無法在 slave 節點上使用瀏覽器，因此第二個方法可以讓我們透過使用命令列來啟動節點。首先先點擊上圖中用紅色框起來的 `slave.jar` 檔，下載完成後使用命令切換到下載目錄下執行整行指令，接著應該會看到類似以下訊息：
 
 ```
 Jan 03, 2018 9:56:17 PM hudson.remoting.jnlp.Main createEngine
