@@ -20,4 +20,5 @@
 	* [4-03. 原始碼管理與建置觸發程序](jenkins/jenkins-scm-and-trigger.md)
 	* [4-04. 參數化建置](jenkins/jenkins-parameterized-job.md)
 	* [4-05. 建置後動作](jenkins/jenkins-post-build-actions.md)
+	* [4-06. 節點介紹](jenkins/jenkins-node.md)
 * [5. 總結](conclusion.md)
