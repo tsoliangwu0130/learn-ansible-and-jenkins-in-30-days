@@ -50,3 +50,50 @@ node('master') {
 ```
 
 將其填入專案組態後儲存離開並執行專案建置。若沒有意外，我們應該可以在建置結果頁面看到專案建置成功。雖然這是一個 Pipeline 專案，但因為我們還沒有設置任何其他參數，所以建置結果理論上會與之前的專案狀態一致。
+
+#### Agent (Node), Stage and Step
+
+藉由上面的例子，大概可以稍微想像 Pipeline 類型專案運作的模式。更具體的說，其實 Pipeline 專案主要是由三個核心概念組成，分別是：
+
+1. **Agent / Node - 節點**
+
+    Agent 也可以稱為 node，就如同上一章介紹的一樣，我們可以在 Pipeline 專案中指定在建置作業的哪些部分使用特定**節點**以及其工作環境來執行建置作業。
+
+2. **Stage - 階段**
+
+    由於 Pipeline 專案的目的就是要將建置作業打造成如同流水線一樣順暢的流程，所以 stage 在 Pipeline 裡代表的就是建置**階段**。
+
+3. **Step - 步驟**
+
+    在定義階段後，我們可以更近一步定義在該階段下的建置**步驟**。
+
+若以這三個核心概念為基礎，我們可以將上面的範例改寫成以下這樣：
+
+```groovy
+pipeline {
+    node('master') {
+        stage ('Checkout') {
+            steps {
+                git 'https://github.com/tsoliangwu0130/my-ansible.git'
+            }
+        }
+
+        stage ('Build') {
+            steps {
+                sh '''for file in $(find . -type f -name "*.yml")
+                do
+                    ansible-lint $file
+                done > ansible-lint.log'''
+            }
+        }
+
+        stage ('Delivery') {
+            steps {
+                echo 'Publish artifact over SSH.'
+            }
+        }
+    }
+}
+```
+
+這裡我又額外增加了 Delivery 這個建置階段，來將使用 ansible-lint 的結果當作輸出產物遞送到目標伺服器上。通常來說，我們會將這種定義好的 Pipeline 建置腳本儲存在 `Jenkinsfile` 的檔案內來做管理。
