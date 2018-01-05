@@ -96,4 +96,4 @@ pipeline {
 }
 ```
 
-這裡我又額外增加了 Delivery 這個建置階段，來將使用 ansible-lint 的結果當作輸出產物遞送到目標伺服器上。通常來說，我們會將這種定義好的 Pipeline 建置腳本儲存在 `Jenkinsfile` 的檔案內來做管理。
+這裡我又額外增加了 Delivery 這個建置階段，來將使用 ansible-lint 的結果當作輸出產物遞送到目標伺服器上。通常來說，我們會將這種定義好的 Pipeline 建置腳本儲存在 `Jenkinsfile` 檔案內來做管理。
