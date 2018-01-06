@@ -139,7 +139,7 @@ Blue Ocean 的安裝方式相當簡單，我們可以直接透過 Jenkins 的插
 
 ![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-pipeline-14.png?raw=true)
 
-因此對於原本就有管理 Pipeline 專案的使用者而言，直接使用 Blue Ocean 基本上是完全無痛的。除此之外，對於要開發新的 Pipeline 專案的使用者而言，在 Blue Ocean 的設計下現在幾乎不用自己手動寫任何 Groovy 語法。作為示範，讓我們回到 Blue Ocean 首頁，並點選右上角 **新的 Pipeline** 來建立新的建置作業。接著，我們會被一步一步引導設填入需要的資訊：
+因此對於原本就有管理 Pipeline 專案的使用者而言，直接使用 Blue Ocean 基本上是完全無痛的。除此之外，對於要開發新的 Pipeline 專案的使用者來說，在 Blue Ocean 的設計下現在幾乎不用自己手動寫任何 Groovy 語法。作為示範，讓我們回到 Blue Ocean 首頁，並點選右上角**新的 Pipeline** 來建立新的建置作業。接著，我們會被一步一步引導設填入需要的資訊：
 
 ![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-pipeline-15.png?raw=true)
 
@@ -153,7 +153,7 @@ Blue Ocean 的安裝方式相當簡單，我們可以直接透過 Jenkins 的插
 
 ![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-pipeline-18.png?raw=true)
 
-接著點擊第二個小圓圈設定建置階段，如同前面介紹的一樣，每個建置階段可以由多個建置步驟組合而成，而在 Blue Ocean 友善的介面下，我們可以直接從 **Add Step** 的下拉式選單中選擇我們希望執行的動作：
+接著點擊第二個小圓圈來設定建置階段，如同前面介紹的一樣，每個建置階段可以由多個建置步驟組合而成，而在 Blue Ocean 友善的介面下，我們可以直接從 **Add Step** 的下拉式選單中選擇我們希望執行的動作：
 
 ![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-pipeline-19.png?raw=true)
 
@@ -165,4 +165,4 @@ Blue Ocean 的安裝方式相當簡單，我們可以直接透過 Jenkins 的插
 
 ![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-pipeline-21.png?raw=true)
 
-我們可以看到效果跟我們之前使用原始 Pipeline 專案完全一致。唯一不同的是這次我們完全省去手動查找 Groovy 與 Pipeline 對應語法的繁瑣步驟，只透過 Blue Ocean 簡潔的 UI 就輕鬆打造一個全新的 Pipeline 專案。在 Blue Ocean 問世後，使用 Pipeline 專案實現持續整合的難度又再大大降低了，相信這對所有想要使用 Jenkins 實踐持續整合的團隊絕對是一大福音。
+我們可以看到效果跟我們之前使用原始 Pipeline 專案完全一致。唯一不同的是這次我們完全省去手動查找 Groovy 與 Pipeline 對應語法的繁瑣步驟，只透過 Blue Ocean 簡潔的 UI 就輕鬆打造一個全新的 Pipeline 專案。在 Blue Ocean 問世後，使用 Pipeline 專案實現持續整合的難度又再大大降低，相信這對所有想要使用 Jenkins 實踐持續整合的團隊來說絕對是一大福音。
