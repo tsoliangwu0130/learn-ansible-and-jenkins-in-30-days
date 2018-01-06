@@ -65,35 +65,35 @@ node('master') {
 
 3. **Step - 步驟**
 
-    在定義階段後，我們可以更近一步定義在該階段下的建置**步驟**。
+    在定義階段後，我們可以更近一步定義在該階段下的建置**步驟**，舉凡是 `git 'https://github.com/tsoliangwu0130/my-ansible.git'` 或是 `echo "Hello Jenkins"` 等都可以是建置步驟。
 
-若以這三個核心概念為基礎，我們可以將上面的範例改寫成以下這樣：
+若以這三個核心概念為基礎，我們可以將上面的範例改寫成類似以下這樣：
 
 ```groovy
-pipeline {
-    node('master') {
-        stage ('Checkout') {
-            steps {
-                git 'https://github.com/tsoliangwu0130/my-ansible.git'
-            }
-        }
+node ('master') {
+    stage ('Checkout') {
+        git 'https://github.com/tsoliangwu0130/my-ansible.git'
+    }
 
-        stage ('Build') {
-            steps {
-                sh '''for file in $(find . -type f -name "*.yml")
-                do
-                    ansible-lint $file
-                done > ansible-lint.log'''
-            }
-        }
+    stage ('Build') {
+        sh '''for file in $(find . -type f -name "*.yml")
+        do
+            ansible-lint $file
+        done > ansible-lint.log'''
+    }
 
-        stage ('Delivery') {
-            steps {
-                echo 'Publish artifact over SSH.'
-            }
-        }
+    stage ('Delivery') {
+        echo 'Publish artifact over SSH.'
     }
 }
 ```
 
-這裡我又額外增加了 Delivery 這個建置階段，來將使用 ansible-lint 的結果當作輸出產物遞送到目標伺服器上。通常來說，我們會將這種定義好的 Pipeline 建置腳本儲存在 `Jenkinsfile` 檔案內來做管理。
+通常來說，我們會將這種定義好的 Pipeline 建置腳本儲存在 `Jenkinsfile` 檔案內來做管理。我們可以根據專案的需求來任意擴增專案的建置階段，如上面的例子，我建立了一個 Delivery 的建置階段來將建置產物傳遞到目標伺服器上。但因為這個章節主要是介紹 Pipeline 專案的邏輯，所以這邊只用了 `echo` 來模擬建置步驟。建置腳本設定好之後儲存離開，並執行建置。這次我們應該會看到不一樣的結果如下：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-pipeline-06.png?raw=true)
+
+在定義了 stage 後，我們會發現 Jenkins 在建置過程中建立了一個視覺化的 stage view 告訴我們在不同的階段花費了多少時間，每個階段的建置狀態也用不同的顏色做標示。若將滑鼠移至不同的建置階段上還可以看到每個建置階段各自的 console output：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-pipeline-07.png?raw=true)
+
+至此，相信讀者多少可以體會 Pipeline 類型的專案能為開發團隊帶來多大的效益。相較於 Free-Style 專案，Pipeline 專案可以實現的建置邏輯又更加複雜，彈性也更大，因此若能掌握好 Pipeline 專案的設計，在持續整合的實踐上絕對會事半功倍。
