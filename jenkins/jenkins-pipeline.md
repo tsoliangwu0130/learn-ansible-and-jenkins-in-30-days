@@ -70,20 +70,31 @@ node('master') {
 若以這三個核心概念為基礎，我們可以將上面的範例改寫成類似以下這樣：
 
 ```groovy
-node ('master') {
-    stage ('Checkout') {
-        git 'https://github.com/tsoliangwu0130/my-ansible.git'
+pipeline {
+    agent {
+        node {
+            label 'master'
+        }
     }
-
-    stage ('Build') {
-        sh '''for file in $(find . -type f -name "*.yml")
-        do
-            ansible-lint $file
-        done > ansible-lint.log'''
-    }
-
-    stage ('Delivery') {
-        echo 'Publish artifact over SSH.'
+    stages {
+        stage('Checkout') {
+            steps {
+                git(url: 'https://github.com/tsoliangwu0130/my-ansible', branch: 'master')
+            }
+        }
+        stage('Build') {
+            steps {
+                sh '''for file in $(find . -type f -name"*.yml")
+                do
+	               ansible-lint $file
+                done'''
+            }
+        }
+        stage('Delivery') {
+            steps {
+                sh 'echo \'Publish artifact over SSH.\''
+            }
+        }
     }
 }
 ```
@@ -97,3 +108,61 @@ node ('master') {
 ![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-pipeline-07.png?raw=true)
 
 至此，相信讀者多少可以體會 Pipeline 類型的專案能為開發團隊帶來多大的效益。相較於 Free-Style 專案，Pipeline 專案可以實現的建置邏輯又更加複雜，彈性也更大，因此若能掌握好 Pipeline 專案的設計，在持續整合的實踐上絕對會事半功倍。
+
+#### Blue Ocean 專案
+
+有鑑於 Pipeline 專案的成功，Jenkins 在 [2016](https://jenkins.io/blog/2016/05/26/introducing-blue-ocean/) 年首次釋出了 [Blue Ocean](https://jenkins.io/projects/blueocean/) 專案，進一步地提升了 Pipeline 的使用體驗。與其說 Blue Ocean 是一個全新的計畫，不如說它是 Jenkins Pipeline 的強化版。Blue Ocean 不但重新設計了 Jenkins 的使用介面，在操作上，對開發人員而言也更加友善、直覺，而也由於 Blue Ocean 釋出已有一段時間，穩定性的表現也比剛釋出時來得好許多。因此，接下來我將簡單介紹如何使用 Blue Ocean 來升級 Jenkins 的使用體驗。
+
+> 註：目前 Blue Ocean 在中文化上還有許多地方尚未完成，因此若是使用中文瀏覽器的讀者目前在介面的翻譯上可能還是會看到一些簡體中文及中國用語。
+
+Blue Ocean 的安裝方式相當簡單，我們可以直接透過 Jenkins 的插件管理系統直接安裝 Blue Ocean 的插件來使用：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-pipeline-08.png?raw=true)
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-pipeline-09.png?raw=true)
+
+由於 Blue Ocean 是相當龐大的插件，因此需要安裝的依賴插件也不少。在安裝過程完成後重新啟動 Jenkins，這時候在 Jenkins 主頁面應該會看到看到多出了 **Open Blue Ocean** 這個選項：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-pipeline-10.png?raw=true)
+
+點擊進入後，我們會被重新導向到一個全新的 Blue Ocean 介面：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-pipeline-11.png?raw=true)
+
+在這裡我們依然可以看到之前建立的專案。點擊專案可以輕鬆看到歷次專案紀錄以及每一次專案紀錄的細節：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-pipeline-12.png?raw=true)
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-pipeline-13.png?raw=true)
+
+除了一般的 Free-Style 專案，在 Pipeline 專案下的 stage view 也被直接升級成更清楚的流程圖：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-pipeline-14.png?raw=true)
+
+因此對於原本就有管理 Pipeline 專案的使用者而言，直接使用 Blue Ocean 基本上是完全無痛的。除此之外，對於要開發新的 Pipeline 專案的使用者而言，在 Blue Ocean 的設計下現在幾乎不用自己手動寫任何 Groovy 語法。作為示範，讓我們回到 Blue Ocean 首頁，並點選右上角 **新的 Pipeline** 來建立新的建置作業。接著，我們會被一步一步引導設填入需要的資訊：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-pipeline-15.png?raw=true)
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-pipeline-16.png?raw=true)
+
+> 註：建立 GitHub Access Token 時記得至少要選取所有 **repos** 以及 **user:email** 的 scopes。
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-pipeline-17.png?raw=true)
+
+依序填完所需資訊後，若專案下沒有 **Jenkinsfile**，Blue Ocean 便會將頁面導向到 Pipeline 流程建置。首先選擇執行節點：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-pipeline-18.png?raw=true)
+
+接著點擊第二個小圓圈設定建置階段，如同前面介紹的一樣，每個建置階段可以由多個建置步驟組合而成，而在 Blue Ocean 友善的介面下，我們可以直接從 **Add Step** 的下拉式選單中選擇我們希望執行的動作：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-pipeline-19.png?raw=true)
+
+接著將剩下的 stage 依序依照需求都設置好，最後點擊右上角 **Save** 儲存離開。接著我們會看到以下提示：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-pipeline-20.png?raw=true)
+
+這表示 Jenkins 會將這個 Pipeline 配置好後自動產生的 `Jenkinsfile`，也就是 Pipeline 建置流程，直接提交到該專案目錄下作為紀錄。最後點擊 **Save & run** 來執行建置：
+
+![](https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/blob/master/images/jenkins-pipeline-21.png?raw=true)
+
+我們可以看到效果跟我們之前使用原始 Pipeline 專案完全一致。唯一不同的是這次我們完全省去手動查找 Groovy 與 Pipeline 對應語法的繁瑣步驟，只透過 Blue Ocean 簡潔的 UI 就輕鬆打造一個全新的 Pipeline 專案。在 Blue Ocean 問世後，使用 Pipeline 專案實現持續整合的難度又再大大降低了，相信這對所有想要使用 Jenkins 實踐持續整合的團隊絕對是一大福音。
