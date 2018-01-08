@@ -26,6 +26,10 @@
 
 這個插件可以讓我們輕鬆控制及管理建置流程中的各個環境變數，並橫跨不同的建置階段。舉例來說，我們可以將從 SCM 提取的 commit number 存入一個環境變數中，待建置結束後，再將這個 commit number 作為建置後輸出報告的變數使用。除此之外，在每一次建置作業內，我們都可以查看該次建置作業使用的環境變數分別有哪些。筆者個人認為這算是 Jenkins 必裝的插件之一。
 
+#### [GitHub Pull Request Builder](https://plugins.jenkins.io/ghprb)
+
+當建置作業完成時，若有需有，我們可以直接透過這個插件在 GitHub repository 上建立新的 pull request。同時，若建置分支沒有產生衝突，我們也可以使用這個插件來實現自動合併。
+
 #### [Global Build Stats](https://plugins.jenkins.io/global-build-stats)
 
 這個插件可以讓我們隨時檢視 Jenkins 在伺服器上的使用狀況。我們可以根據不同時間間隔等參數來快速查看 Jenkins 的使用狀況，並以此客製化視覺圖表。對於管理 Jenkins 的管理人員來說是相當好用的一個插件。
@@ -52,8 +56,12 @@
 
 #### [Publish Over SSH](https://plugins.jenkins.io/publish-over-ssh)
 
-筆者同樣在[建置後動作](https://tsoliangwu0130.gitbooks.io/learn-ansible-and-jenkins-in-30-days/content/jenkins/jenkins-post-build-actions.html)章節內有介紹到的插件。這個插件可以允許我們將建置後產物透過 SSH 傳送至目標伺服器上，對於持續部署或持續交付的實踐上是相當實用的一個插件。
+在[建置後動作](https://tsoliangwu0130.gitbooks.io/learn-ansible-and-jenkins-in-30-days/content/jenkins/jenkins-post-build-actions.html)章節內有介紹到的插件。這個插件可以允許我們將建置後產物透過 SSH 傳送至目標伺服器上，對於持續部署或持續交付的實踐上是相當實用的一個插件。
 
 #### [Role-based Authorization Strategy](https://plugins.jenkins.io/role-strategy)
 
 隨著參與使用 Jenkins 的團隊人數逐漸擴張，要如何有效管控使用者在 Jenkins 上的操作權限也就成了一門學問。這個插件可以讓我們在 Jenkins 上替所有使用者劃分群組角色，並根據不同角色給予特定權限。除了全域劃分外，我們還可以根據特定專案來設置不同的角色權限。
+
+#### [Slack Notification](https://plugins.jenkins.io/slack)
+
+筆者同樣在[建置後動作](https://tsoliangwu0130.gitbooks.io/learn-ansible-and-jenkins-in-30-days/content/jenkins/jenkins-post-build-actions.html)提過的插件。這個插件提供了 Jenkins 傳送建置後通知至指定 Slack 頻道內的功能。
