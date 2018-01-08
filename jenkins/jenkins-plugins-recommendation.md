@@ -26,6 +26,10 @@
 
 這個插件可以讓我們輕鬆控制及管理建置流程中的各個環境變數，並橫跨不同的建置階段。舉例來說，我們可以將從 SCM 提取的 commit number 存入一個環境變數中，待建置結束後，再將這個 commit number 作為建置後輸出報告的變數使用。除此之外，在每一次建置作業內，我們都可以查看該次建置作業使用的環境變數分別有哪些。筆者個人認為這算是 Jenkins 必裝的插件之一。
 
+#### [Global Build Stats](https://plugins.jenkins.io/global-build-stats)
+
+這個插件可以讓我們隨時檢視 Jenkins 在伺服器上的使用狀況。我們可以根據不同時間間隔等參數來快速查看 Jenkins 的使用狀況，並以此客製化視覺圖表。對於管理 Jenkins 的管理人員來說是相當好用的一個插件。
+
 #### [HipChat](https://plugins.jenkins.io/hipchat)
 
 如同前面介紹過的 [Slack Notification](https://plugins.jenkins.io/slack) 這個插件一樣，HipChat 這個插件同樣提供了傳送建置結果至 [HipChat](https://www.stride.com/) 頻道內的功能，對於主要使用 HipChat 作為溝通軟體的團隊來說這個插件絕對是一個不可多得的好物。
