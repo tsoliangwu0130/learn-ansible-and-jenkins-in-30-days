@@ -9,8 +9,8 @@
 由衷希望這系列文章可以作為一塊學習 Ansible 與 Jenkins 的入門磚。我仍舊不敢說我對這兩項工具已有十足的掌握，但若能透過這些文章幫助到任何人，對我而言絕對是非常榮幸的一件事。當初開始撰寫這系列文章的初衷除了自我檢視之外，另一個原因也是期許自己能夠對中文 IT 界有所貢獻。因此，對於內容的各種建議與指教都相當歡迎，無論透過什麼方式，都希望我可以將這系列文章做持續改進。也期望在不久的將來，中文 IT 界可以因為有大家的參與發展得更加茁壯，所有想要學習各類 IT 技術的人都可以輕易地在網路上找到適合的資源，而不用再被語言障礙等高學習門檻拒於門外。
 
 
-本系列文章同步更新於：
+> 本系列文章同步更新於：
 
-* 30 天入門 Ansible 及 Jenkins (GitBook) ： https://www.gitbook.com/book/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/
-* 30 天入門 Ansible 及 Jenkins (GitHub): https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days
-* 2018 iT 邦幫忙鐵人賽：https://ithelp.ithome.com.tw/users/20103346/ironman/1473
+> * [30 天入門 Ansible 及 Jenkins - GitBook]( https://www.gitbook.com/book/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days/)
+> * [30 天入門 Ansible 及 Jenkins - GitHub]( https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days)
+> * [30 天入門 Ansible 及 Jenkins - 2018 iT 邦幫忙鐵人賽](https://ithelp.ithome.com.tw/users/20103346/ironman/1473)
