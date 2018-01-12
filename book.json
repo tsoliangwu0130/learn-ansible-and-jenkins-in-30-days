@@ -4,7 +4,6 @@
     "language": "zh-tw",
     "plugins": [
         "anchors",
-        "book-summary-scroll-position-saver",
         "disqus",
         "ga",
         "github",
