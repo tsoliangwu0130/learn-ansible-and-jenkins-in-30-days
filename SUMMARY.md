@@ -2,11 +2,13 @@
 
 * [前言](README.md)
 
-* **[Vagrant](vagrant/README.md)**
+## Vagrant
+* [Vagrant](vagrant/README.md)
 	* [Vagrant 介紹](vagrant/vagrant-intro.md)
 	* [Vagrant 基本設定](vagrant/vagrant-tutorial.md)
 
-* **[Ansible](ansible/README.md)**
+## Ansible
+* [Ansible](ansible/README.md)
 	* [Ansible 介紹](ansible/ansible-intro.md)
 	* [Ansible 安裝](ansible/ansible-installation.md)
 	* [撰寫第一個 Ansible Playbook](ansible/ansible-playbook-intro.md)
@@ -17,7 +19,8 @@
 	* [Ansible 的最佳實踐](ansible/ansible-best-practice.md)
 	* [實戰 Ansible](ansible/practical-ansible.md)
 
-* **[Jenkins](jenkins/README.md)**
+# Jenkins
+* [Jenkins](jenkins/README.md)
 	* [Jenkins 介紹](jenkins/jenkins-intro.md)
 	* [我的第一個 Jenkins Job](jenkins/jenkins-job-intro.md)
 	* [原始碼管理與建置觸發程序](jenkins/jenkins-scm-and-trigger.md)
