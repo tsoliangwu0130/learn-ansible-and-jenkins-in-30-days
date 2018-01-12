@@ -1,12 +1,13 @@
 # 30 天入門 Ansible 及 Jenkins
+
 * [前言](README.md)
 
-## Vagrant
+## Part I - Vagrant
 * [使用 Vagrant 模擬環境](vagrant/README.md)
 	* [Vagrant 介紹](vagrant/vagrant-intro.md)
 	* [Vagrant 基本設定](vagrant/vagrant-tutorial.md)
 
-## Ansible
+## Part II - Ansible
 * [使用 Ansible 部署環境](ansible/README.md)
 	* [Ansible 介紹](ansible/ansible-intro.md)
 	* [Ansible 安裝](ansible/ansible-installation.md)
@@ -18,7 +19,7 @@
 	* [Ansible 的最佳實踐](ansible/ansible-best-practice.md)
 	* [實戰 Ansible](ansible/practical-ansible.md)
 
-## Jenkins
+## Part III - Jenkins
 * [使用 Jenkins 實現持續整合](jenkins/README.md)
 	* [Jenkins 介紹](jenkins/jenkins-intro.md)
 	* [我的第一個 Jenkins Job](jenkins/jenkins-job-intro.md)
