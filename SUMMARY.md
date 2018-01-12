@@ -1,6 +1,6 @@
 # 30 天入門 Ansible 及 Jenkins
 
-[前言](README.md)
+* [前言](README.md)
 
 ## Vagrant
 * [Vagrant](vagrant/README.md)
