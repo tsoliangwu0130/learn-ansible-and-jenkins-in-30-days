@@ -3,31 +3,31 @@
     "author": "Tso-Liang Wu <tsoliangwu0130@gmail.com>",
     "language": "zh-tw",
     "plugins": [
-	    "anchors",
-	    "disqus",
-	    "ga",
-	    "github",
+        "anchors",
+        "disqus",
+        "ga",
+        "github",
         "multipart",
         "sitemap",
-	    "splitter"
+        "splitter"
     ],
     "pluginsConfig": {
         "disqus": {
             "shortName": "learn-ansible-and-jenkins-in-30-days"
         },
-	    "ga": {
-	        "token": "UA-86543700-4"
-	    },
-	    "github": {
-	        "url": "https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days"
-	    },
+        "ga": {
+            "token": "UA-86543700-4"
+        },
+        "github": {
+            "url": "https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days"
+        },
         "sitemap": {
             "hostname": "https://www.gitbook.com/book/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days"
         }
     },
     "links": {
         "sidebar": {
-	    "Tso-Liang Wu": "https://tsoliangwu.com/"
+            "Tso-Liang Wu": "https://tsoliangwu.com/"
         }
     }
 }
