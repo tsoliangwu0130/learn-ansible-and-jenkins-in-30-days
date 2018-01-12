@@ -6,6 +6,7 @@
 	"anchors",
 	"disqus",
 	"ga",
+	"github",
 	"splitter"],
     "pluginsConfig": {
         "disqus": {
@@ -13,6 +14,9 @@
         },
 	"ga": {
 	    "token": "UA-86543700-4"
+	},
+	"github": {
+	    "url": "https://github.com/tsoliangwu0130/learn-ansible-and-jenkins-in-30-days"
 	}
     },
     "links": {
