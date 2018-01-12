@@ -1,7 +1,5 @@
 # 30 天入門 Ansible 及 Jenkins
 
-* [前言](README.md)
-
 ## Vagrant
 * [Vagrant](vagrant/README.md)
 	* [Vagrant 介紹](vagrant/vagrant-intro.md)
@@ -30,4 +28,4 @@
 	* [Pipeline 專案](jenkins/jenkins-pipeline.md)
 	* [Jenkins 插件推薦](jenkins/jenkins-plugins-recommendation.md)
 
-* [總結](conclusion.md)
+* [後記雜談](conclusion.md)
