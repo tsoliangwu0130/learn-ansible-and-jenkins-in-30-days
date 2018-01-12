@@ -1,5 +1,7 @@
 # 30 天入門 Ansible 及 Jenkins
 
+[前言](README.md)
+
 ## Vagrant
 * [Vagrant](vagrant/README.md)
 	* [Vagrant 介紹](vagrant/vagrant-intro.md)
