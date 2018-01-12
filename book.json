@@ -1,10 +1,23 @@
 {
     "title": "30 天入門 Ansible 及 Jenkins",
+    "author": "Tso-Liang Wu <tsoliangwu0130@gmail.com>",
     "language": "zh-tw",
-    "plugins": ["disqus"],
+    "plugins": [
+	"anchors",
+	"disqus",
+	"ga",
+	"splitter"],
     "pluginsConfig": {
         "disqus": {
             "shortName": "learn-ansible-and-jenkins-in-30-days"
+        },
+	"ga": {
+	    "token": "UA-86543700-4"
+	}
+    },
+    "links": {
+        "sidebar": {
+	    "Tso-Liang Wu": "https://tsoliangwu.com/"
         }
     }  
 }
