@@ -6,7 +6,8 @@
 	    "anchors",
 	    "disqus",
 	    "ga",
-	    "github",,
+	    "github",
+        "multipart",
         "sitemap",
 	    "splitter"
     ],
