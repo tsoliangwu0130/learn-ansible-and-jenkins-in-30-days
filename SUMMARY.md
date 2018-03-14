@@ -23,4 +23,3 @@
 	* [4-06. 節點介紹](jenkins/jenkins-node.md)
 	* [4-07. Pipeline 專案](jenkins/jenkins-pipeline.md)
 	* [4-08. Jenkins 插件推薦](jenkins/jenkins-plugins-recommendation.md)
-* [5. 總結](conclusion.md)
